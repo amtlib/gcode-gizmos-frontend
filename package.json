@@ -1,17 +1,16 @@
 {
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 5000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
-    "grommet": "^2.28.0",
-    "grommet-icons": "^4.8.0",
     "next": "latest",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.42.1",
     "styled-components": "^5.3.6"
   },
   "devDependencies": {
