@@ -8,6 +8,10 @@ export const theme = extendTheme({
             900: "#1a202c",
         },
     },
+    breakpoints: {
+        xlg: "960px",
+        xxlg: "1005px"
+    },
     components: {
         Button: {
             baseStyle: {
