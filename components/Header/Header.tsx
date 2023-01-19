@@ -22,7 +22,7 @@ import { HamburgerIcon, CloseIcon, AddIcon, MoonIcon, SunIcon } from '@chakra-ui
 import { Logo } from './Logo';
 import { Search } from './Search';
 
-const Links = ['Explore', 'My gizmos'];
+const Links = ['Explore', 'My gizmos', 'Favorities'];
 
 const NavLink = ({ children }: { children: ReactNode }) => (
     <Link
@@ -92,6 +92,9 @@ export function Header() {
                                 />
                             </MenuButton>
                             <MenuList rounded={0}>
+                                <MenuItem>
+                                    Account
+                                </MenuItem>
                                 <MenuItem onClick={toggleColorMode}>
                                     {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
                                     <Box ml={2}>Toggle color scheme</Box>
