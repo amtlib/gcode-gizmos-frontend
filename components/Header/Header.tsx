@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import {
     Box,
     Flex,
@@ -16,6 +16,7 @@ import {
     useColorModeValue,
     Stack,
     useColorMode,
+    Input,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, AddIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { Logo } from './Logo';
@@ -38,10 +39,11 @@ const NavLink = ({ children }: { children: ReactNode }) => (
 export function Header() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { colorMode, toggleColorMode } = useColorMode();
+    const [maxW, setMaxW] = useState("960px");
 
     return (
         <Box px={4} position="sticky" top={0} bgColor="Background" borderBottomWidth={1} borderBottomColor={useColorModeValue('black', 'transparent')}>
-            <Box maxW="960px" mx="auto">
+            <Box maxW={maxW} mx="auto" transitionDuration="0.5s">
                 <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
                     <IconButton
                         size={'md'}
@@ -60,6 +62,9 @@ export function Header() {
                                 <NavLink key={link}>{link}</NavLink>
                             ))}
                         </HStack>
+                    </HStack>
+                    <HStack spacing={8} justify="center" mx="8" flexGrow={1} display={{ base: "none", md: "block"}}>
+                        <Input rounded={0} type="search" placeholder="find gizmo..." onBlur={() => setMaxW("960px")} onFocus={() => setMaxW("full")} />
                     </HStack>
                     <Flex alignItems={'center'}>
                         <Button
@@ -103,6 +108,7 @@ export function Header() {
                             {Links.map((link) => (
                                 <NavLink key={link}>{link}</NavLink>
                             ))}
+                            <Box><Input rounded={0} type="search" placeholder="find gizmo..." /></Box>
                         </Stack>
                     </Box>
                 ) : null}
