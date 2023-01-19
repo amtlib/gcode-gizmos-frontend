@@ -3,6 +3,6 @@ import React from "react";
 
 export const Search = () => {
     return (
-        <Input rounded={0} type="search" placeholder="find gizmo..." />
+        <Input type="search" placeholder="find gizmo..." />
     )
 }
