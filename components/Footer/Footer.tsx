@@ -21,7 +21,6 @@ import {
   }) => {
     return (
       <chakra.button
-        bg={useColorModeValue('blackAlpha.100', 'whiteAlpha.100')}
         w={8}
         h={8}
         cursor={'pointer'}
