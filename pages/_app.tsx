@@ -1,7 +1,6 @@
-import { Grommet } from "grommet";
-import { theme } from "../styles/theme";
-import "../styles/reset.css";
+import React from "react";
+import { ChakraProvider } from '@chakra-ui/react'
 
 export default function MyApp({ Component, pageProps }) {
-    return <Grommet theme={theme} full><Component {...pageProps} /></Grommet>
+    return <ChakraProvider><Component {...pageProps} /></ChakraProvider>;
 }
