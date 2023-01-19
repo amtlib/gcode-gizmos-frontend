@@ -25,7 +25,7 @@ const LoginPage = () => {
                         <Stack spacing={4}>
                             <FormControl id="email">
                                 <FormLabel>Email address</FormLabel>
-                                <Input focusBorderColor="purple" type="email" />
+                                <Input type="email" />
                             </FormControl>
                             <FormControl id="password">
                                 <FormLabel>Password</FormLabel>
