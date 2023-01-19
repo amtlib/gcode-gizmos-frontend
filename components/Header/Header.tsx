@@ -20,6 +20,7 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, AddIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { Logo } from './Logo';
+import { Search } from './Search';
 
 const Links = ['Explore', 'My gizmos'];
 
@@ -108,7 +109,7 @@ export function Header() {
                             {Links.map((link) => (
                                 <NavLink key={link}>{link}</NavLink>
                             ))}
-                            <Box><Input rounded={0} type="search" placeholder="find gizmo..." /></Box>
+                            <Box><Search /></Box>
                         </Stack>
                     </Box>
                 ) : null}
