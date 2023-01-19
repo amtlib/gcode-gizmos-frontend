@@ -67,10 +67,11 @@ export const theme = extendTheme({
                         background: "inherit",
                         border: "1px solid",
                         borderColor: "inherit",
+                        focusBorderColor: "purple",
                         _focus: {
                             zIndex: 1,
                             borderColor: "purple.200",
-                            boxShadow: "0 0 0 1px #3182ce",
+                            boxShadow: 0,
                         },
                         _hover: { borderColor: "gray.300" },
                     },
@@ -98,7 +99,7 @@ export const theme = extendTheme({
                         paddingX: 0,
                         _focus: {
                             borderColor: "purple.200",
-                            boxShadow: "0 0 0 1px #3182ce",
+                            boxShadow: 0,
                         },
                     },
                 },
@@ -114,6 +115,7 @@ export const theme = extendTheme({
             defaultProps: {
                 size: "md",
                 variant: "outline",
+                focusBorderColor: "purple"
             },
         }
     }
