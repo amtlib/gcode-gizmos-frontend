@@ -205,19 +205,38 @@ export type Model = {
   createdAt?: Maybe<Scalars['DateTime']>;
   createdBy?: Maybe<User>;
   description?: Maybe<Scalars['String']>;
+  doUserLikesIt?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
+  likedBy?: Maybe<Array<User>>;
+  likedByCount?: Maybe<Scalars['Int']>;
   modelFile?: Maybe<FileFieldOutput>;
   modelImage?: Maybe<ImageFieldOutput>;
   name?: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
+};
+
+
+export type ModelLikedByArgs = {
+  orderBy?: Array<UserOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: UserWhereInput;
+};
+
+
+export type ModelLikedByCountArgs = {
+  where?: UserWhereInput;
 };
 
 export type ModelCreateInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy?: InputMaybe<UserRelateToOneForCreateInput>;
   description?: InputMaybe<Scalars['String']>;
+  likedBy?: InputMaybe<UserRelateToManyForCreateInput>;
   modelFile?: InputMaybe<FileFieldInput>;
   modelImage?: InputMaybe<ImageFieldInput>;
   name?: InputMaybe<Scalars['String']>;
+  slug?: InputMaybe<Scalars['String']>;
 };
 
 export type ModelManyRelationFilter = {
@@ -231,6 +250,7 @@ export type ModelOrderByInput = {
   description?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
   name?: InputMaybe<OrderDirection>;
+  slug?: InputMaybe<OrderDirection>;
 };
 
 export type ModelRelateToManyForCreateInput = {
@@ -254,9 +274,11 @@ export type ModelUpdateInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy?: InputMaybe<UserRelateToOneForUpdateInput>;
   description?: InputMaybe<Scalars['String']>;
+  likedBy?: InputMaybe<UserRelateToManyForUpdateInput>;
   modelFile?: InputMaybe<FileFieldInput>;
   modelImage?: InputMaybe<ImageFieldInput>;
   name?: InputMaybe<Scalars['String']>;
+  slug?: InputMaybe<Scalars['String']>;
 };
 
 export type ModelWhereInput = {
@@ -267,11 +289,14 @@ export type ModelWhereInput = {
   createdBy?: InputMaybe<UserWhereInput>;
   description?: InputMaybe<StringFilter>;
   id?: InputMaybe<IdFilter>;
+  likedBy?: InputMaybe<UserManyRelationFilter>;
   name?: InputMaybe<StringFilter>;
+  slug?: InputMaybe<StringFilter>;
 };
 
 export type ModelWhereUniqueInput = {
   id?: InputMaybe<Scalars['ID']>;
+  slug?: InputMaybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -465,6 +490,8 @@ export type User = {
   email?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   isAdmin?: Maybe<Scalars['Boolean']>;
+  likedModels?: Maybe<Array<Model>>;
+  likedModelsCount?: Maybe<Scalars['Int']>;
   password?: Maybe<PasswordState>;
   username?: Maybe<Scalars['String']>;
 };
@@ -479,6 +506,19 @@ export type UserCreatedModelsArgs = {
 
 
 export type UserCreatedModelsCountArgs = {
+  where?: ModelWhereInput;
+};
+
+
+export type UserLikedModelsArgs = {
+  orderBy?: Array<ModelOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: ModelWhereInput;
+};
+
+
+export type UserLikedModelsCountArgs = {
   where?: ModelWhereInput;
 };
 
@@ -499,8 +539,15 @@ export type UserCreateInput = {
   createdModels?: InputMaybe<ModelRelateToManyForCreateInput>;
   email?: InputMaybe<Scalars['String']>;
   isAdmin?: InputMaybe<Scalars['Boolean']>;
+  likedModels?: InputMaybe<ModelRelateToManyForCreateInput>;
   password?: InputMaybe<Scalars['String']>;
   username?: InputMaybe<Scalars['String']>;
+};
+
+export type UserManyRelationFilter = {
+  every?: InputMaybe<UserWhereInput>;
+  none?: InputMaybe<UserWhereInput>;
+  some?: InputMaybe<UserWhereInput>;
 };
 
 export type UserOrderByInput = {
@@ -508,6 +555,18 @@ export type UserOrderByInput = {
   id?: InputMaybe<OrderDirection>;
   isAdmin?: InputMaybe<OrderDirection>;
   username?: InputMaybe<OrderDirection>;
+};
+
+export type UserRelateToManyForCreateInput = {
+  connect?: InputMaybe<Array<UserWhereUniqueInput>>;
+  create?: InputMaybe<Array<UserCreateInput>>;
+};
+
+export type UserRelateToManyForUpdateInput = {
+  connect?: InputMaybe<Array<UserWhereUniqueInput>>;
+  create?: InputMaybe<Array<UserCreateInput>>;
+  disconnect?: InputMaybe<Array<UserWhereUniqueInput>>;
+  set?: InputMaybe<Array<UserWhereUniqueInput>>;
 };
 
 export type UserRelateToOneForCreateInput = {
@@ -530,6 +589,7 @@ export type UserUpdateInput = {
   createdModels?: InputMaybe<ModelRelateToManyForUpdateInput>;
   email?: InputMaybe<Scalars['String']>;
   isAdmin?: InputMaybe<Scalars['Boolean']>;
+  likedModels?: InputMaybe<ModelRelateToManyForUpdateInput>;
   password?: InputMaybe<Scalars['String']>;
   username?: InputMaybe<Scalars['String']>;
 };
@@ -542,6 +602,7 @@ export type UserWhereInput = {
   email?: InputMaybe<StringFilter>;
   id?: InputMaybe<IdFilter>;
   isAdmin?: InputMaybe<BooleanFilter>;
+  likedModels?: InputMaybe<ModelManyRelationFilter>;
   username?: InputMaybe<StringFilter>;
 };
 
@@ -554,7 +615,15 @@ export type UserWhereUniqueInput = {
 export type ModelsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ModelsQuery = { __typename?: 'Query', models?: Array<{ __typename?: 'Model', id: string, name?: string | null, description?: string | null, modelImage?: { __typename?: 'ImageFieldOutput', url: string } | null }> | null };
+export type ModelsQuery = { __typename?: 'Query', models?: Array<{ __typename?: 'Model', id: string, name?: string | null, description?: string | null, slug?: string | null, modelImage?: { __typename?: 'ImageFieldOutput', url: string } | null }> | null };
+
+export type ModelQueryVariables = Exact<{
+  slug?: InputMaybe<Scalars['String']>;
+}>;
 
 
-export const ModelsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Models"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"models"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"modelImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}}]} as unknown as DocumentNode<ModelsQuery, ModelsQueryVariables>;
+export type ModelQuery = { __typename?: 'Query', model?: { __typename?: 'Model', name?: string | null, description?: string | null, createdAt?: any | null, likedByCount?: number | null, doUserLikesIt?: boolean | null, modelImage?: { __typename?: 'ImageFieldOutput', url: string } | null, createdBy?: { __typename?: 'User', username?: string | null } | null } | null };
+
+
+export const ModelsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Models"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"models"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"modelImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}}]} as unknown as DocumentNode<ModelsQuery, ModelsQueryVariables>;
+export const ModelDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Model"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slug"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"model"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"slug"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slug"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"modelImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"likedByCount"}},{"kind":"Field","name":{"kind":"Name","value":"doUserLikesIt"}}]}}]}}]} as unknown as DocumentNode<ModelQuery, ModelQueryVariables>;
