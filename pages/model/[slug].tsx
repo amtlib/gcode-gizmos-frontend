@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { Container, SimpleGrid, Flex, Stack, Heading, useColorModeValue, StackDivider, VStack, List, ListItem, Button, Box, Image, Text, Spinner } from "@chakra-ui/react";
+import { Container, SimpleGrid, Flex, Stack, Heading, StackDivider, VStack, List, ListItem, Button, Box, Image, Text, Spinner } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React from "react";
 import { ModelQuery } from "../../graphql/queries/models";
@@ -53,12 +53,14 @@ export default function Model() {
                         direction={'column'}
                         divider={
                             <StackDivider
-                                borderColor={useColorModeValue('gray.200', 'gray.600')}
+                                borderColor='gray.200'
+                                _dark={{borderColor: 'gray.600'}}
                             />
                         }>
                         <VStack spacing={{ base: 4, sm: 6 }}>
                             <Text
-                                color={useColorModeValue('gray.500', 'gray.400')}
+                                color='gray.500'
+                                _dark={{ color: 'gray.400' }}
                                 fontSize={'2xl'}
                                 fontWeight={'300'}>
                                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
@@ -74,7 +76,8 @@ export default function Model() {
                         <Box>
                             <Text
                                 fontSize={{ base: '16px', lg: '18px' }}
-                                color={useColorModeValue('yellow.500', 'yellow.300')}
+                                color='yellow.500'
+                                _dark={{ color: 'yellow.300'}}
                                 fontWeight={'500'}
                                 textTransform={'uppercase'}
                                 mb={'4'}>
@@ -97,7 +100,8 @@ export default function Model() {
                         <Box>
                             <Text
                                 fontSize={{ base: '16px', lg: '18px' }}
-                                color={useColorModeValue('yellow.500', 'yellow.300')}
+                                color='yellow.500'
+                                _dark={{ color: 'yellow.300'}}
                                 fontWeight={'500'}
                                 textTransform={'uppercase'}
                                 mb={'4'}>
@@ -158,8 +162,12 @@ export default function Model() {
                         mt={8}
                         size={'lg'}
                         py={'7'}
-                        bg={useColorModeValue('gray.900', 'gray.50')}
-                        color={useColorModeValue('white', 'gray.900')}
+                        bg='gray.900'
+                        color='white'
+                        _dark={{
+                            bg: 'gray.50',
+                            color: 'gray.900'
+                        }}
                         textTransform={'uppercase'}
                         _hover={{
                             transform: 'translateY(2px)',
