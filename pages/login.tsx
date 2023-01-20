@@ -42,7 +42,7 @@ const LoginPage = () => {
                                 <Button>
                                     Sign in
                                 </Button>
-                                <Box>Don't have an account? <Link href="/register">Register</Link></Box>
+                                <Box>Don&apos;t have an account? <Link href="/register">Register</Link></Box>
                             </Stack>
                         </Stack>
                     </Box>
