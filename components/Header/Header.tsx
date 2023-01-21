@@ -1,13 +1,13 @@
-import { ReactNode, useState } from 'react';
+import { ComponentPropsWithoutRef, ReactNode, useContext, useMemo, useState } from 'react';
 import {
     Box,
     Flex,
     Avatar,
     HStack,
-    Link,
     IconButton,
     Button,
     Menu,
+    Link as ChakraLink,
     MenuButton,
     MenuList,
     MenuItem,
@@ -21,25 +21,42 @@ import {
 import { HamburgerIcon, CloseIcon, AddIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { Logo } from './Logo';
 import { Search } from './Search';
+import { UserContext } from '../../contexts/UserContext';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
-const Links = ['Explore', 'My gizmos', 'Favorities'];
 
-const NavLink = ({ children }: { children: ReactNode }) => (
-    <Link
+const Links = [
+    {
+        name: "Explore",
+        href: "/",
+        hasToBeLoggedIn: false,
+    },
+    {
+        name: "Favorities",
+        href: "/favorities",
+        hasToBeLoggedIn: true,
+    }
+] as const;
+
+const NavLink = ({ children, ...rest }: { children: ReactNode; } & ComponentPropsWithoutRef<typeof ChakraLink>) => (
+    <ChakraLink
         px={2}
         py={1}
         _hover={{
             textDecoration: 'none',
             bg: useColorModeValue('gray.200', 'gray.700'),
         }}
-        href={'#'}>
+        {...rest}>
         {children}
-    </Link>
+    </ChakraLink>
 );
 
 export function Header() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { colorMode, toggleColorMode } = useColorMode();
+    const router = useRouter();
+    const { loggedIn, unauthenticate, username } = useContext(UserContext);
     const [maxW, setMaxW] = useState("960px");
 
     return (
@@ -59,58 +76,68 @@ export function Header() {
                             as={'nav'}
                             spacing={4}
                             display={{ base: 'none', md: 'flex' }}>
-                            {Links.map((link) => (
-                                <NavLink key={link}>{link}</NavLink>
+                            {Links.map((link) => ((link.hasToBeLoggedIn && loggedIn) || !link.hasToBeLoggedIn) && (
+                                <NavLink href={link.href} key={link.name}>{link.name}</NavLink>
                             ))}
                         </HStack>
                     </HStack>
-                    <HStack spacing={8} justify="center" mx="8" flexGrow={1} display={{ base: "none", md: "block"}}>
+                    <HStack spacing={8} justify="center" mx="8" flexGrow={1} display={{ base: "none", md: "block" }}>
                         <Input rounded={0} type="search" placeholder="find gizmo..." onBlur={() => setMaxW("960px")} onFocus={() => setMaxW("full")} />
                     </HStack>
                     <Flex alignItems={'center'}>
-                        <Button
-                            variant={'solid'}
-                            colorScheme={'purple'}
-                            size={'sm'}
-                            mr={4}
-                            borderRadius={0}
-                            leftIcon={<AddIcon />}>
-                            Create gizmo
-                        </Button>
-                        <Menu>
-                            <MenuButton
-                                as={Button}
-                                rounded={'full'}
-                                variant={'link'}
-                                cursor={'pointer'}
-                                minW={0}>
-                                <Avatar
-                                    size={'sm'}
-                                    src={
-                                        'https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
-                                    }
-                                />
-                            </MenuButton>
-                            <MenuList rounded={0}>
-                                <MenuItem>
-                                    Account
-                                </MenuItem>
-                                <MenuItem onClick={toggleColorMode}>
-                                    {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
-                                    <Box ml={2}>Toggle color scheme</Box>
-                                </MenuItem>
-                                <MenuDivider />
-                                <MenuItem>Log out</MenuItem>
-                            </MenuList>
-                        </Menu>
+                        {loggedIn && (
+                            <Button
+                                variant={'solid'}
+                                colorScheme={'purple'}
+                                size={'sm'}
+                                mr={4}
+                                borderRadius={0}
+                                leftIcon={<AddIcon />}>
+                                Create gizmo
+                            </Button>
+                        )}
+                        {loggedIn ? (
+                            <Menu>
+                                <MenuButton
+                                    as={Button}
+                                    rounded={'full'}
+                                    variant={'link'}
+                                    cursor={'pointer'}
+                                    _hover={{
+                                        textDecoration: "none"
+                                    }}
+                                    minW={0}>
+                                    <Avatar
+                                        size={'sm'}
+                                        name={username}
+                                    />
+                                </MenuButton>
+                                <MenuList rounded={0}>
+                                    <MenuItem>
+                                        Account
+                                    </MenuItem>
+                                    <MenuItem>
+                                        My gizmos
+                                    </MenuItem>
+                                    <MenuItem onClick={toggleColorMode}>
+                                        {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+                                        <Box ml={2}>Toggle color scheme</Box>
+                                    </MenuItem>
+                                    <MenuDivider />
+                                    <MenuItem onClick={unauthenticate}>Log out</MenuItem>
+                                </MenuList>
+                            </Menu>
+                        ) : (
+                            <Button onClick={() => router.push("/login")}>Log in</Button>
+                        )}
                     </Flex>
                 </Flex>
 
                 {isOpen ? (
                     <Box pb={4} display={{ md: 'none' }}>
                         <Stack as={'nav'} spacing={4}>
-                            {Links.map((link) => (
-                                <NavLink key={link}>{link}</NavLink>
+                            {Links.map((link) => ((link.hasToBeLoggedIn && loggedIn) || !link.hasToBeLoggedIn) && (
+                                <NavLink href={link.href} key={link.name}>{link.name}</NavLink>
                             ))}
                             <Box><Search /></Box>
                         </Stack>
