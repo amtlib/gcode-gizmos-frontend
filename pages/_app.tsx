@@ -4,6 +4,7 @@ import { theme } from "../theme/theme";
 import { ApolloProvider } from "@apollo/client";
 import client from "../apollo-client";
 import Head from "next/head";
+import { UserContainer } from "../containers/UserContainer";
 
 export default function MyApp({ Component, pageProps }) {
     return (<>
@@ -15,9 +16,11 @@ export default function MyApp({ Component, pageProps }) {
             <title>gcode gizmos</title>
         </Head>
         <ApolloProvider client={client}>
-            <ChakraProvider theme={theme}>
-                <Component {...pageProps} />
-            </ChakraProvider>
+            <UserContainer>
+                <ChakraProvider theme={theme}>
+                    <Component {...pageProps} />
+                </ChakraProvider>
+            </UserContainer>
         </ApolloProvider>
     </>);
 }
