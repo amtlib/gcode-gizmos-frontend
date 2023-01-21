@@ -3,7 +3,7 @@ import { Flex, Spinner } from "@chakra-ui/react";
 import React from "react";
 import { Card } from "../components/Grid/Card";
 import { Grid } from "../components/Grid/Grid";
-import { ModelsQuery } from "../graphql/queries/models";
+import { ModelsQuery } from "../graphql/operations/models";
 import { BaseLayout } from "../layouts/BaseLayout";
 
 export default function Home() {

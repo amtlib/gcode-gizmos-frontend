@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 import { Container, SimpleGrid, Flex, Stack, Heading, StackDivider, VStack, List, ListItem, Button, Box, Image, Text, Spinner } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React from "react";
-import { ModelQuery } from "../../graphql/queries/models";
+import { ModelQuery } from "../../graphql/operations/models";
 import { BaseLayout } from "../../layouts/BaseLayout";
 
 
