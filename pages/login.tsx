@@ -1,12 +1,37 @@
-import { Flex, FormControl, FormLabel, Input, Checkbox, Stack, Button, Heading, useColorModeValue, Box, Text, Link } from "@chakra-ui/react";
-import React from "react";
+import { Flex, FormControl, FormLabel, Input, Checkbox, Stack, Button, Heading, useColorModeValue, Box, Text, Link, FormErrorMessage } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import React, { useContext, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { UserContext } from "../contexts/UserContext";
 import { BaseLayout } from "../layouts/BaseLayout";
 
 const LoginPage = () => {
+    const { authenticate } = useContext(UserContext);
+    const [error, setError] = useState(null);
+    const { register, handleSubmit, formState: { errors }, watch } = useForm({ defaultValues: { username: "", password: "" } });
+    const router = useRouter();
+
+    // clear general error on form change
+    useEffect(() => {
+        const subscription = watch(() => setError(null));
+        return () => subscription.unsubscribe();
+    }, [watch]);
+
+    const onSubmit = async (values) => {
+        const { username, password } = values;
+        try {
+            const result = await authenticate(username, password);
+            // redirect to the frontpage after successful login
+            if (result) {
+                router.push("/");
+            }
+        } catch (e) {
+            setError(e);
+        }
+    }
 
     return (
         <BaseLayout>
-
             <Flex
                 minH={'90vh'}
                 align={'center'}
@@ -19,35 +44,46 @@ const LoginPage = () => {
                         </Text>
                     </Stack>
                     <Box
-                        
                         bg={useColorModeValue('white', 'gray.700')}
+                        as="form"
+                        onSubmit={handleSubmit(onSubmit)}
                         p={8}>
                         <Stack spacing={4}>
-                            <FormControl id="email">
-                                <FormLabel>Email address</FormLabel>
-                                <Input type="email" />
+                            <FormControl id="username" isInvalid={!!errors.username}>
+                                <FormLabel>Username</FormLabel>
+                                <Input type="text" {...register("username", { required: { value: true, message: "Username is required" } })} />
+                                {!!errors.username &&
+                                    <FormErrorMessage>{errors.username.message}</FormErrorMessage>
+                                }
                             </FormControl>
-                            <FormControl id="password">
+                            <FormControl id="password" isInvalid={!!errors.password}>
                                 <FormLabel>Password</FormLabel>
-                                <Input type="password" />
+                                <Input type="password" {...register("password", { required: { value: true, message: "Password is required" } })} />
+                                {!!errors.password &&
+                                    <FormErrorMessage>{errors.password.message}</FormErrorMessage>
+                                }
                             </FormControl>
                             <Stack spacing={10}>
-                                <Stack
+                                {/* <Stack
                                     direction={{ base: 'column', sm: 'row' }}
                                     align={'start'}
                                     justify={'space-between'}>
                                     <Checkbox>Remember me</Checkbox>
-                                   
-                                </Stack>
-                                <Button>
-                                    Sign in
-                                </Button>
+                                </Stack> */}
+                                <FormControl isInvalid={!!error}>
+                                    <Button type="submit">
+                                        Sign in
+                                    </Button>
+                                    {error && (
+                                        <FormErrorMessage>{error.message}</FormErrorMessage>
+                                    )}
+                                </FormControl>
                                 <Box>Don&apos;t have an account? <Link href="/register">Register</Link></Box>
                             </Stack>
                         </Stack>
                     </Box>
                 </Stack>
-            </Flex> 
+            </Flex>
         </BaseLayout>
     )
 };
