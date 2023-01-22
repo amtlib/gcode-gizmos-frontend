@@ -9,6 +9,7 @@ export const theme = extendTheme({
         },
     },
     breakpoints: {
+        xsm: "768px",
         xlg: "960px",
         xxlg: "1005px"
     },
