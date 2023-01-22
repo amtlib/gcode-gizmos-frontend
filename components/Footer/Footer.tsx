@@ -42,6 +42,7 @@ import {
   export const Footer = () => {
     return (
       <Box
+        px={4}
         bg={useColorModeValue('white', 'black')}
         color={useColorModeValue('gray.700', 'gray.200')}
         borderTopWidth={1} borderTopColor={useColorModeValue('black', 'transparent')}
