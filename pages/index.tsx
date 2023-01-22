@@ -11,7 +11,7 @@ export default function Home() {
     if (loading) {
         return (
             <BaseLayout>
-                <Flex align="center" justify="center" w="full" minH="85vh">
+                <Flex align="center" justify="center" w="full" minH="calc(100vh - 130px)">
                     <Spinner color='purple.200' size="xl" />
                 </Flex>
             </BaseLayout>

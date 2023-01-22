@@ -33,7 +33,7 @@ const LoginPage = () => {
     return (
         <BaseLayout>
             <Flex
-                minH={'90vh'}
+                minH="80vh"
                 align={'center'}
                 justify={'center'}>
                 <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
@@ -78,7 +78,7 @@ const LoginPage = () => {
                                         <FormErrorMessage>{error.message}</FormErrorMessage>
                                     )}
                                 </FormControl>
-                                <Box>Don&apos;t have an account? <Link href="/register">Register</Link></Box>
+                                <Box>Don&apos;t have an account? <Link href="/register" textDecor="underline">Register here</Link></Box>
                             </Stack>
                         </Stack>
                     </Box>
