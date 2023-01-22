@@ -20,7 +20,6 @@ export const Card = ({ name, imageUrl, description, slug }: { name: string; imag
     return (
         <GridItem>
             <Box
-                rounded={'sm'}
                 my={5}
                 mx={0}
                 overflow={'hidden'}
@@ -33,7 +32,6 @@ export const Card = ({ name, imageUrl, description, slug }: { name: string; imag
                         src={
                             imageUrl
                         }
-                        roundedTop={'sm'}
                         objectFit="cover"
                         h="full"
                         w="full"
