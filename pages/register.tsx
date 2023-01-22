@@ -1,13 +1,48 @@
-import { Flex, FormControl, FormLabel, Input, Checkbox, Stack, Button, Heading, useColorModeValue, Box, Text, Link } from "@chakra-ui/react";
-import React from "react";
+import { useMutation } from "@apollo/client";
+import { Flex, FormControl, FormLabel, Input, Stack, Button, Heading, useColorModeValue, Box, Text, Link, FormErrorMessage } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import React, { useContext, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { UserContext } from "../contexts/UserContext";
 import { BaseLayout } from "../layouts/BaseLayout";
 
 const RegisterPage = () => {
+    const { createAccount } = useContext(UserContext);
+    const [error, setError] = useState<string | null>(null);
+    const router = useRouter();
+
+    const { register, watch, handleSubmit, formState: { errors } } = useForm({
+        defaultValues: {
+            username: "",
+            email: "",
+            password: "",
+            passwordRepeat: "",
+        }
+    });
+
+    // clear general error on form change
+    useEffect(() => {
+        const subscription = watch(() => setError(null));
+        return () => subscription.unsubscribe();
+    }, [watch]);
+
+    const onSubmit = async (values) => {
+        try {
+            const result = await createAccount(values.username, values.email, values.password);
+            if (result) {
+                router.push("/login");
+            }
+        } catch(e) {
+            setError(e.message);
+        }
+    }
 
     return (
         <BaseLayout>
             <Flex
-                minH={'90vh'}
+                as="form"
+                onSubmit={handleSubmit(onSubmit)}
+                minH={'80vh'}
                 align={'center'}
                 justify={'center'}>
                 <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
@@ -21,32 +56,55 @@ const RegisterPage = () => {
                         bg={useColorModeValue('white', 'gray.700')}
                         p={8}>
                         <Stack spacing={4}>
-                            <FormControl id="username">
+                            <FormControl id="username" isInvalid={!!errors.username}>
                                 <FormLabel>Username</FormLabel>
-                                <Input type="text" />
+                                <Input type="text" {...register("username", { required: { value: true, message: "Username is required" } })} />
+                                {errors.username && (
+                                    <FormErrorMessage>{errors.username.message}</FormErrorMessage>
+                                )}
                             </FormControl>
-                            <FormControl id="email">
+                            <FormControl id="email" isInvalid={!!errors.email}>
                                 <FormLabel>Email address</FormLabel>
-                                <Input type="email" />
+                                <Input type="email" {...register("email", { required: { value: true, message: "Email is required" } })} />
+                                {errors.email && (
+                                    <FormErrorMessage>{errors.email.message}</FormErrorMessage>
+                                )}
                             </FormControl>
-                            <FormControl id="password">
+                            <FormControl id="password" isInvalid={!!errors.password}>
                                 <FormLabel>Password</FormLabel>
-                                <Input type="password" />
+                                <Input type="password" {...register("password", { required: { value: true, message: "Password is required" }, minLength: { value: 8, message: "Password has to be at least 8 character long" } })} />
+                                {errors.password && (
+                                    <FormErrorMessage>{errors.password.message}</FormErrorMessage>
+                                )}
                             </FormControl>
-                            <FormControl id="password-repeat">
+                            <FormControl id="password-repeat" isInvalid={!!errors.passwordRepeat}>
                                 <FormLabel>Repeat password</FormLabel>
-                                <Input type="password" />
+                                <Input type="password" {...register("passwordRepeat", {
+                                    required: { value: true, message: "Please repeat your password" }, minLength: { value: 8, message: "Password has to be at least 8 characters long" }, validate: (val: string) => {
+                                        if (watch('password') != val) {
+                                            return "Passwords have to match";
+                                        }
+                                    }
+                                })} />
+                                {errors.passwordRepeat && (
+                                    <FormErrorMessage>{errors.passwordRepeat.message}</FormErrorMessage>
+                                )}
                             </FormControl>
                             <Stack spacing={10}>
-                                <Button>
-                                    Register
-                                </Button>
-                                <Box>Have an account? <Link href="/login">Log in</Link></Box>
+                                <FormControl isInvalid={!!error}>
+                                    <Button type="submit">
+                                        Register
+                                    </Button>
+                                    {error && (
+                                        <FormErrorMessage>{error}</FormErrorMessage>
+                                    )}
+                                </FormControl>
+                                <Box>Have an account? <Link textDecoration="underline" href="/login">Log in here</Link></Box>
                             </Stack>
                         </Stack>
                     </Box>
                 </Stack>
-            </Flex> 
+            </Flex>
         </BaseLayout>
     )
 };
