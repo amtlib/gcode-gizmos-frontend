@@ -1,7 +1,7 @@
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
-import { Authenticate, CheckToken, EndSession } from "../graphql/operations/user";
+import { Authenticate, CheckToken, CreateUser, EndSession } from "../graphql/operations/user";
 
 
 export function UserContainer({ children }) {
@@ -12,12 +12,13 @@ export function UserContainer({ children }) {
     const [loggedIn, setLoggedIn] = useState(false);
 
     const [authenticateUserWithPassword, { data: authenticateData, loading: authenticateLoading }] = useMutation(Authenticate);
+    const [createUser, { data: createUserData, loading: createUserLoading }] = useMutation(CreateUser);
 
     const { data: checkTokenData, loading: checkTokenLoading } = useQuery(CheckToken);
     const [endSession] = useMutation(EndSession);
 
 
-    const authenticate = async (username?: string, password?: string) => {
+    const authenticate = async (username: string, password: string) => {
         const { data, errors } = await authenticateUserWithPassword({ variables: { username, password } });
         if (data.authenticateUserWithPassword.__typename === "UserAuthenticationWithPasswordFailure") {
             throw new Error("Invalid username or password");
@@ -32,6 +33,28 @@ export function UserContainer({ children }) {
         }
         return false;
     };
+
+    const createAccount = async (username: string, email: string, password: string) => {
+        try {
+            const { data, errors } = await createUser({ variables: {username, email, password}});
+            if (errors) {
+                return false;
+            }
+            if (data?.createUser?.__typename === "User") {
+                return true;
+            }
+        } catch(e) {
+            if (e.message === "Prisma error: Unique constraint failed on the fields: (`email`)") {
+                throw new Error("This email is already in our system");
+            }
+            if (e.message === "Prisma error: Unique constraint failed on the fields: (`username`)") {
+                throw new Error("Username is already taken");
+            }
+            return false;
+        }
+        
+        return false;
+    }
 
     const unauthenticate = () => {
         endSession();
@@ -60,17 +83,14 @@ export function UserContainer({ children }) {
 
     useEffect(() => {
         if (checkTokenData?.authenticatedItem && !checkTokenLoading) {
-            console.log(checkTokenData)
-            // const { firstName, lastName, type, id, birthDate, district } = checkTokenData?.authenticatedItem;
-            // setFirstName(firstName);
-            // setLastName(lastName);
-            // setType(type);
-            // setLoggedIn(true);
-            // setBirthDate(birthDate);
-            // setDistrict(district.id)
-            // setUserId(id);
+            const { id, username, email, isAdmin } = checkTokenData?.authenticatedItem;
+            setId(id);
+            setUsername(username);
+            setEmail(email);
+            setIsAdmin(isAdmin);
+            setLoggedIn(true);
         }
-    }, [checkTokenData, checkTokenLoading])
+    }, [checkTokenData, checkTokenLoading]);
 
 
     return <UserContext.Provider value={{
@@ -81,6 +101,7 @@ export function UserContainer({ children }) {
         loading: authenticateLoading || checkTokenLoading,
         loggedIn,
         authenticate,
-        unauthenticate
+        unauthenticate,
+        createAccount
     }}>{children}</UserContext.Provider>
 }

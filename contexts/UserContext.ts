@@ -9,6 +9,7 @@ export type UserContextType = {
     isAdmin?: boolean;
     authenticate: (username?: string, password?: string) => Promise<Boolean>;
     unauthenticate: () => void;
+    createAccount: (username: string, email: string, password: string) => Promise<Boolean>
 };
 
 export const UserContext = createContext<UserContextType>({
@@ -16,4 +17,5 @@ export const UserContext = createContext<UserContextType>({
     loading: false,
     authenticate: () => Promise.resolve(false),
     unauthenticate: () => {},
+    createAccount: () => Promise.resolve(false)
 });
