@@ -35,3 +35,10 @@ export const EndSession = gql(`
     }
 `);
 
+export const CreateUser = gql(`
+    mutation CreateUser($username: String!, $email: String!, $password: String!) {
+        createUser(data: {username: $username, email: $email, password: $password}) {
+            id
+        }
+    }
+`);
