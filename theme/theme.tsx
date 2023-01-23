@@ -27,6 +27,11 @@ export const theme = extendTheme({
                 colorScheme: "purple"
             }
         },
+        ModalContent: {
+            defaultProps: {
+                rounded: 0
+            }
+        },
         Input: {
             sizes: {
                 xs: {
