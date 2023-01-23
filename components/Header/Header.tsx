@@ -24,6 +24,7 @@ import { Search } from './Search';
 import { UserContext } from '../../contexts/UserContext';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { ModalContext } from '../../contexts/ModalContext';
 
 
 const Links = [
@@ -55,6 +56,7 @@ const NavLink = ({ children, ...rest }: { children: ReactNode; } & ComponentProp
 export function Header() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { colorMode, toggleColorMode } = useColorMode();
+    const {onCreateModelModalOpen} = useContext(ModalContext);
     const router = useRouter();
     const { loggedIn, unauthenticate, username } = useContext(UserContext);
     const [maxW, setMaxW] = useState("960px");
@@ -92,6 +94,7 @@ export function Header() {
                                 size={'sm'}
                                 mr={4}
                                 borderRadius={0}
+                                onClick={onCreateModelModalOpen}
                                 leftIcon={<AddIcon />}>
                                 Create gizmo
                             </Button>
