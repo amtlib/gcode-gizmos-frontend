@@ -20,7 +20,7 @@ export default function Home() {
     return (
         <BaseLayout>
             <Grid>
-                {data?.models.map(model => <Card key={model.id} name={model.name} imageUrl={model.modelImage.url} description={model.description} slug={model.slug} />)}
+                {data?.models.map(model => <Card key={model.id} name={model.name} imageUrl={model.modelImage?.url} description={model.description} slug={model.slug} />)}
             </Grid>
         </BaseLayout>
     )
