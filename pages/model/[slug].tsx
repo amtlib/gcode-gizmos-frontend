@@ -2,6 +2,7 @@ import { useQuery } from "@apollo/client";
 import { Container, SimpleGrid, Flex, Stack, Heading, StackDivider, VStack, List, ListItem, Button, Box, Image, Text, Spinner } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React from "react";
+import { StlPreview } from "../../components/StlPreview/StlPreview";
 import { ModelQuery } from "../../graphql/operations/models";
 import { BaseLayout } from "../../layouts/BaseLayout";
 
@@ -27,9 +28,8 @@ export default function Model() {
                 columns={{ base: 1, lg: 2 }}
                 spacing={{ base: 8, md: 10 }}
                 py={{ base: 18, md: 24 }}>
-                <Flex>
+                <Flex direction="column">
                     <Image
-
                         alt=""
                         src={model.modelImage.url}
                         fit={'cover'}
@@ -37,6 +37,7 @@ export default function Model() {
                         w={'100%'}
                         h={{ base: '100%', sm: '400px', lg: '500px' }}
                     />
+                    <StlPreview url={model.modelFile.url} />
                 </Flex>
                 <Stack spacing={{ base: 6, md: 10 }}>
                     <Box as={'header'}>
@@ -57,22 +58,11 @@ export default function Model() {
                                 _dark={{borderColor: 'gray.600'}}
                             />
                         }>
-                        <VStack spacing={{ base: 4, sm: 6 }}>
-                            <Text
-                                color='gray.500'
-                                _dark={{ color: 'gray.400' }}
-                                fontSize={'2xl'}
-                                fontWeight={'300'}>
-                                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                                diam nonumy eirmod tempor invidunt ut labore
+                        <Box>
+                            <Text fontSize={'lg'} textAlign="left" >
+                                {model.description}
                             </Text>
-                            <Text fontSize={'lg'}>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad
-                                aliquid amet at delectus doloribus dolorum expedita hic, ipsum
-                                maxime modi nam officiis porro, quae, quisquam quos
-                                reprehenderit velit? Natus, totam.
-                            </Text>
-                        </VStack>
+                        </Box>
                         <Box>
                             <Text
                                 fontSize={{ base: '16px', lg: '18px' }}
