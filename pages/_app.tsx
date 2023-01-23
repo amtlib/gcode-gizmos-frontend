@@ -5,6 +5,8 @@ import { ApolloProvider } from "@apollo/client";
 import client from "../apollo-client";
 import Head from "next/head";
 import { UserContainer } from "../containers/UserContainer";
+import { ModelContainer } from "../containers/ModelContainer";
+import { ModalContainer } from "../containers/ModalContainer";
 
 export default function MyApp({ Component, pageProps }) {
     return (<>
@@ -17,9 +19,13 @@ export default function MyApp({ Component, pageProps }) {
         </Head>
         <ApolloProvider client={client}>
             <UserContainer>
-                <ChakraProvider theme={theme}>
-                    <Component {...pageProps} />
-                </ChakraProvider>
+                <ModalContainer>
+                    <ModelContainer>
+                        <ChakraProvider theme={theme}>
+                            <Component {...pageProps} />
+                        </ChakraProvider>
+                    </ModelContainer>
+                </ModalContainer>
             </UserContainer>
         </ApolloProvider>
     </>);
