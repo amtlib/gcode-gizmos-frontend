@@ -22,12 +22,24 @@ export const ModelQuery = gql(`
             modelImage {
                 url
             }
+            modelFile {
+                url
+            }
             createdAt
             createdBy {
                 username
             }
             likedByCount
             doUserLikesIt
+            recommendedInfill
         }
     }
-`)
+`);
+
+export const CreateModel = gql(`
+    mutation CreateModel($data: ModelCreateInput!) {
+        createModel(data: $data) {
+            slug
+        }
+    }
+`);
