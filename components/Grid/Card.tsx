@@ -13,7 +13,7 @@ import {
 import { BsArrowUpRight, BsHeartFill, BsHeart } from 'react-icons/bs';
 import Link from 'next/link';
 
-export const Card = ({ name, imageUrl, description, slug }: { name: string; imageUrl: string; description: string; slug: string; }) => {
+export const Card = ({ name, imageUrl, description, slug }: { name: string; imageUrl?: string; description: string; slug: string; }) => {
     const [liked, setLiked] = useState(false);
     const [shadowWhite, shadowBlack] = useToken('colors', ['black', 'purple.200']);
 
