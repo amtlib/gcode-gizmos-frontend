@@ -32,6 +32,8 @@ export const ModelQuery = gql(`
             likedByCount
             doUserLikesIt
             recommendedInfill
+            recommendedMaterial
+            supports
         }
     }
 `);
