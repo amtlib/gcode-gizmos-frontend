@@ -1,7 +1,8 @@
 import { useQuery } from "@apollo/client";
-import { Container, SimpleGrid, Flex, Stack, Heading, StackDivider, VStack, List, ListItem, Button, Box, Image, Text, Spinner } from "@chakra-ui/react";
+import { SimpleGrid, Flex, Stack, Heading, StackDivider, VStack, List, ListItem, Button, Box, Image, Text, Spinner } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React from "react";
+import { BsBox } from "react-icons/bs";
 import { StlPreview } from "../../components/StlPreview/StlPreview";
 import { ModelQuery } from "../../graphql/operations/models";
 import { BaseLayout } from "../../layouts/BaseLayout";
@@ -31,11 +32,13 @@ export default function Model() {
                 <Flex direction="column">
                     <Image
                         alt=""
-                        src={model.modelImage.url}
+                        src={model.modelImage?.url}
                         fit={'cover'}
                         align={'center'}
+                        objectFit='cover'
                         w={'100%'}
-                        h={{ base: '100%', sm: '400px', lg: '500px' }}
+                        pb={4}
+                        fallback={null}
                     />
                     <StlPreview url={model.modelFile.url} />
                 </Flex>
@@ -48,7 +51,6 @@ export default function Model() {
                             {model.name}
                         </Heading>
                     </Box>
-
                     <Stack
                         spacing={{ base: 4, sm: 6 }}
                         direction={'column'}
@@ -71,21 +73,29 @@ export default function Model() {
                                 fontWeight={'500'}
                                 textTransform={'uppercase'}
                                 mb={'4'}>
-                                Features
+                                Additional informations
                             </Text>
 
-                            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
-                                <List spacing={2}>
-                                    <ListItem>Chronograph</ListItem>
-                                    <ListItem>Master Chronometer Certified</ListItem>{' '}
-                                    <ListItem>Tachymeter</ListItem>
-                                </List>
-                                <List spacing={2}>
-                                    <ListItem>Anti‑magnetic</ListItem>
-                                    <ListItem>Chronometer</ListItem>
-                                    <ListItem>Small seconds</ListItem>
-                                </List>
-                            </SimpleGrid>
+                            <List spacing={2}>
+                                <ListItem>
+                                    <Text as={'span'} fontWeight={'bold'}>
+                                        Recommended infill:
+                                    </Text>{' '}
+                                    {model.recommendedInfill ? `${model.recommendedInfill}%` : `unknown`}
+                                </ListItem>
+                                <ListItem>
+                                    <Text as={'span'} fontWeight={'bold'}>
+                                        Recommended material:
+                                    </Text>{' '}
+                                    {model.recommendedMaterial || "PLA"}
+                                </ListItem>
+                                <ListItem>
+                                    <Text as={'span'} fontWeight={'bold'}>
+                                        Supports:
+                                    </Text>{' '}
+                                    {model.supports === "yes" ? "Yes" : model.supports === "no" ? "No" : "Doesn't matter"}
+                                </ListItem>
+                            </List>
                         </Box>
                         <Box>
                             <Text
@@ -95,52 +105,15 @@ export default function Model() {
                                 fontWeight={'500'}
                                 textTransform={'uppercase'}
                                 mb={'4'}>
-                                Product Details
+                                Administration
                             </Text>
 
                             <List spacing={2}>
                                 <ListItem>
-                                    <Text as={'span'} fontWeight={'bold'}>
-                                        Between lugs:
-                                    </Text>{' '}
-                                    20 mm
+                                    <Button>Edit model</Button>
                                 </ListItem>
                                 <ListItem>
-                                    <Text as={'span'} fontWeight={'bold'}>
-                                        Bracelet:
-                                    </Text>{' '}
-                                    leather strap
-                                </ListItem>
-                                <ListItem>
-                                    <Text as={'span'} fontWeight={'bold'}>
-                                        Case:
-                                    </Text>{' '}
-                                    Steel
-                                </ListItem>
-                                <ListItem>
-                                    <Text as={'span'} fontWeight={'bold'}>
-                                        Case diameter:
-                                    </Text>{' '}
-                                    42 mm
-                                </ListItem>
-                                <ListItem>
-                                    <Text as={'span'} fontWeight={'bold'}>
-                                        Dial color:
-                                    </Text>{' '}
-                                    Black
-                                </ListItem>
-                                <ListItem>
-                                    <Text as={'span'} fontWeight={'bold'}>
-                                        Crystal:
-                                    </Text>{' '}
-                                    Domed, scratch‑resistant sapphire crystal with anti‑reflective
-                                    treatment inside
-                                </ListItem>
-                                <ListItem>
-                                    <Text as={'span'} fontWeight={'bold'}>
-                                        Water resistance:
-                                    </Text>{' '}
-                                    5 bar (50 metres / 167 feet){' '}
+                                    <Button>Delete model</Button>
                                 </ListItem>
                             </List>
                         </Box>
@@ -148,6 +121,8 @@ export default function Model() {
 
                     <Button
                         rounded={'none'}
+                        as="a"
+                        href={model.modelFile.url}
                         w={'full'}
                         mt={8}
                         size={'lg'}
@@ -163,12 +138,8 @@ export default function Model() {
                             transform: 'translateY(2px)',
                             boxShadow: 'lg',
                         }}>
-                        Add to cart
+                        Download
                     </Button>
-
-                    <Stack direction="row" alignItems="center" justifyContent={'center'}>
-                        <Text>2-3 business days delivery</Text>
-                    </Stack>
                 </Stack>
             </SimpleGrid>
         </BaseLayout>
