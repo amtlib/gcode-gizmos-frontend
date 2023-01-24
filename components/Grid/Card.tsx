@@ -1,21 +1,36 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
     Box,
     Heading,
     Text,
-    Img,
+    Image,
     Flex,
     useColorModeValue,
     HStack,
     GridItem,
     useToken,
+    Tooltip,
 } from '@chakra-ui/react';
-import { BsArrowUpRight, BsHeartFill, BsHeart } from 'react-icons/bs';
+import { BsArrowUpRight, BsHeartFill, BsHeart, BsBox } from 'react-icons/bs';
 import Link from 'next/link';
+import { UserContext } from '../../contexts/UserContext';
+import { ModelContext } from '../../contexts/ModelContext';
 
-export const Card = ({ name, imageUrl, description, slug }: { name: string; imageUrl?: string; description: string; slug: string; }) => {
-    const [liked, setLiked] = useState(false);
+export const Card = ({ name, imageUrl, description, slug, doUserLikesIt }: { name: string; imageUrl?: string; description: string; slug: string; doUserLikesIt: boolean }) => {
+    const [liked, setLiked] = useState<boolean>(doUserLikesIt);
     const [shadowWhite, shadowBlack] = useToken('colors', ['black', 'purple.200']);
+    const { loggedIn, username } = useContext(UserContext);
+    const { likeModel, dislikeModel } = useContext(ModelContext);
+
+    useEffect(() => {
+        if (username) {
+            if (liked) {
+                likeModel(slug, username)
+            } else {
+                dislikeModel(slug, username);
+            }
+        }
+    }, [liked])
 
     return (
         <GridItem>
@@ -28,14 +43,19 @@ export const Card = ({ name, imageUrl, description, slug }: { name: string; imag
                 borderColor="black"
                 boxShadow={useColorModeValue(`6px 6px 0 ${shadowWhite}`, `6px 6px 0 ${shadowBlack}`)}>
                 <Box h={'200px'} borderBottom={'1px'} borderColor="black">
-                    <Img
+                    <Image
                         src={
                             imageUrl
                         }
                         objectFit="cover"
                         h="full"
                         w="full"
-                        alt={'Blog Image'}
+                        alt=""
+                        fallback={<>
+                            <Flex w="full" h="full" align="center" justify="center">
+                                <BsBox style={{ width: "80%", height: "80%" }} color="black" />
+                            </Flex>
+                        </>}
                     />
                 </Box>
                 <Box p={4}>
@@ -73,21 +93,23 @@ export const Card = ({ name, imageUrl, description, slug }: { name: string; imag
                             </Flex>
                         </Link>
                     </Box>
+                    <Tooltip label={loggedIn ? liked ? 'Click to dislike!' : 'Click to like!' : 'Log in to like models!'}>
+                        <Flex
+                            p={4}
+                            alignItems="center"
+                            justifyContent={'space-between'}
+                            roundedBottom={'sm'}
+                            borderLeft={'1px'}
+                            cursor="pointer"
 
-                    <Flex
-                        p={4}
-                        alignItems="center"
-                        justifyContent={'space-between'}
-                        roundedBottom={'sm'}
-                        borderLeft={'1px'}
-                        cursor="pointer"
-                        onClick={() => setLiked(!liked)}>
-                        {liked ? (
-                            <BsHeartFill fill="red" fontSize={'24px'} />
-                        ) : (
-                            <BsHeart fontSize={'24px'} />
-                        )}
-                    </Flex>
+                            onClick={() => loggedIn ? setLiked(!liked) : null}>
+                            {liked ? (
+                                <BsHeartFill fill="red" fontSize={'24px'} />
+                            ) : (
+                                <BsHeart fontSize={'24px'} />
+                            )}
+                        </Flex>
+                    </Tooltip>
                 </HStack>
             </Box>
         </GridItem>
