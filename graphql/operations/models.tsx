@@ -10,6 +10,7 @@ export const ModelsQuery = gql(`
                 url
             }
             slug
+            doUserLikesIt
         }
     }
 `);
@@ -17,6 +18,7 @@ export const ModelsQuery = gql(`
 export const ModelQuery = gql(`
     query Model($slug: String) {
         model(where: {slug: $slug}) {
+            id
             name
             description
             modelImage {
@@ -41,6 +43,25 @@ export const ModelQuery = gql(`
 export const CreateModel = gql(`
     mutation CreateModel($data: ModelCreateInput!) {
         createModel(data: $data) {
+            id
+            slug
+        }
+    }
+`);
+
+export const LikeModel = gql(`
+    mutation LikeModel($modelSlug: String!, $username: String!) {
+        updateModel(where: {slug: $modelSlug}, data: {likedBy: {connect: {username: $username}}}) {
+            id
+            slug
+        }
+    }
+`);
+
+export const DislikeModel = gql(`
+    mutation DislikeModel($modelSlug: String!, $username: String!) {
+        updateModel(where: {slug: $modelSlug}, data: {likedBy: {disconnect: {username: $username}}}) {
+            id
             slug
         }
     }
