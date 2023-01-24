@@ -4,7 +4,6 @@ import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { ModalContext } from "../../contexts/ModalContext";
 import { ModelContext } from "../../contexts/ModelContext";
-import { ModelForm } from "../Forms/ModelForm";
 
 export const CreateModelModal = () => {
     const { createModel } = useContext(ModelContext);
