@@ -1,9 +1,11 @@
 import { useQuery } from "@apollo/client";
 import { SimpleGrid, Flex, Stack, Heading, StackDivider, VStack, List, ListItem, Button, Box, Image, Text, Spinner } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import React from "react";
-import { BsBox } from "react-icons/bs";
+import React, { useContext } from "react";
 import { StlPreview } from "../../components/StlPreview/StlPreview";
+import { ModalContext } from "../../contexts/ModalContext";
+import { ModelContext } from "../../contexts/ModelContext";
+import { UserContext } from "../../contexts/UserContext";
 import { ModelQuery } from "../../graphql/operations/models";
 import { BaseLayout } from "../../layouts/BaseLayout";
 
@@ -11,8 +13,29 @@ import { BaseLayout } from "../../layouts/BaseLayout";
 export default function Model() {
     const router = useRouter();
     const { slug } = router.query;
+    const { username, isAdmin } = useContext(UserContext);
+    const { deleteModel, deleteModelLoading } = useContext(ModelContext);
+    const { launchModelModal } = useContext(ModalContext);
 
     const { data, loading } = useQuery(ModelQuery, { variables: { slug: slug?.toString() } });
+
+    const handleDelete = async () => {
+        if (slug) {
+            const result = await deleteModel(slug.toString());
+            if (result) {
+                router.push("/");
+            }
+        }
+    };
+
+    const handleEdit = async () => {
+        console.log(data?.model)
+        launchModelModal("update", {
+            slug,
+            ...data?.model
+        });
+    }
+
     if (loading) {
         return (
             <BaseLayout>
@@ -23,6 +46,8 @@ export default function Model() {
         )
     }
     const { model } = data;
+    const haveAccessToAdmin = model.createdBy?.username === username || isAdmin;
+
     return (
         <BaseLayout>
             <SimpleGrid
@@ -40,7 +65,9 @@ export default function Model() {
                         pb={4}
                         fallback={null}
                     />
-                    <StlPreview url={model.modelFile.url} />
+                    <Box w="full" h="full">
+                        <StlPreview url={model.modelFile.url} />
+                    </Box>
                 </Flex>
                 <Stack spacing={{ base: 6, md: 10 }}>
                     <Box as={'header'}>
@@ -57,7 +84,7 @@ export default function Model() {
                         divider={
                             <StackDivider
                                 borderColor='gray.200'
-                                _dark={{borderColor: 'gray.600'}}
+                                _dark={{ borderColor: 'gray.600' }}
                             />
                         }>
                         <Box>
@@ -69,7 +96,7 @@ export default function Model() {
                             <Text
                                 fontSize={{ base: '16px', lg: '18px' }}
                                 color='yellow.500'
-                                _dark={{ color: 'yellow.300'}}
+                                _dark={{ color: 'yellow.300' }}
                                 fontWeight={'500'}
                                 textTransform={'uppercase'}
                                 mb={'4'}>
@@ -81,13 +108,13 @@ export default function Model() {
                                     <Text as={'span'} fontWeight={'bold'}>
                                         Recommended infill:
                                     </Text>{' '}
-                                    {model.recommendedInfill ? `${model.recommendedInfill}%` : `unknown`}
+                                    {model.recommendedInfill ? `${Math.floor(parseFloat(model.recommendedInfill))}%` : `unknown`}
                                 </ListItem>
                                 <ListItem>
                                     <Text as={'span'} fontWeight={'bold'}>
                                         Recommended material:
                                     </Text>{' '}
-                                    {model.recommendedMaterial || "PLA"}
+                                    {model.recommendedMaterial?.toUpperCase() || "PLA"}
                                 </ListItem>
                                 <ListItem>
                                     <Text as={'span'} fontWeight={'bold'}>
@@ -97,26 +124,28 @@ export default function Model() {
                                 </ListItem>
                             </List>
                         </Box>
-                        <Box>
-                            <Text
-                                fontSize={{ base: '16px', lg: '18px' }}
-                                color='yellow.500'
-                                _dark={{ color: 'yellow.300'}}
-                                fontWeight={'500'}
-                                textTransform={'uppercase'}
-                                mb={'4'}>
-                                Administration
-                            </Text>
+                        {haveAccessToAdmin && (
+                            <Box>
+                                <Text
+                                    fontSize={{ base: '16px', lg: '18px' }}
+                                    color='yellow.500'
+                                    _dark={{ color: 'yellow.300' }}
+                                    fontWeight={'500'}
+                                    textTransform={'uppercase'}
+                                    mb={'4'}>
+                                    Administration
+                                </Text>
 
-                            <List spacing={2}>
-                                <ListItem>
-                                    <Button>Edit model</Button>
-                                </ListItem>
-                                <ListItem>
-                                    <Button>Delete model</Button>
-                                </ListItem>
-                            </List>
-                        </Box>
+                                <List spacing={2}>
+                                    <ListItem>
+                                        <Button onClick={handleEdit}>Edit model</Button>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Button onClick={handleDelete} isLoading={deleteModelLoading}>Delete model</Button>
+                                    </ListItem>
+                                </List>
+                            </Box>
+                        )}
                     </Stack>
 
                     <Button
