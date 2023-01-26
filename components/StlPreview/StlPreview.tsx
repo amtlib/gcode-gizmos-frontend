@@ -7,8 +7,8 @@ export const StlPreview = ({ url }: { url: string }) => {
     const [positionX, setPositionX] = useState<number | null>(null);
     const [positionY, setPositionY] = useState<number | null>(null);
     const style = {
-        width: '400px',
-        height: '400px',
+        width: '100%',
+        height: '300px'
     }
 
     const handleFinishLoading = (ev: ModelDimensions) => {
@@ -24,7 +24,7 @@ export const StlPreview = ({ url }: { url: string }) => {
             <Flex align="center" w="400px" h="400px" justify="center" display={isLoading ? "flex" : "none"}>
                 <Spinner />
             </Flex>
-            <Box visibility={isLoading ? "hidden" : "visible"}>
+            <Box position={isLoading ? "absolute" : "static"} visibility={isLoading ? "hidden" : "visible"}>
                 <StlViewer
                     style={style}
                     orbitControls
