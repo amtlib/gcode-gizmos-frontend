@@ -1,5 +1,22 @@
 import { gql } from '../apolloSchema/gql';
-
+const ModelFragment = gql(`
+    fragment Model on Model {
+        id
+        name
+        description
+        modelImage {
+            url
+        }
+        createdBy {
+            username
+        }
+        likedBy {
+            username
+        }
+        slug
+        doUserLikesIt
+    }
+`)
 export const Authenticate = gql(`
     mutation Authenticate($username: String!, $password: String!) {
         authenticateUserWithPassword(username: $username, password: $password) {
@@ -10,6 +27,12 @@ export const Authenticate = gql(`
                     username
                     email
                     isAdmin
+                    createdModels {
+                        ...Model
+                    }
+                    likedModels {
+                        ...Model
+                    }
                 }
             }
         }
@@ -24,6 +47,12 @@ export const CheckToken = gql(`
                 username
                 email
                 isAdmin
+                createdModels {
+                    ...Model
+                }
+                likedModels {
+                    ...Model
+                }
             }
         }
     }
@@ -42,3 +71,36 @@ export const CreateUser = gql(`
         }
     }
 `);
+
+export const ChangePassword = gql(`
+    mutation ChangePassword($username: String!, $newPassword: String!) {
+        updateUser(where: {username: $username}, data: {password: $newPassword}) {
+            id
+        }
+    }
+`);
+
+export const LikeModel = gql(`
+    mutation LikeModel($modelSlug: String!, $username: String!) {
+        updateUser(where: {username: $username}, data: {likedModels: {connect: {slug: $modelSlug}}}) {
+            id
+        }
+    }
+`);
+
+export const DislikeModel = gql(`
+    mutation DislikeModel($modelSlug: String!, $username: String!) {
+        updateUser(where: {username: $username}, data: {likedModels: {disconnect: {slug: $modelSlug}}}) {
+            id
+        }
+    }
+`);
+
+export const LikedModels = gql(`
+    query LikedModels($username: String!) {
+        models(where: {likedBy: {some: {username: {equals: $username}}}}) {
+            id
+            name
+        }
+    }
+`)
