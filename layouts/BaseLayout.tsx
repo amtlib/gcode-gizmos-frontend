@@ -2,8 +2,6 @@ import { Box } from "@chakra-ui/layout";
 import React, { ComponentPropsWithRef } from "react";
 import { Footer } from "../components/Footer/Footer";
 import { Header } from "../components/Header/Header";
-import { CreateModelModal } from "../components/Modal/CreateModelModal";
-
 
 export const BaseLayout = ({ children, ...rest }: {children: React.ReactNode } & ComponentPropsWithRef<typeof Box>) => {
     return (
@@ -13,7 +11,6 @@ export const BaseLayout = ({ children, ...rest }: {children: React.ReactNode } &
                 {children}
             </Box>
             <Footer />
-            <CreateModelModal />
         </>
     )
 }
