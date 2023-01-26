@@ -33,11 +33,11 @@ const Links = [
         href: "/",
         hasToBeLoggedIn: false,
     },
-    {
-        name: "Favorities",
-        href: "/favorities",
-        hasToBeLoggedIn: true,
-    }
+    // {
+    //     name: "Favorities",
+    //     href: "/favorities",
+    //     hasToBeLoggedIn: true,
+    // }
 ] as const;
 
 const NavLink = ({ children, ...rest }: { children: ReactNode; } & ComponentPropsWithoutRef<typeof ChakraLink>) => (
@@ -56,7 +56,7 @@ const NavLink = ({ children, ...rest }: { children: ReactNode; } & ComponentProp
 export function Header() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { colorMode, toggleColorMode } = useColorMode();
-    const {onCreateModelModalOpen} = useContext(ModalContext);
+    const {launchModelModal} = useContext(ModalContext);
     const router = useRouter();
     const { loggedIn, unauthenticate, username } = useContext(UserContext);
     const [maxW, setMaxW] = useState("960px");
@@ -83,9 +83,9 @@ export function Header() {
                             ))}
                         </HStack>
                     </HStack>
-                    <HStack spacing={8} justify="center" mx="8" flexGrow={1} display={{ base: "none", md: "block" }}>
+                    {/* <HStack spacing={8} justify="center" mx="8" flexGrow={1} display={{ base: "none", md: "block" }}>
                         <Input rounded={0} type="search" placeholder="find gizmo..." onBlur={() => setMaxW("960px")} onFocus={() => setMaxW("full")} />
-                    </HStack>
+                    </HStack> */}
                     <Flex alignItems={'center'}>
                         {loggedIn && (
                             <Button
@@ -94,7 +94,7 @@ export function Header() {
                                 size={'sm'}
                                 mr={4}
                                 borderRadius={0}
-                                onClick={onCreateModelModalOpen}
+                                onClick={() => launchModelModal("create")}
                                 leftIcon={<AddIcon />}>
                                 Create gizmo
                             </Button>
@@ -116,12 +116,12 @@ export function Header() {
                                     />
                                 </MenuButton>
                                 <MenuList rounded={0}>
-                                    <MenuItem>
+                                    <MenuItem onClick={() => router.push("/account")}>
                                         Account
                                     </MenuItem>
-                                    <MenuItem>
+                                    {/* <MenuItem>
                                         My gizmos
-                                    </MenuItem>
+                                    </MenuItem> */}
                                     <MenuItem onClick={toggleColorMode}>
                                         {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
                                         <Box ml={2}>Toggle color scheme</Box>
