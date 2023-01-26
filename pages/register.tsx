@@ -7,7 +7,7 @@ import { UserContext } from "../contexts/UserContext";
 import { BaseLayout } from "../layouts/BaseLayout";
 
 const RegisterPage = () => {
-    const { createAccount } = useContext(UserContext);
+    const { createAccount, createAccountLoading } = useContext(UserContext);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
@@ -58,14 +58,14 @@ const RegisterPage = () => {
                         <Stack spacing={4}>
                             <FormControl id="username" isInvalid={!!errors.username}>
                                 <FormLabel>Username</FormLabel>
-                                <Input type="text" {...register("username", { required: { value: true, message: "Username is required" } })} />
+                                <Input type="text" {...register("username", { required: { value: true, message: "Username is required" }, pattern: { value: /^[a-zA-Z1-9]+$/, message: "You can use only letters and numbers"} })} />
                                 {errors.username && (
                                     <FormErrorMessage>{errors.username.message}</FormErrorMessage>
                                 )}
                             </FormControl>
                             <FormControl id="email" isInvalid={!!errors.email}>
                                 <FormLabel>Email address</FormLabel>
-                                <Input type="email" {...register("email", { required: { value: true, message: "Email is required" } })} />
+                                <Input type="email" {...register("email", { required: { value: true, message: "Email is required" }, pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Provide a valid email address"} })} />
                                 {errors.email && (
                                     <FormErrorMessage>{errors.email.message}</FormErrorMessage>
                                 )}
@@ -92,7 +92,7 @@ const RegisterPage = () => {
                             </FormControl>
                             <Stack spacing={10}>
                                 <FormControl isInvalid={!!error}>
-                                    <Button type="submit">
+                                    <Button type="submit" isLoading={createAccountLoading} disabled={createAccountLoading}>
                                         Register
                                     </Button>
                                     {error && (
