@@ -1,14 +1,13 @@
-import { useQuery } from "@apollo/client";
 import { Flex, Spinner } from "@chakra-ui/react";
-import React from "react";
+import React, { useContext } from "react";
 import { Card } from "../components/Grid/Card";
 import { Grid } from "../components/Grid/Grid";
-import { ModelsQuery } from "../graphql/operations/models";
+import { ModelContext } from "../contexts/ModelContext";
 import { BaseLayout } from "../layouts/BaseLayout";
 
 export default function Home() {
-    const { data, loading } = useQuery(ModelsQuery);
-    if (loading) {
+    const { models, modelsLoading } = useContext(ModelContext);
+    if (modelsLoading) {
         return (
             <BaseLayout>
                 <Flex align="center" justify="center" w="full" minH="calc(100vh - 130px)">
@@ -20,7 +19,7 @@ export default function Home() {
     return (
         <BaseLayout>
             <Grid>
-                {data?.models.map(model => <Card key={model.id} name={model.name} imageUrl={model.modelImage?.url} doUserLikesIt={model.doUserLikesIt} description={model.description} slug={model.slug} />)}
+                {models?.map(model => <Card key={model.id} name={model.name} imageUrl={model.modelImage?.url} doUserLikesIt={model.doUserLikesIt} description={model.description} slug={model.slug} />)}
             </Grid>
         </BaseLayout>
     )
