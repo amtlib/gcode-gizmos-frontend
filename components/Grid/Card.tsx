@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import {
     Box,
     Heading,
@@ -14,23 +14,24 @@ import {
 import { BsArrowUpRight, BsHeartFill, BsHeart, BsBox } from 'react-icons/bs';
 import Link from 'next/link';
 import { UserContext } from '../../contexts/UserContext';
-import { ModelContext } from '../../contexts/ModelContext';
 
 export const Card = ({ name, imageUrl, description, slug, doUserLikesIt }: { name: string; imageUrl?: string; description: string; slug: string; doUserLikesIt: boolean }) => {
     const [liked, setLiked] = useState<boolean>(doUserLikesIt);
     const [shadowWhite, shadowBlack] = useToken('colors', ['black', 'purple.200']);
     const { loggedIn, username } = useContext(UserContext);
-    const { likeModel, dislikeModel } = useContext(ModelContext);
+    const { likeModel, dislikeModel } = useContext(UserContext);
 
-    useEffect(() => {
-        if (username) {
+
+    const handleLike = () => {
+        setLiked(prev => !prev);
+        if (username && slug) {
             if (liked) {
-                likeModel(slug, username)
-            } else {
                 dislikeModel(slug, username);
+            } else {
+                likeModel(slug, username);
             }
         }
-    }, [liked])
+    }
 
     return (
         <GridItem>
@@ -42,7 +43,7 @@ export const Card = ({ name, imageUrl, description, slug, doUserLikesIt }: { nam
                 border={'1px'}
                 borderColor="black"
                 boxShadow={useColorModeValue(`6px 6px 0 ${shadowWhite}`, `6px 6px 0 ${shadowBlack}`)}>
-                <Box h={'200px'} borderBottom={'1px'} borderColor="black">
+                <Box h={'300px'} borderBottom={'1px'} borderColor="black">
                     <Image
                         src={
                             imageUrl
@@ -74,7 +75,7 @@ export const Card = ({ name, imageUrl, description, slug, doUserLikesIt }: { nam
                         {name}
                     </Heading>
                     <Text color={'gray.500'} noOfLines={2}>
-                        {description}
+                        {description.length > 100 ? `${description.substring(0, 100)}...` : description}
                     </Text>
                 </Box>
                 <HStack borderTop={'1px'} color="black">
@@ -101,8 +102,7 @@ export const Card = ({ name, imageUrl, description, slug, doUserLikesIt }: { nam
                             roundedBottom={'sm'}
                             borderLeft={'1px'}
                             cursor="pointer"
-
-                            onClick={() => loggedIn ? setLiked(!liked) : null}>
+                            onClick={() => loggedIn ? handleLike() : null}>
                             {liked ? (
                                 <BsHeartFill fill="red" fontSize={'24px'} />
                             ) : (
