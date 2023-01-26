@@ -1,13 +1,13 @@
 import { createContext } from "react";
 
 export type ModalContextType = {
-    isCreateModelModalOpen: boolean;
-    onCreateModelModalOpen: () => void;
-    onCreateModelModalClose: () => void;
+    isModelModalOpen: boolean;
+    launchModelModal: (action: "create" | "update", data?: any) => void,
+    onModelModalClose: () => void;
 };
 
 export const ModalContext = createContext<ModalContextType>({
-    isCreateModelModalOpen: false,
-    onCreateModelModalOpen: () => {},
-    onCreateModelModalClose: () => {},
+    isModelModalOpen: false,
+    launchModelModal: () => {},
+    onModelModalClose: () => {},
 });
