@@ -51,7 +51,7 @@ const LoginPage = () => {
                         <Stack spacing={4}>
                             <FormControl id="username" isInvalid={!!errors.username}>
                                 <FormLabel>Username</FormLabel>
-                                <Input type="text" {...register("username", { required: { value: true, message: "Username is required" } })} />
+                                <Input type="text" {...register("username", { required: { value: true, message: "Username is required" }, pattern: { value: /^[a-zA-Z1-9]+$/, message: "You can use only letters and numbers"} })} />
                                 {!!errors.username &&
                                     <FormErrorMessage>{errors.username.message}</FormErrorMessage>
                                 }
