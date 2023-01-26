@@ -19,13 +19,13 @@ export default function MyApp({ Component, pageProps }) {
         </Head>
         <ApolloProvider client={client}>
             <UserContainer>
-                <ModalContainer>
+                <ChakraProvider theme={theme}>
                     <ModelContainer>
-                        <ChakraProvider theme={theme}>
+                        <ModalContainer>
                             <Component {...pageProps} />
-                        </ChakraProvider>
+                        </ModalContainer>
                     </ModelContainer>
-                </ModalContainer>
+                </ChakraProvider>
             </UserContainer>
         </ApolloProvider>
     </>);
