@@ -31,7 +31,7 @@ export default function Account() {
 
     return (
         <BaseLayout>
-            <Box w="50%">
+            <Box w={{ base: "100%", md: "50%" }}>
                 <Heading
                     lineHeight={1.1}
                     fontWeight={600}
