@@ -2,6 +2,7 @@ import { useQuery } from "@apollo/client";
 import { SimpleGrid, Flex, Stack, Heading, StackDivider, VStack, List, ListItem, Button, Box, Image, Text, Spinner } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useContext } from "react";
+import Download from "../../components/Download/Download";
 import { StlPreview } from "../../components/StlPreview/StlPreview";
 import { ModalContext } from "../../contexts/ModalContext";
 import { ModelContext } from "../../contexts/ModelContext";
@@ -29,7 +30,6 @@ export default function Model() {
     };
 
     const handleEdit = async () => {
-        console.log(data?.model)
         launchModelModal("update", {
             slug,
             ...data?.model
@@ -55,18 +55,21 @@ export default function Model() {
                 spacing={{ base: 8, md: 10 }}
                 py={{ base: 18, md: 24 }}>
                 <Flex direction="column">
-                    <Image
-                        alt=""
-                        src={model.modelImage?.url}
-                        fit={'cover'}
-                        align={'center'}
-                        objectFit='cover'
-                        w={'100%'}
-                        pb={4}
-                        fallback={null}
-                    />
+                    {model.images.map(image => (
+                        <Image
+                            alt=""
+                            src={image.image.url}
+                            fit={'cover'}
+                            align={'center'}
+                            objectFit='cover'
+                            w={'100%'}
+                            pb={4}
+                            fallback={null}
+                        />
+
+                    ))}
                     <Box w="full" h="full">
-                        <StlPreview url={model.modelFile.url} />
+                        <StlPreview url={model.files[0]?.file.url} />
                     </Box>
                 </Flex>
                 <Stack spacing={{ base: 6, md: 10 }}>
@@ -147,11 +150,11 @@ export default function Model() {
                             </Box>
                         )}
                     </Stack>
-
-                    <Button
+                    <Download model={model} />
+                    {/* <Button
                         rounded={'none'}
                         as="a"
-                        href={model.modelFile.url}
+                        // href={model.modelFile.url}
                         w={'full'}
                         mt={8}
                         size={'lg'}
@@ -168,7 +171,7 @@ export default function Model() {
                             boxShadow: 'lg',
                         }}>
                         Download
-                    </Button>
+                    </Button> */}
                 </Stack>
             </SimpleGrid>
         </BaseLayout>
