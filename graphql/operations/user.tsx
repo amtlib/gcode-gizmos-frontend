@@ -4,8 +4,10 @@ const ModelFragment = gql(`
         id
         name
         description
-        modelImage {
-            url
+        images {
+            image {
+                url
+            }
         }
         createdBy {
             username

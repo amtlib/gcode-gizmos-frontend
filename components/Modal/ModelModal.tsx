@@ -13,8 +13,8 @@ type FormType = {
     recommendedInfill?: number,
     recommendedMaterial?: "pla" | "abs" | "pet" | "tpe",
     supports?: 'yes' | 'no' | 'n/a',
-    modelFile?: any,
-    modelImage?: any,
+    files?: any,
+    images?: any,
 }
 
 export const ModelModal = ({ action, data }: { action: "create" | "update"; data?: FormType }) => {
@@ -30,15 +30,15 @@ export const ModelModal = ({ action, data }: { action: "create" | "update"; data
             recommendedInfill: data?.recommendedInfill ?? 0,
             recommendedMaterial: data?.recommendedMaterial || "pla",
             supports: data?.supports || 'no',
-            modelFile: data?.modelFile || null,
-            modelImage: data?.modelImage || null,
+            files: data?.files || null,
+            images: data?.images || null,
         }
     })
 
     const onSubmit = async (values: Record<string, any>) => {
         console.log(action)
         if (action === "create") {
-            const slug = await createModel(values.name, values.description, values.modelFile[0], values.modelImage[0], values.recommendedInfill.toString(), values.recommendedMaterial, values.supports);
+            const slug = await createModel(values.name, values.description, values.files, values.images, values.recommendedInfill.toString(), values.recommendedMaterial, values.supports);
             console.log(slug)
             if (slug) {
                 onClose();
@@ -108,18 +108,18 @@ export const ModelModal = ({ action, data }: { action: "create" | "update"; data
                         </FormControl>
                         {action === "create" && (
                             <>
-                                <FormControl isInvalid={!!errors.modelImage}>
+                                <FormControl isInvalid={!!errors.images}>
                                     <FormLabel>Image</FormLabel>
-                                    <Input type="file" accept="image/jpg,image/png,image/jpeg" {...register("modelImage")} py={1} pl={1} />
-                                    {!!errors.modelImage &&
-                                        <FormErrorMessage>{errors.modelImage.message.toString()}</FormErrorMessage>
+                                    <Input type="file" multiple accept="image/jpg,image/png,image/jpeg" {...register("images")} py={1} pl={1} />
+                                    {!!errors.images &&
+                                        <FormErrorMessage>{errors.images.message.toString()}</FormErrorMessage>
                                     }
                                 </FormControl>
-                                <FormControl isInvalid={!!errors.modelFile}>
+                                <FormControl isInvalid={!!errors.files}>
                                     <FormLabel>Model</FormLabel>
-                                    <Input type="file" accept=".stl" {...register("modelFile")} py={1} pl={1} />
-                                    {!!errors.modelFile &&
-                                        <FormErrorMessage>{errors.modelFile.message.toString()}</FormErrorMessage>
+                                    <Input type="file" multiple accept=".stl" {...register("files")} py={1} pl={1} />
+                                    {!!errors.files &&
+                                        <FormErrorMessage>{errors.files.message.toString()}</FormErrorMessage>
                                     }
                                 </FormControl>
                             </>

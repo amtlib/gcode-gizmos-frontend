@@ -6,8 +6,10 @@ export const ModelsQuery = gql(`
             id
             name
             description
-            modelImage {
-                url
+            images {
+                image {
+                    url
+                }
             }
             createdBy {
                 username
@@ -27,11 +29,15 @@ export const ModelQuery = gql(`
             id
             name
             description
-            modelImage {
-                url
+            images {
+                image {
+                    url
+                }
             }
-            modelFile {
-                url
+            files {
+                file {
+                    url
+                }
             }
             createdAt
             createdBy {
