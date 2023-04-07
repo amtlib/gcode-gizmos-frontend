@@ -15,10 +15,12 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "apollo-upload-client": "^17.0.0",
+    "file-saver": "^2.0.5",
     "framer-motion": "^8.5.0",
     "graphql": "^16.6.0",
     "graphql-tag": "^2.12.6",
     "isomorphic-unfetch": "^4.0.2",
+    "jszip": "^3.10.1",
     "next": "latest",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -26,7 +28,7 @@
     "react-icons": "^4.7.1",
     "react-stl-viewer": "^2.2.4",
     "styled-components": "^5.3.6",
-    "three": "^0.148.0"
+    "three": "^0.150.1"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^2.16.4",
