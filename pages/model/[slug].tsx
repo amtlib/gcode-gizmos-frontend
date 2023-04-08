@@ -57,6 +57,7 @@ export default function Model() {
                 <Flex direction="column">
                     {model.images.map(image => (
                         <Image
+                            key={image.image.url}
                             alt=""
                             src={image.image.url}
                             fit={'cover'}
