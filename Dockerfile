@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as a parent image
-FROM node:14-alpine
+FROM node:16-alpine
 
 # Install Yarn
 RUN apk add --no-cache yarn
