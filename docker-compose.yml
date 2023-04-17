@@ -4,13 +4,8 @@ services:
   gcode-gizmos-frontend:
     container_name: gcode-gizmos-frontend
     build: .
-    ports:
-      - "5000:5000"
     env_file:
       - .env
-    volumes:
-      - .:/app
-      - /app/node_modules
     restart: always
     labels:
       - "traefik.enable=true"
