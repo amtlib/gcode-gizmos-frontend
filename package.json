@@ -6,7 +6,8 @@
     "start": "next start -p 5000",
     "lint": "next lint",
     "compile": "graphql-codegen",
-    "watch": "graphql-codegen -w"
+    "watch": "graphql-codegen -w",
+    "test": "yarn lint"
   },
   "dependencies": {
     "@apollo/client": "^3.7.4",
