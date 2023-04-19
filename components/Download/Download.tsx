@@ -60,7 +60,7 @@ const Download = ({ model }: { model: { name?: string; images?: { image?: { url:
 
     return (
         <Button colorScheme="blue" onClick={handleCreateZip} isLoading={isCreating}>
-            Download
+            Download all files
         </Button>
     );
 };
