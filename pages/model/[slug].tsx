@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
-import { SimpleGrid, Flex, Stack, Heading, StackDivider, VStack, List, ListItem, Button, Box, Image, Text, Spinner } from "@chakra-ui/react";
+import { SimpleGrid, Flex, Stack, Heading, StackDivider, VStack, List, ListItem, Button, Box, Text, Spinner, Select } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Download from "../../components/Download/Download";
 import { StlPreview } from "../../components/StlPreview/StlPreview";
 import { ModalContext } from "../../contexts/ModalContext";
@@ -9,7 +9,7 @@ import { ModelContext } from "../../contexts/ModelContext";
 import { UserContext } from "../../contexts/UserContext";
 import { ModelQuery } from "../../graphql/operations/models";
 import { BaseLayout } from "../../layouts/BaseLayout";
-
+import ImageCarousel from "../../components/ImageCarousel/ImageCarousel";
 
 export default function Model() {
     const router = useRouter();
@@ -17,8 +17,11 @@ export default function Model() {
     const { username, isAdmin } = useContext(UserContext);
     const { deleteModel, deleteModelLoading } = useContext(ModelContext);
     const { launchModelModal } = useContext(ModalContext);
+    const [selectedModelUrl, setSelectedModelUrl] = useState<string | undefined>();
+
 
     const { data, loading } = useQuery(ModelQuery, { variables: { slug: slug?.toString() } });
+
 
     const handleDelete = async () => {
         if (slug) {
@@ -35,6 +38,11 @@ export default function Model() {
             ...data?.model
         });
     }
+    useEffect(() => {
+        if (model) {
+            setSelectedModelUrl(model.files[0].file.url)
+        }
+    }, [data]);
 
     if (loading) {
         return (
@@ -55,22 +63,19 @@ export default function Model() {
                 spacing={{ base: 8, md: 10 }}
                 py={{ base: 18, md: 24 }}>
                 <Flex direction="column">
-                    {model.images.map(image => (
-                        <Image
-                            key={image.image.url}
-                            alt=""
-                            src={image.image.url}
-                            fit={'cover'}
-                            align={'center'}
-                            objectFit='cover'
-                            w={'100%'}
-                            pb={4}
-                            fallback={null}
-                        />
+                    <Box w={"100%"}>
+                        <ImageCarousel images={model.images.map(image => image.image.url)} />
+                    </Box>
 
-                    ))}
                     <Box w="full" h="full">
-                        <StlPreview url={model.files[0]?.file.url} />
+                        {selectedModelUrl && (
+                            <>
+                                <StlPreview url={selectedModelUrl} />
+                                <Select defaultValue={model.files[0]?.file.url} onChange={(e => setSelectedModelUrl(e.target.value))}>
+                                    {model.files.map((file, index) => (<option value={file.file.url}>Model {index + 1}</option>))}
+                                </Select>
+                            </>
+                        )}
                     </Box>
                 </Flex>
                 <Stack spacing={{ base: 6, md: 10 }}>
