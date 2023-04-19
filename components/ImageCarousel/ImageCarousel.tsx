@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import Image from "next/image";
 
 
 const ImageCarousel = ({ images }) => {
@@ -44,7 +45,7 @@ const ImageCarousel = ({ images }) => {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      <img src={images[currentIndex]} alt="carousel image" />
+      <Image src={images[currentIndex]} alt="carousel image" />
       <div className="arrow-container">
         <div className="arrow left-arrow" onClick={handlePrev}>
           &#10094;

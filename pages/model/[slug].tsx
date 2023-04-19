@@ -40,9 +40,9 @@ export default function Model() {
     }
     useEffect(() => {
         if (model) {
-            setSelectedModelUrl(model.files[0].file.url)
+            setSelectedModelUrl(data.model.files[0].file.url)
         }
-    }, [data]);
+    }, [data, model]);
 
     if (loading) {
         return (
@@ -72,7 +72,7 @@ export default function Model() {
                             <>
                                 <StlPreview url={selectedModelUrl} />
                                 <Select defaultValue={model.files[0]?.file.url} onChange={(e => setSelectedModelUrl(e.target.value))}>
-                                    {model.files.map((file, index) => (<option value={file.file.url}>Model {index + 1}</option>))}
+                                    {model.files.map((file, index) => (<option key={file.file.url} value={file.file.url}>Model {index + 1}</option>))}
                                 </Select>
                             </>
                         )}

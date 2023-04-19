@@ -24,7 +24,7 @@ const ModelMesh = ({ url }) => {
         
         camera.lookAt(geom);
         camera.position.set(center.x, center.y, center.z + distance * 2);
-    }, [geom, primitiveRef.current]);
+    }, [geom, camera]);
 
     return (
         <mesh ref={meshRef}>
