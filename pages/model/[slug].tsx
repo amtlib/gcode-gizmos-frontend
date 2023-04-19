@@ -39,10 +39,10 @@ export default function Model() {
         });
     }
     useEffect(() => {
-        if (model) {
+        if (data.model) {
             setSelectedModelUrl(data.model.files[0].file.url)
         }
-    }, [data, model]);
+    }, [data]);
 
     if (loading) {
         return (
