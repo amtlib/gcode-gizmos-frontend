@@ -39,7 +39,7 @@ export default function Model() {
         });
     }
     useEffect(() => {
-        if (data.model) {
+        if (data?.model) {
             setSelectedModelUrl(data.model.files[0].file.url)
         }
     }, [data]);
