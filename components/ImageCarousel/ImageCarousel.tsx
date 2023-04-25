@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
-import Image from "next/image";
-
+import { Image } from "@chakra-ui/react";
 
 const ImageCarousel = ({ images }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -9,13 +8,13 @@ const ImageCarousel = ({ images }) => {
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === images.length - 1 ? 0 : prevIndex + 1
+      prevIndex === images.length - 1 ? prevIndex : prevIndex + 1
     );
   };
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? images.length - 1 : prevIndex - 1
+      prevIndex === 0 ? 0 : prevIndex - 1
     );
   };
 
@@ -45,7 +44,7 @@ const ImageCarousel = ({ images }) => {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      <Image src={images[currentIndex]} alt="carousel image" />
+      <Image w="full" h="full" src={images[currentIndex]} alt="carousel image" />
       <div className="arrow-container">
         <div className="arrow left-arrow" onClick={handlePrev}>
           &#10094;
