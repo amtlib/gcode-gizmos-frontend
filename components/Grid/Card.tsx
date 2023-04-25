@@ -15,7 +15,7 @@ import { BsArrowUpRight, BsHeartFill, BsHeart, BsBox } from 'react-icons/bs';
 import Link from 'next/link';
 import { UserContext } from '../../contexts/UserContext';
 
-export const Card = ({ name, imageUrl, description, slug, doUserLikesIt }: { name: string; imageUrl?: string; description: string; slug: string; doUserLikesIt: boolean }) => {
+export const Card = ({ name, imageUrl, slug, doUserLikesIt }: { name: string; imageUrl?: string; slug: string; doUserLikesIt: boolean }) => {
     const [liked, setLiked] = useState<boolean>(doUserLikesIt);
     const [shadowWhite, shadowBlack] = useToken('colors', ['black', 'purple.200']);
     const { loggedIn, username } = useContext(UserContext);
@@ -71,12 +71,9 @@ export const Card = ({ name, imageUrl, description, slug, doUserLikesIt }: { nam
                             React
                         </Text>
                     </Box> */}
-                    <Heading color={'black'} fontSize={'2xl'} noOfLines={1}>
+                    <Heading color={'black'} fontSize={'2xl'} noOfLines={3}>
                         {name}
                     </Heading>
-                    <Text color={'gray.500'} noOfLines={2}>
-                        {description.length > 100 ? `${description.substring(0, 100)}...` : description}
-                    </Text>
                 </Box>
                 <HStack borderTop={'1px'} color="black">
                     <Box p={4} w="full">
