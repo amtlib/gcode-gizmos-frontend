@@ -12,7 +12,7 @@ type CommentType = {
         document?: any;
     };
 };
-function compare( a, b, prop ) {
+function compare( a: CommentType, b: CommentType, prop: keyof CommentType ) {
     if ( a[prop] < b[prop] ){
       return -1;
     }
