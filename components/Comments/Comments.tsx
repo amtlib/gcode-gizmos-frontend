@@ -12,6 +12,15 @@ type CommentType = {
         document?: any;
     };
 };
+function compare( a, b, prop ) {
+    if ( a[prop] < b[prop] ){
+      return -1;
+    }
+    if ( a[prop] > b[prop] ){
+      return 1;
+    }
+    return 0;
+  }
 
 export const Comments = ({ modelSlug, comments }: { modelSlug: string; comments: CommentType[] }) => {
     return (
@@ -26,7 +35,7 @@ export const Comments = ({ modelSlug, comments }: { modelSlug: string; comments:
             </Box>
             <AddComment modelSlug={modelSlug} />
 
-            {comments.map((comment, key) => (
+            {[...comments].sort((a, b) => -compare(a, b, "createdAt")).map((comment, key) => (
                 <Comment key={key} createdAt={comment.createdAt} username={comment.author.username} document={comment.content.document} />
             ))}
         </Stack>
