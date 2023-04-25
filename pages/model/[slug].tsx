@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { SimpleGrid, Flex, Stack, Heading, StackDivider, VStack, List, ListItem, Button, Box, Text, Spinner, Select, Input, Textarea } from "@chakra-ui/react";
+import { SimpleGrid, Flex, Stack, Heading, StackDivider, List, ListItem, Button, Box, Text, Spinner, Select } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 import Download from "../../components/Download/Download";
@@ -10,6 +10,7 @@ import { UserContext } from "../../contexts/UserContext";
 import { ModelQuery } from "../../graphql/operations/models";
 import { BaseLayout } from "../../layouts/BaseLayout";
 import ImageCarousel from "../../components/ImageCarousel/ImageCarousel";
+import { Comments } from "../../components/Comments/Comments";
 
 export default function Model() {
     const router = useRouter();
@@ -63,7 +64,6 @@ export default function Model() {
         return;
     }
     const haveAccessToAdmin = data?.model.createdBy?.username === username || isAdmin;
-
     return (
         <BaseLayout>
             <SimpleGrid
@@ -167,6 +167,7 @@ export default function Model() {
                     <Download model={data?.model} />
                 </Stack>
             </SimpleGrid>
+            <Comments comments={data.model.comments} />
         </BaseLayout>
     )
 };
