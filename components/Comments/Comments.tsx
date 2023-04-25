@@ -12,15 +12,15 @@ type CommentType = {
         document?: any;
     };
 };
-function compare( a: CommentType, b: CommentType, prop: keyof CommentType ) {
-    if ( a[prop] < b[prop] ){
-      return -1;
+const compare = (a: CommentType, b: CommentType, prop: keyof CommentType) => {
+    if (a[prop] < b[prop]) {
+        return -1;
     }
-    if ( a[prop] > b[prop] ){
-      return 1;
+    if (a[prop] > b[prop]) {
+        return 1;
     }
     return 0;
-  }
+}
 
 export const Comments = ({ modelSlug, comments }: { modelSlug: string; comments: CommentType[] }) => {
     return (
