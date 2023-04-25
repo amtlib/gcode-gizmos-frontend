@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { SimpleGrid, Flex, Stack, Heading, StackDivider, VStack, List, ListItem, Button, Box, Text, Spinner, Select } from "@chakra-ui/react";
+import { SimpleGrid, Flex, Stack, Heading, StackDivider, VStack, List, ListItem, Button, Box, Text, Spinner, Select, Input, Textarea } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 import Download from "../../components/Download/Download";
@@ -44,6 +44,12 @@ export default function Model() {
         }
     }, [data]);
 
+    useEffect(() => {
+        if (!loading && !data?.model) {
+            router.push("/");
+        }
+    }, [loading, data])
+
     if (loading) {
         return (
             <BaseLayout>
@@ -53,8 +59,10 @@ export default function Model() {
             </BaseLayout>
         )
     }
-    const { model } = data;
-    const haveAccessToAdmin = model.createdBy?.username === username || isAdmin;
+    if (!data?.model) {
+        return;
+    }
+    const haveAccessToAdmin = data?.model.createdBy?.username === username || isAdmin;
 
     return (
         <BaseLayout>
@@ -62,17 +70,17 @@ export default function Model() {
                 columns={{ base: 1, lg: 2 }}
                 spacing={{ base: 8, md: 10 }}
                 py={{ base: 18, md: 24 }}>
-                <Flex direction="column">
+                <Flex direction="column" gap={5}>
                     <Box w={"100%"}>
-                        <ImageCarousel images={model.images.map(image => image.image.url)} />
+                        <ImageCarousel images={data?.model.images.map(image => image.image.url)} />
                     </Box>
 
                     <Box w="full" h="full">
                         {selectedModelUrl && (
                             <>
                                 <StlPreview url={selectedModelUrl} />
-                                <Select defaultValue={model.files[0]?.file.url} onChange={(e => setSelectedModelUrl(e.target.value))}>
-                                    {model.files.map((file, index) => (<option key={file.file.url} value={file.file.url}>Model {index + 1}</option>))}
+                                <Select defaultValue={data?.model.files[0]?.file.url} onChange={(e => setSelectedModelUrl(e.target.value))}>
+                                    {data?.model.files.map((file, index) => (<option key={file.file.url} value={file.file.url}>Model {index + 1}</option>))}
                                 </Select>
                             </>
                         )}
@@ -84,7 +92,7 @@ export default function Model() {
                             lineHeight={1.1}
                             fontWeight={600}
                             fontSize={{ base: '2xl', sm: '4xl', lg: '5xl' }}>
-                            {model.name}
+                            {data?.model.name}
                         </Heading>
                     </Box>
                     <Stack
@@ -98,7 +106,7 @@ export default function Model() {
                         }>
                         <Box>
                             <Text fontSize={'lg'} textAlign="left" >
-                                {model.description}
+                                {data?.model.description}
                             </Text>
                         </Box>
                         <Box>
@@ -117,19 +125,19 @@ export default function Model() {
                                     <Text as={'span'} fontWeight={'bold'}>
                                         Recommended infill:
                                     </Text>{' '}
-                                    {model.recommendedInfill ? `${Math.floor(parseFloat(model.recommendedInfill))}%` : `unknown`}
+                                    {data?.model.recommendedInfill ? `${Math.floor(data?.model.recommendedInfill)}%` : `unknown`}
                                 </ListItem>
                                 <ListItem>
                                     <Text as={'span'} fontWeight={'bold'}>
                                         Recommended material:
                                     </Text>{' '}
-                                    {model.recommendedMaterial?.toUpperCase() || "PLA"}
+                                    {data?.model.recommendedMaterial?.toUpperCase() || "PLA"}
                                 </ListItem>
                                 <ListItem>
                                     <Text as={'span'} fontWeight={'bold'}>
                                         Supports:
                                     </Text>{' '}
-                                    {model.supports === "yes" ? "Yes" : model.supports === "no" ? "No" : "Doesn't matter"}
+                                    {data?.model.supports === "yes" ? "Yes" : data?.model.supports === "no" ? "No" : "Doesn't matter"}
                                 </ListItem>
                             </List>
                         </Box>
@@ -156,28 +164,7 @@ export default function Model() {
                             </Box>
                         )}
                     </Stack>
-                    <Download model={model} />
-                    {/* <Button
-                        rounded={'none'}
-                        as="a"
-                        // href={model.modelFile.url}
-                        w={'full'}
-                        mt={8}
-                        size={'lg'}
-                        py={'7'}
-                        bg='gray.900'
-                        color='white'
-                        _dark={{
-                            bg: 'gray.50',
-                            color: 'gray.900'
-                        }}
-                        textTransform={'uppercase'}
-                        _hover={{
-                            transform: 'translateY(2px)',
-                            boxShadow: 'lg',
-                        }}>
-                        Download
-                    </Button> */}
+                    <Download model={data?.model} />
                 </Stack>
             </SimpleGrid>
         </BaseLayout>
