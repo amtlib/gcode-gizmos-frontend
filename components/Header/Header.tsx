@@ -62,7 +62,7 @@ export function Header() {
     const [maxW, setMaxW] = useState("960px");
 
     return (
-        <Box px={4} position="sticky" top={0} bgColor="Background" borderBottomWidth={1} borderBottomColor={useColorModeValue('black', 'transparent')}>
+        <Box zIndex={1000} px={4} position="sticky" top={0} bgColor="Background" borderBottomWidth={1} borderBottomColor={useColorModeValue('black', 'transparent')}>
             <Box maxW={maxW} mx="auto" transitionDuration="0.5s">
                 <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
                     <IconButton
