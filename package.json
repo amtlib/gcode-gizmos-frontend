@@ -15,6 +15,7 @@
     "@chakra-ui/react": "^2.4.9",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@keystone-6/document-renderer": "^1.1.2",
     "@react-three/drei": "^9.65.4",
     "@react-three/fiber": "^8.12.1",
     "apollo-upload-client": "^17.0.0",
