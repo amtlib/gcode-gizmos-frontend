@@ -13,7 +13,7 @@ export function ModelContainer({ children }) {
     const { data: dataModels, loading: modelsLoading } = useQuery(ModelsQuery);
     const { username } = useContext(UserContext);
 
-    const createModel = async (name: string, description: string, files: File[], images: File[], recommendedInfill: number, recommendedMaterial: 'pla' | 'abs' | 'pet' | 'tpe', supports: 'yes' | 'no' | 'n/a') => {
+    const createModel = async (name: string, description: any, files: File[], images: File[], recommendedInfill: number, recommendedMaterial: 'pla' | 'abs' | 'pet' | 'tpe', supports: 'yes' | 'no' | 'n/a') => {
         const result = await createModelMutation({
             variables: {
                 data: {
@@ -35,7 +35,7 @@ export function ModelContainer({ children }) {
         return null;
     }
 
-    const updateModel = async (slug: string, name: string, description: string, recommendedInfill: number, recommendedMaterial: 'pla' | 'abs' | 'pet' | 'tpe', supports: 'yes' | 'no' | 'n/a') => {
+    const updateModel = async (slug: string, name: string, description: any, recommendedInfill: number, recommendedMaterial: 'pla' | 'abs' | 'pet' | 'tpe', supports: 'yes' | 'no' | 'n/a') => {
         const result = await updateModelMutation({
             variables: {
                 slug,

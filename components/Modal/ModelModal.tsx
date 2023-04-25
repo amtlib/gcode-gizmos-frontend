@@ -1,9 +1,11 @@
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, Box, FormControl, FormErrorMessage, FormLabel, Input, Textarea, Select, Checkbox, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ModalContext } from "../../contexts/ModalContext";
 import { ModelContext } from "../../contexts/ModelContext";
+import { RichTextBlock } from "../Comments/AddComment/RichTextBlocks";
+import { Descendant } from "slate";
 
 type FormType = {
     slug?: string;
@@ -17,7 +19,15 @@ type FormType = {
     images?: any,
 }
 
+const initialDescriptionValue = [
+    {
+        type: "paragraph",
+        children: [{ text: "" }]
+    }
+];
+
 export const ModelModal = ({ action, data }: { action: "create" | "update"; data?: FormType }) => {
+    const [description, setDescription] = useState<Descendant[]>(initialDescriptionValue);
     const { createModel, createModelLoading, updateModel, updateModelLoading } = useContext(ModelContext);
     const { isModelModalOpen: isOpen, onModelModalClose: onClose } = useContext(ModalContext);
     const router = useRouter();
@@ -26,7 +36,6 @@ export const ModelModal = ({ action, data }: { action: "create" | "update"; data
         defaultValues: {
             id: data?.id || "",
             name: data?.name || "",
-            description: data?.description || "",
             recommendedInfill: data?.recommendedInfill ?? 0,
             recommendedMaterial: data?.recommendedMaterial || "pla",
             supports: data?.supports || 'no',
@@ -36,16 +45,15 @@ export const ModelModal = ({ action, data }: { action: "create" | "update"; data
     })
 
     const onSubmit = async (values: Record<string, any>) => {
-        console.log(action)
         if (action === "create") {
-            const slug = await createModel(values.name, values.description, values.files, values.images, values.recommendedInfill.toString(), values.recommendedMaterial, values.supports);
+            const slug = await createModel(values.name, description, values.files, values.images, values.recommendedInfill, values.recommendedMaterial, values.supports);
             console.log(slug)
             if (slug) {
                 onClose();
                 router.push(`/model/${slug}`);
             }
         } else if (action === "update") {
-            const slug = await updateModel(data.slug, values.name, values.description, values.recommendedInfill.toString(), values.recommendedMaterial, values.supports);
+            const slug = await updateModel(data.slug, values.name, description, values.recommendedInfill, values.recommendedMaterial, values.supports);
             console.log(slug)
             if (slug) {
                 onClose();
@@ -69,12 +77,9 @@ export const ModelModal = ({ action, data }: { action: "create" | "update"; data
                                 <FormErrorMessage>{errors.name.message}</FormErrorMessage>
                             }
                         </FormControl>
-                        <FormControl isInvalid={!!errors.description}>
+                        <FormControl>
                             <FormLabel>Description</FormLabel>
-                            <Textarea noOfLines={5} {...register("description", { required: { value: true, message: "Description is required" }, maxLength: { value: 500, message: "Description is too long" } })} rounded={0} />
-                            {!!errors.description &&
-                                <FormErrorMessage>{errors.description.message}</FormErrorMessage>
-                            }
+                            <RichTextBlock value={description} setValue={setDescription}/>
                         </FormControl>
                         <FormControl isInvalid={!!errors.recommendedInfill}>
                             <FormLabel>Recommended infill %</FormLabel>

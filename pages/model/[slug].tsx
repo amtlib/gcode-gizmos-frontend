@@ -11,6 +11,7 @@ import { ModelQuery } from "../../graphql/operations/models";
 import { BaseLayout } from "../../layouts/BaseLayout";
 import ImageCarousel from "../../components/ImageCarousel/ImageCarousel";
 import { Comments } from "../../components/Comments/Comments";
+import { DocumentRenderer } from "@keystone-6/document-renderer";
 
 export default function Model() {
     const router = useRouter();
@@ -105,9 +106,7 @@ export default function Model() {
                             />
                         }>
                         <Box>
-                            <Text fontSize={'lg'} textAlign="left" >
-                                {data?.model.description}
-                            </Text>
+                            <DocumentRenderer document={data?.model.description.document} />
                         </Box>
                         <Box>
                             <Text

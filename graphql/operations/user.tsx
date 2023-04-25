@@ -3,7 +3,9 @@ const ModelFragment = gql(`
     fragment Model on Model {
         id
         name
-        description
+        description {
+            document
+        }
         images {
             image {
                 url

@@ -5,7 +5,9 @@ export const ModelsQuery = gql(`
         models {
             id
             name
-            description
+            description {
+                document
+            }
             images {
                 image {
                     url
@@ -28,7 +30,9 @@ export const ModelQuery = gql(`
         model(where: {slug: $slug}) {
             id
             name
-            description
+            description {
+                document
+            }
             images {
                 image {
                     url
