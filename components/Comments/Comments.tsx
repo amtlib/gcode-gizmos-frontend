@@ -4,6 +4,7 @@ import { Comment } from "./Comment";
 import { AddComment } from "./AddComment/AddComment";
 
 type CommentType = {
+    createdAt?: string;
     author?: {
         username?: string;
     };
@@ -12,7 +13,7 @@ type CommentType = {
     };
 };
 
-export const Comments = ({ comments }: { comments: CommentType[] }) => {
+export const Comments = ({ modelSlug, comments }: { modelSlug: string; comments: CommentType[] }) => {
     return (
         <Stack spacing={{ base: 3, md: 6 }}>
             <Box as={'header'}>
@@ -23,10 +24,10 @@ export const Comments = ({ comments }: { comments: CommentType[] }) => {
                     Comments
                 </Heading>
             </Box>
-            <AddComment />
+            <AddComment modelSlug={modelSlug} />
 
             {comments.map((comment, key) => (
-                <Comment key={key} username={comment.author.username} document={comment.content.document} />
+                <Comment key={key} createdAt={comment.createdAt} username={comment.author.username} document={comment.content.document} />
             ))}
         </Stack>
     )
