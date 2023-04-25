@@ -7,10 +7,11 @@ export type ModelType = {
     description?: string;
     slug?: string;
     doUserLikesIt?: boolean;
-    modelImage?: {
-        __typename?: "ImageFieldOutput";
-        url: string;
-    };
+    images?: {
+        image: {
+            url: string;
+        }
+    }[];
 }
 
 export type ModelContextType = {
