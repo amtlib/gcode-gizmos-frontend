@@ -13,8 +13,6 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel-plugin for production.
  */
 const documents = {
-    "\n    mutation CreateImages($data: [ImageCreateInput!]!) {\n        createImages(data: $data) {\n            id\n        }\n    }\n": types.CreateImagesDocument,
-    "\n    mutation CreateFiles($data: [FileCreateInput!]!) {\n        createFiles(data: $data) {\n            id\n        }\n    }\n": types.CreateFilesDocument,
     "\n    query Models {\n        models {\n            id\n            name\n            description\n            images {\n                image {\n                    url\n                }\n            }\n            createdBy {\n                username\n            }\n            likedBy {\n                username\n            }\n            slug\n            doUserLikesIt\n        }\n    }\n": types.ModelsDocument,
     "\n    query Model($slug: String) {\n        model(where: {slug: $slug}) {\n            id\n            name\n            description\n            images {\n                image {\n                    url\n                }\n            }\n            files {\n                file {\n                    url\n                }\n            }\n            createdAt\n            createdBy {\n                username\n            }\n            likedByCount\n            doUserLikesIt\n            recommendedInfill\n            recommendedMaterial\n            supports\n        }\n    }\n": types.ModelDocument,
     "\n    mutation CreateModel($data: ModelCreateInput!) {\n        createModel(data: $data) {\n            id\n            slug\n        }\n    }\n": types.CreateModelDocument,
@@ -45,14 +43,6 @@ const documents = {
  */
 export function gql(source: string): unknown;
 
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(source: "\n    mutation CreateImages($data: [ImageCreateInput!]!) {\n        createImages(data: $data) {\n            id\n        }\n    }\n"): (typeof documents)["\n    mutation CreateImages($data: [ImageCreateInput!]!) {\n        createImages(data: $data) {\n            id\n        }\n    }\n"];
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(source: "\n    mutation CreateFiles($data: [FileCreateInput!]!) {\n        createFiles(data: $data) {\n            id\n        }\n    }\n"): (typeof documents)["\n    mutation CreateFiles($data: [FileCreateInput!]!) {\n        createFiles(data: $data) {\n            id\n        }\n    }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -13,7 +13,6 @@ export type Scalars = {
   Int: number;
   Float: number;
   DateTime: any;
-  Decimal: any;
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: any;
   /** The `Upload` scalar type represents a file upload. */
@@ -25,6 +24,76 @@ export type AuthenticatedItem = User;
 export type BooleanFilter = {
   equals?: InputMaybe<Scalars['Boolean']>;
   not?: InputMaybe<BooleanFilter>;
+};
+
+export type Comment = {
+  __typename?: 'Comment';
+  author?: Maybe<User>;
+  content?: Maybe<Comment_Content_Document>;
+  id: Scalars['ID'];
+  model?: Maybe<Model>;
+};
+
+export type CommentCreateInput = {
+  author?: InputMaybe<UserRelateToOneForCreateInput>;
+  content?: InputMaybe<Scalars['JSON']>;
+  model?: InputMaybe<ModelRelateToOneForCreateInput>;
+};
+
+export type CommentManyRelationFilter = {
+  every?: InputMaybe<CommentWhereInput>;
+  none?: InputMaybe<CommentWhereInput>;
+  some?: InputMaybe<CommentWhereInput>;
+};
+
+export type CommentOrderByInput = {
+  id?: InputMaybe<OrderDirection>;
+};
+
+export type CommentRelateToManyForCreateInput = {
+  connect?: InputMaybe<Array<CommentWhereUniqueInput>>;
+  create?: InputMaybe<Array<CommentCreateInput>>;
+};
+
+export type CommentRelateToManyForUpdateInput = {
+  connect?: InputMaybe<Array<CommentWhereUniqueInput>>;
+  create?: InputMaybe<Array<CommentCreateInput>>;
+  disconnect?: InputMaybe<Array<CommentWhereUniqueInput>>;
+  set?: InputMaybe<Array<CommentWhereUniqueInput>>;
+};
+
+export type CommentUpdateArgs = {
+  data: CommentUpdateInput;
+  where: CommentWhereUniqueInput;
+};
+
+export type CommentUpdateInput = {
+  author?: InputMaybe<UserRelateToOneForUpdateInput>;
+  content?: InputMaybe<Scalars['JSON']>;
+  model?: InputMaybe<ModelRelateToOneForUpdateInput>;
+};
+
+export type CommentWhereInput = {
+  AND?: InputMaybe<Array<CommentWhereInput>>;
+  NOT?: InputMaybe<Array<CommentWhereInput>>;
+  OR?: InputMaybe<Array<CommentWhereInput>>;
+  author?: InputMaybe<UserWhereInput>;
+  id?: InputMaybe<IdFilter>;
+  model?: InputMaybe<ModelWhereInput>;
+};
+
+export type CommentWhereUniqueInput = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+export type Comment_Content_Document = {
+  __typename?: 'Comment_content_Document';
+  document: Scalars['JSON'];
+};
+
+
+export type Comment_Content_DocumentDocumentArgs = {
+  hydrateRelationships?: Scalars['Boolean'];
 };
 
 export type CreateInitialUserInput = {
@@ -44,31 +113,6 @@ export type DateTimeNullableFilter = {
   notIn?: InputMaybe<Array<Scalars['DateTime']>>;
 };
 
-export type DecimalNullableFilter = {
-  equals?: InputMaybe<Scalars['Decimal']>;
-  gt?: InputMaybe<Scalars['Decimal']>;
-  gte?: InputMaybe<Scalars['Decimal']>;
-  in?: InputMaybe<Array<Scalars['Decimal']>>;
-  lt?: InputMaybe<Scalars['Decimal']>;
-  lte?: InputMaybe<Scalars['Decimal']>;
-  not?: InputMaybe<DecimalNullableFilter>;
-  notIn?: InputMaybe<Array<Scalars['Decimal']>>;
-};
-
-export type File = {
-  __typename?: 'File';
-  createdBy?: Maybe<User>;
-  file?: Maybe<FileFieldOutput>;
-  id: Scalars['ID'];
-  model?: Maybe<Model>;
-};
-
-export type FileCreateInput = {
-  createdBy?: InputMaybe<UserRelateToOneForCreateInput>;
-  file?: InputMaybe<FileFieldInput>;
-  model?: InputMaybe<ModelRelateToOneForCreateInput>;
-};
-
 export type FileFieldInput = {
   upload: Scalars['Upload'];
 };
@@ -80,52 +124,6 @@ export type FileFieldOutput = {
   url: Scalars['String'];
 };
 
-export type FileManyRelationFilter = {
-  every?: InputMaybe<FileWhereInput>;
-  none?: InputMaybe<FileWhereInput>;
-  some?: InputMaybe<FileWhereInput>;
-};
-
-export type FileOrderByInput = {
-  id?: InputMaybe<OrderDirection>;
-};
-
-export type FileRelateToManyForCreateInput = {
-  connect?: InputMaybe<Array<FileWhereUniqueInput>>;
-  create?: InputMaybe<Array<FileCreateInput>>;
-};
-
-export type FileRelateToManyForUpdateInput = {
-  connect?: InputMaybe<Array<FileWhereUniqueInput>>;
-  create?: InputMaybe<Array<FileCreateInput>>;
-  disconnect?: InputMaybe<Array<FileWhereUniqueInput>>;
-  set?: InputMaybe<Array<FileWhereUniqueInput>>;
-};
-
-export type FileUpdateArgs = {
-  data: FileUpdateInput;
-  where: FileWhereUniqueInput;
-};
-
-export type FileUpdateInput = {
-  createdBy?: InputMaybe<UserRelateToOneForUpdateInput>;
-  file?: InputMaybe<FileFieldInput>;
-  model?: InputMaybe<ModelRelateToOneForUpdateInput>;
-};
-
-export type FileWhereInput = {
-  AND?: InputMaybe<Array<FileWhereInput>>;
-  NOT?: InputMaybe<Array<FileWhereInput>>;
-  OR?: InputMaybe<Array<FileWhereInput>>;
-  createdBy?: InputMaybe<UserWhereInput>;
-  id?: InputMaybe<IdFilter>;
-  model?: InputMaybe<ModelWhereInput>;
-};
-
-export type FileWhereUniqueInput = {
-  id?: InputMaybe<Scalars['ID']>;
-};
-
 export type IdFilter = {
   equals?: InputMaybe<Scalars['ID']>;
   gt?: InputMaybe<Scalars['ID']>;
@@ -135,20 +133,6 @@ export type IdFilter = {
   lte?: InputMaybe<Scalars['ID']>;
   not?: InputMaybe<IdFilter>;
   notIn?: InputMaybe<Array<Scalars['ID']>>;
-};
-
-export type Image = {
-  __typename?: 'Image';
-  createdBy?: Maybe<User>;
-  id: Scalars['ID'];
-  image?: Maybe<ImageFieldOutput>;
-  model?: Maybe<Model>;
-};
-
-export type ImageCreateInput = {
-  createdBy?: InputMaybe<UserRelateToOneForCreateInput>;
-  image?: InputMaybe<ImageFieldInput>;
-  model?: InputMaybe<ModelRelateToOneForCreateInput>;
 };
 
 export enum ImageExtension {
@@ -172,50 +156,15 @@ export type ImageFieldOutput = {
   width: Scalars['Int'];
 };
 
-export type ImageManyRelationFilter = {
-  every?: InputMaybe<ImageWhereInput>;
-  none?: InputMaybe<ImageWhereInput>;
-  some?: InputMaybe<ImageWhereInput>;
-};
-
-export type ImageOrderByInput = {
-  id?: InputMaybe<OrderDirection>;
-};
-
-export type ImageRelateToManyForCreateInput = {
-  connect?: InputMaybe<Array<ImageWhereUniqueInput>>;
-  create?: InputMaybe<Array<ImageCreateInput>>;
-};
-
-export type ImageRelateToManyForUpdateInput = {
-  connect?: InputMaybe<Array<ImageWhereUniqueInput>>;
-  create?: InputMaybe<Array<ImageCreateInput>>;
-  disconnect?: InputMaybe<Array<ImageWhereUniqueInput>>;
-  set?: InputMaybe<Array<ImageWhereUniqueInput>>;
-};
-
-export type ImageUpdateArgs = {
-  data: ImageUpdateInput;
-  where: ImageWhereUniqueInput;
-};
-
-export type ImageUpdateInput = {
-  createdBy?: InputMaybe<UserRelateToOneForUpdateInput>;
-  image?: InputMaybe<ImageFieldInput>;
-  model?: InputMaybe<ModelRelateToOneForUpdateInput>;
-};
-
-export type ImageWhereInput = {
-  AND?: InputMaybe<Array<ImageWhereInput>>;
-  NOT?: InputMaybe<Array<ImageWhereInput>>;
-  OR?: InputMaybe<Array<ImageWhereInput>>;
-  createdBy?: InputMaybe<UserWhereInput>;
-  id?: InputMaybe<IdFilter>;
-  model?: InputMaybe<ModelWhereInput>;
-};
-
-export type ImageWhereUniqueInput = {
-  id?: InputMaybe<Scalars['ID']>;
+export type IntNullableFilter = {
+  equals?: InputMaybe<Scalars['Int']>;
+  gt?: InputMaybe<Scalars['Int']>;
+  gte?: InputMaybe<Scalars['Int']>;
+  in?: InputMaybe<Array<Scalars['Int']>>;
+  lt?: InputMaybe<Scalars['Int']>;
+  lte?: InputMaybe<Scalars['Int']>;
+  not?: InputMaybe<IntNullableFilter>;
+  notIn?: InputMaybe<Array<Scalars['Int']>>;
 };
 
 export type KeystoneAdminMeta = {
@@ -334,48 +283,63 @@ export type KeystoneMeta = {
 
 export type Model = {
   __typename?: 'Model';
+  comments?: Maybe<Array<Comment>>;
+  commentsCount?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   createdBy?: Maybe<User>;
   description?: Maybe<Scalars['String']>;
   doUserLikesIt?: Maybe<Scalars['Boolean']>;
-  files?: Maybe<Array<File>>;
+  files?: Maybe<Array<ModelFile>>;
   filesCount?: Maybe<Scalars['Int']>;
   id: Scalars['ID'];
-  images?: Maybe<Array<Image>>;
+  images?: Maybe<Array<ModelImage>>;
   imagesCount?: Maybe<Scalars['Int']>;
   likedBy?: Maybe<Array<User>>;
   likedByCount?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
-  recommendedInfill?: Maybe<Scalars['Decimal']>;
+  recommendedInfill?: Maybe<Scalars['Int']>;
   recommendedMaterial?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
   supports?: Maybe<Scalars['String']>;
 };
 
 
-export type ModelFilesArgs = {
-  orderBy?: Array<FileOrderByInput>;
+export type ModelCommentsArgs = {
+  orderBy?: Array<CommentOrderByInput>;
   skip?: Scalars['Int'];
   take?: InputMaybe<Scalars['Int']>;
-  where?: FileWhereInput;
+  where?: CommentWhereInput;
+};
+
+
+export type ModelCommentsCountArgs = {
+  where?: CommentWhereInput;
+};
+
+
+export type ModelFilesArgs = {
+  orderBy?: Array<ModelFileOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: ModelFileWhereInput;
 };
 
 
 export type ModelFilesCountArgs = {
-  where?: FileWhereInput;
+  where?: ModelFileWhereInput;
 };
 
 
 export type ModelImagesArgs = {
-  orderBy?: Array<ImageOrderByInput>;
+  orderBy?: Array<ModelImageOrderByInput>;
   skip?: Scalars['Int'];
   take?: InputMaybe<Scalars['Int']>;
-  where?: ImageWhereInput;
+  where?: ModelImageWhereInput;
 };
 
 
 export type ModelImagesCountArgs = {
-  where?: ImageWhereInput;
+  where?: ModelImageWhereInput;
 };
 
 
@@ -392,17 +356,138 @@ export type ModelLikedByCountArgs = {
 };
 
 export type ModelCreateInput = {
+  comments?: InputMaybe<CommentRelateToManyForCreateInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy?: InputMaybe<UserRelateToOneForCreateInput>;
   description?: InputMaybe<Scalars['String']>;
-  files?: InputMaybe<FileRelateToManyForCreateInput>;
-  images?: InputMaybe<ImageRelateToManyForCreateInput>;
+  files?: InputMaybe<ModelFileRelateToManyForCreateInput>;
+  images?: InputMaybe<ModelImageRelateToManyForCreateInput>;
   likedBy?: InputMaybe<UserRelateToManyForCreateInput>;
   name?: InputMaybe<Scalars['String']>;
-  recommendedInfill?: InputMaybe<Scalars['Decimal']>;
+  recommendedInfill?: InputMaybe<Scalars['Int']>;
   recommendedMaterial?: InputMaybe<Scalars['String']>;
   slug?: InputMaybe<Scalars['String']>;
   supports?: InputMaybe<Scalars['String']>;
+};
+
+export type ModelFile = {
+  __typename?: 'ModelFile';
+  createdBy?: Maybe<User>;
+  file?: Maybe<FileFieldOutput>;
+  id: Scalars['ID'];
+  model?: Maybe<Model>;
+};
+
+export type ModelFileCreateInput = {
+  createdBy?: InputMaybe<UserRelateToOneForCreateInput>;
+  file?: InputMaybe<FileFieldInput>;
+  model?: InputMaybe<ModelRelateToOneForCreateInput>;
+};
+
+export type ModelFileManyRelationFilter = {
+  every?: InputMaybe<ModelFileWhereInput>;
+  none?: InputMaybe<ModelFileWhereInput>;
+  some?: InputMaybe<ModelFileWhereInput>;
+};
+
+export type ModelFileOrderByInput = {
+  id?: InputMaybe<OrderDirection>;
+};
+
+export type ModelFileRelateToManyForCreateInput = {
+  connect?: InputMaybe<Array<ModelFileWhereUniqueInput>>;
+  create?: InputMaybe<Array<ModelFileCreateInput>>;
+};
+
+export type ModelFileRelateToManyForUpdateInput = {
+  connect?: InputMaybe<Array<ModelFileWhereUniqueInput>>;
+  create?: InputMaybe<Array<ModelFileCreateInput>>;
+  disconnect?: InputMaybe<Array<ModelFileWhereUniqueInput>>;
+  set?: InputMaybe<Array<ModelFileWhereUniqueInput>>;
+};
+
+export type ModelFileUpdateArgs = {
+  data: ModelFileUpdateInput;
+  where: ModelFileWhereUniqueInput;
+};
+
+export type ModelFileUpdateInput = {
+  createdBy?: InputMaybe<UserRelateToOneForUpdateInput>;
+  file?: InputMaybe<FileFieldInput>;
+  model?: InputMaybe<ModelRelateToOneForUpdateInput>;
+};
+
+export type ModelFileWhereInput = {
+  AND?: InputMaybe<Array<ModelFileWhereInput>>;
+  NOT?: InputMaybe<Array<ModelFileWhereInput>>;
+  OR?: InputMaybe<Array<ModelFileWhereInput>>;
+  createdBy?: InputMaybe<UserWhereInput>;
+  id?: InputMaybe<IdFilter>;
+  model?: InputMaybe<ModelWhereInput>;
+};
+
+export type ModelFileWhereUniqueInput = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+export type ModelImage = {
+  __typename?: 'ModelImage';
+  createdBy?: Maybe<User>;
+  id: Scalars['ID'];
+  image?: Maybe<ImageFieldOutput>;
+  model?: Maybe<Model>;
+};
+
+export type ModelImageCreateInput = {
+  createdBy?: InputMaybe<UserRelateToOneForCreateInput>;
+  image?: InputMaybe<ImageFieldInput>;
+  model?: InputMaybe<ModelRelateToOneForCreateInput>;
+};
+
+export type ModelImageManyRelationFilter = {
+  every?: InputMaybe<ModelImageWhereInput>;
+  none?: InputMaybe<ModelImageWhereInput>;
+  some?: InputMaybe<ModelImageWhereInput>;
+};
+
+export type ModelImageOrderByInput = {
+  id?: InputMaybe<OrderDirection>;
+};
+
+export type ModelImageRelateToManyForCreateInput = {
+  connect?: InputMaybe<Array<ModelImageWhereUniqueInput>>;
+  create?: InputMaybe<Array<ModelImageCreateInput>>;
+};
+
+export type ModelImageRelateToManyForUpdateInput = {
+  connect?: InputMaybe<Array<ModelImageWhereUniqueInput>>;
+  create?: InputMaybe<Array<ModelImageCreateInput>>;
+  disconnect?: InputMaybe<Array<ModelImageWhereUniqueInput>>;
+  set?: InputMaybe<Array<ModelImageWhereUniqueInput>>;
+};
+
+export type ModelImageUpdateArgs = {
+  data: ModelImageUpdateInput;
+  where: ModelImageWhereUniqueInput;
+};
+
+export type ModelImageUpdateInput = {
+  createdBy?: InputMaybe<UserRelateToOneForUpdateInput>;
+  image?: InputMaybe<ImageFieldInput>;
+  model?: InputMaybe<ModelRelateToOneForUpdateInput>;
+};
+
+export type ModelImageWhereInput = {
+  AND?: InputMaybe<Array<ModelImageWhereInput>>;
+  NOT?: InputMaybe<Array<ModelImageWhereInput>>;
+  OR?: InputMaybe<Array<ModelImageWhereInput>>;
+  createdBy?: InputMaybe<UserWhereInput>;
+  id?: InputMaybe<IdFilter>;
+  model?: InputMaybe<ModelWhereInput>;
+};
+
+export type ModelImageWhereUniqueInput = {
+  id?: InputMaybe<Scalars['ID']>;
 };
 
 export type ModelManyRelationFilter = {
@@ -451,14 +536,15 @@ export type ModelUpdateArgs = {
 };
 
 export type ModelUpdateInput = {
+  comments?: InputMaybe<CommentRelateToManyForUpdateInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy?: InputMaybe<UserRelateToOneForUpdateInput>;
   description?: InputMaybe<Scalars['String']>;
-  files?: InputMaybe<FileRelateToManyForUpdateInput>;
-  images?: InputMaybe<ImageRelateToManyForUpdateInput>;
+  files?: InputMaybe<ModelFileRelateToManyForUpdateInput>;
+  images?: InputMaybe<ModelImageRelateToManyForUpdateInput>;
   likedBy?: InputMaybe<UserRelateToManyForUpdateInput>;
   name?: InputMaybe<Scalars['String']>;
-  recommendedInfill?: InputMaybe<Scalars['Decimal']>;
+  recommendedInfill?: InputMaybe<Scalars['Int']>;
   recommendedMaterial?: InputMaybe<Scalars['String']>;
   slug?: InputMaybe<Scalars['String']>;
   supports?: InputMaybe<Scalars['String']>;
@@ -468,15 +554,16 @@ export type ModelWhereInput = {
   AND?: InputMaybe<Array<ModelWhereInput>>;
   NOT?: InputMaybe<Array<ModelWhereInput>>;
   OR?: InputMaybe<Array<ModelWhereInput>>;
+  comments?: InputMaybe<CommentManyRelationFilter>;
   createdAt?: InputMaybe<DateTimeNullableFilter>;
   createdBy?: InputMaybe<UserWhereInput>;
   description?: InputMaybe<StringFilter>;
-  files?: InputMaybe<FileManyRelationFilter>;
+  files?: InputMaybe<ModelFileManyRelationFilter>;
   id?: InputMaybe<IdFilter>;
-  images?: InputMaybe<ImageManyRelationFilter>;
+  images?: InputMaybe<ModelImageManyRelationFilter>;
   likedBy?: InputMaybe<UserManyRelationFilter>;
   name?: InputMaybe<StringFilter>;
-  recommendedInfill?: InputMaybe<DecimalNullableFilter>;
+  recommendedInfill?: InputMaybe<IntNullableFilter>;
   recommendedMaterial?: InputMaybe<StringNullableFilter>;
   slug?: InputMaybe<StringFilter>;
   supports?: InputMaybe<StringNullableFilter>;
@@ -490,29 +577,35 @@ export type ModelWhereUniqueInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   authenticateUserWithPassword?: Maybe<UserAuthenticationWithPasswordResult>;
-  createFile?: Maybe<File>;
-  createFiles?: Maybe<Array<Maybe<File>>>;
-  createImage?: Maybe<Image>;
-  createImages?: Maybe<Array<Maybe<Image>>>;
+  createComment?: Maybe<Comment>;
+  createComments?: Maybe<Array<Maybe<Comment>>>;
   createInitialUser: UserAuthenticationWithPasswordSuccess;
   createModel?: Maybe<Model>;
+  createModelFile?: Maybe<ModelFile>;
+  createModelFiles?: Maybe<Array<Maybe<ModelFile>>>;
+  createModelImage?: Maybe<ModelImage>;
+  createModelImages?: Maybe<Array<Maybe<ModelImage>>>;
   createModels?: Maybe<Array<Maybe<Model>>>;
   createUser?: Maybe<User>;
   createUsers?: Maybe<Array<Maybe<User>>>;
-  deleteFile?: Maybe<File>;
-  deleteFiles?: Maybe<Array<Maybe<File>>>;
-  deleteImage?: Maybe<Image>;
-  deleteImages?: Maybe<Array<Maybe<Image>>>;
+  deleteComment?: Maybe<Comment>;
+  deleteComments?: Maybe<Array<Maybe<Comment>>>;
   deleteModel?: Maybe<Model>;
+  deleteModelFile?: Maybe<ModelFile>;
+  deleteModelFiles?: Maybe<Array<Maybe<ModelFile>>>;
+  deleteModelImage?: Maybe<ModelImage>;
+  deleteModelImages?: Maybe<Array<Maybe<ModelImage>>>;
   deleteModels?: Maybe<Array<Maybe<Model>>>;
   deleteUser?: Maybe<User>;
   deleteUsers?: Maybe<Array<Maybe<User>>>;
   endSession: Scalars['Boolean'];
-  updateFile?: Maybe<File>;
-  updateFiles?: Maybe<Array<Maybe<File>>>;
-  updateImage?: Maybe<Image>;
-  updateImages?: Maybe<Array<Maybe<Image>>>;
+  updateComment?: Maybe<Comment>;
+  updateComments?: Maybe<Array<Maybe<Comment>>>;
   updateModel?: Maybe<Model>;
+  updateModelFile?: Maybe<ModelFile>;
+  updateModelFiles?: Maybe<Array<Maybe<ModelFile>>>;
+  updateModelImage?: Maybe<ModelImage>;
+  updateModelImages?: Maybe<Array<Maybe<ModelImage>>>;
   updateModels?: Maybe<Array<Maybe<Model>>>;
   updateUser?: Maybe<User>;
   updateUsers?: Maybe<Array<Maybe<User>>>;
@@ -525,23 +618,13 @@ export type MutationAuthenticateUserWithPasswordArgs = {
 };
 
 
-export type MutationCreateFileArgs = {
-  data: FileCreateInput;
+export type MutationCreateCommentArgs = {
+  data: CommentCreateInput;
 };
 
 
-export type MutationCreateFilesArgs = {
-  data: Array<FileCreateInput>;
-};
-
-
-export type MutationCreateImageArgs = {
-  data: ImageCreateInput;
-};
-
-
-export type MutationCreateImagesArgs = {
-  data: Array<ImageCreateInput>;
+export type MutationCreateCommentsArgs = {
+  data: Array<CommentCreateInput>;
 };
 
 
@@ -552,6 +635,26 @@ export type MutationCreateInitialUserArgs = {
 
 export type MutationCreateModelArgs = {
   data: ModelCreateInput;
+};
+
+
+export type MutationCreateModelFileArgs = {
+  data: ModelFileCreateInput;
+};
+
+
+export type MutationCreateModelFilesArgs = {
+  data: Array<ModelFileCreateInput>;
+};
+
+
+export type MutationCreateModelImageArgs = {
+  data: ModelImageCreateInput;
+};
+
+
+export type MutationCreateModelImagesArgs = {
+  data: Array<ModelImageCreateInput>;
 };
 
 
@@ -570,28 +673,38 @@ export type MutationCreateUsersArgs = {
 };
 
 
-export type MutationDeleteFileArgs = {
-  where: FileWhereUniqueInput;
+export type MutationDeleteCommentArgs = {
+  where: CommentWhereUniqueInput;
 };
 
 
-export type MutationDeleteFilesArgs = {
-  where: Array<FileWhereUniqueInput>;
-};
-
-
-export type MutationDeleteImageArgs = {
-  where: ImageWhereUniqueInput;
-};
-
-
-export type MutationDeleteImagesArgs = {
-  where: Array<ImageWhereUniqueInput>;
+export type MutationDeleteCommentsArgs = {
+  where: Array<CommentWhereUniqueInput>;
 };
 
 
 export type MutationDeleteModelArgs = {
   where: ModelWhereUniqueInput;
+};
+
+
+export type MutationDeleteModelFileArgs = {
+  where: ModelFileWhereUniqueInput;
+};
+
+
+export type MutationDeleteModelFilesArgs = {
+  where: Array<ModelFileWhereUniqueInput>;
+};
+
+
+export type MutationDeleteModelImageArgs = {
+  where: ModelImageWhereUniqueInput;
+};
+
+
+export type MutationDeleteModelImagesArgs = {
+  where: Array<ModelImageWhereUniqueInput>;
 };
 
 
@@ -610,31 +723,42 @@ export type MutationDeleteUsersArgs = {
 };
 
 
-export type MutationUpdateFileArgs = {
-  data: FileUpdateInput;
-  where: FileWhereUniqueInput;
+export type MutationUpdateCommentArgs = {
+  data: CommentUpdateInput;
+  where: CommentWhereUniqueInput;
 };
 
 
-export type MutationUpdateFilesArgs = {
-  data: Array<FileUpdateArgs>;
-};
-
-
-export type MutationUpdateImageArgs = {
-  data: ImageUpdateInput;
-  where: ImageWhereUniqueInput;
-};
-
-
-export type MutationUpdateImagesArgs = {
-  data: Array<ImageUpdateArgs>;
+export type MutationUpdateCommentsArgs = {
+  data: Array<CommentUpdateArgs>;
 };
 
 
 export type MutationUpdateModelArgs = {
   data: ModelUpdateInput;
   where: ModelWhereUniqueInput;
+};
+
+
+export type MutationUpdateModelFileArgs = {
+  data: ModelFileUpdateInput;
+  where: ModelFileWhereUniqueInput;
+};
+
+
+export type MutationUpdateModelFilesArgs = {
+  data: Array<ModelFileUpdateArgs>;
+};
+
+
+export type MutationUpdateModelImageArgs = {
+  data: ModelImageUpdateInput;
+  where: ModelImageWhereUniqueInput;
+};
+
+
+export type MutationUpdateModelImagesArgs = {
+  data: Array<ModelImageUpdateArgs>;
 };
 
 
@@ -694,14 +818,17 @@ export type PasswordState = {
 export type Query = {
   __typename?: 'Query';
   authenticatedItem?: Maybe<AuthenticatedItem>;
-  file?: Maybe<File>;
-  files?: Maybe<Array<File>>;
-  filesCount?: Maybe<Scalars['Int']>;
-  image?: Maybe<Image>;
-  images?: Maybe<Array<Image>>;
-  imagesCount?: Maybe<Scalars['Int']>;
+  comment?: Maybe<Comment>;
+  comments?: Maybe<Array<Comment>>;
+  commentsCount?: Maybe<Scalars['Int']>;
   keystone: KeystoneMeta;
   model?: Maybe<Model>;
+  modelFile?: Maybe<ModelFile>;
+  modelFiles?: Maybe<Array<ModelFile>>;
+  modelFilesCount?: Maybe<Scalars['Int']>;
+  modelImage?: Maybe<ModelImage>;
+  modelImages?: Maybe<Array<ModelImage>>;
+  modelImagesCount?: Maybe<Scalars['Int']>;
   models?: Maybe<Array<Model>>;
   modelsCount?: Maybe<Scalars['Int']>;
   user?: Maybe<User>;
@@ -710,44 +837,62 @@ export type Query = {
 };
 
 
-export type QueryFileArgs = {
-  where: FileWhereUniqueInput;
+export type QueryCommentArgs = {
+  where: CommentWhereUniqueInput;
 };
 
 
-export type QueryFilesArgs = {
-  orderBy?: Array<FileOrderByInput>;
+export type QueryCommentsArgs = {
+  orderBy?: Array<CommentOrderByInput>;
   skip?: Scalars['Int'];
   take?: InputMaybe<Scalars['Int']>;
-  where?: FileWhereInput;
+  where?: CommentWhereInput;
 };
 
 
-export type QueryFilesCountArgs = {
-  where?: FileWhereInput;
-};
-
-
-export type QueryImageArgs = {
-  where: ImageWhereUniqueInput;
-};
-
-
-export type QueryImagesArgs = {
-  orderBy?: Array<ImageOrderByInput>;
-  skip?: Scalars['Int'];
-  take?: InputMaybe<Scalars['Int']>;
-  where?: ImageWhereInput;
-};
-
-
-export type QueryImagesCountArgs = {
-  where?: ImageWhereInput;
+export type QueryCommentsCountArgs = {
+  where?: CommentWhereInput;
 };
 
 
 export type QueryModelArgs = {
   where: ModelWhereUniqueInput;
+};
+
+
+export type QueryModelFileArgs = {
+  where: ModelFileWhereUniqueInput;
+};
+
+
+export type QueryModelFilesArgs = {
+  orderBy?: Array<ModelFileOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: ModelFileWhereInput;
+};
+
+
+export type QueryModelFilesCountArgs = {
+  where?: ModelFileWhereInput;
+};
+
+
+export type QueryModelImageArgs = {
+  where: ModelImageWhereUniqueInput;
+};
+
+
+export type QueryModelImagesArgs = {
+  orderBy?: Array<ModelImageOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: ModelImageWhereInput;
+};
+
+
+export type QueryModelImagesCountArgs = {
+  where?: ModelImageWhereInput;
 };
 
 
@@ -818,9 +963,11 @@ export type StringNullableFilter = {
 
 export type User = {
   __typename?: 'User';
-  createdFiles?: Maybe<Array<File>>;
+  comments?: Maybe<Array<Comment>>;
+  commentsCount?: Maybe<Scalars['Int']>;
+  createdFiles?: Maybe<Array<ModelFile>>;
   createdFilesCount?: Maybe<Scalars['Int']>;
-  createdImages?: Maybe<Array<Image>>;
+  createdImages?: Maybe<Array<ModelImage>>;
   createdImagesCount?: Maybe<Scalars['Int']>;
   createdModels?: Maybe<Array<Model>>;
   createdModelsCount?: Maybe<Scalars['Int']>;
@@ -834,29 +981,42 @@ export type User = {
 };
 
 
-export type UserCreatedFilesArgs = {
-  orderBy?: Array<FileOrderByInput>;
+export type UserCommentsArgs = {
+  orderBy?: Array<CommentOrderByInput>;
   skip?: Scalars['Int'];
   take?: InputMaybe<Scalars['Int']>;
-  where?: FileWhereInput;
+  where?: CommentWhereInput;
+};
+
+
+export type UserCommentsCountArgs = {
+  where?: CommentWhereInput;
+};
+
+
+export type UserCreatedFilesArgs = {
+  orderBy?: Array<ModelFileOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: ModelFileWhereInput;
 };
 
 
 export type UserCreatedFilesCountArgs = {
-  where?: FileWhereInput;
+  where?: ModelFileWhereInput;
 };
 
 
 export type UserCreatedImagesArgs = {
-  orderBy?: Array<ImageOrderByInput>;
+  orderBy?: Array<ModelImageOrderByInput>;
   skip?: Scalars['Int'];
   take?: InputMaybe<Scalars['Int']>;
-  where?: ImageWhereInput;
+  where?: ModelImageWhereInput;
 };
 
 
 export type UserCreatedImagesCountArgs = {
-  where?: ImageWhereInput;
+  where?: ModelImageWhereInput;
 };
 
 
@@ -899,8 +1059,9 @@ export type UserAuthenticationWithPasswordSuccess = {
 };
 
 export type UserCreateInput = {
-  createdFiles?: InputMaybe<FileRelateToManyForCreateInput>;
-  createdImages?: InputMaybe<ImageRelateToManyForCreateInput>;
+  comments?: InputMaybe<CommentRelateToManyForCreateInput>;
+  createdFiles?: InputMaybe<ModelFileRelateToManyForCreateInput>;
+  createdImages?: InputMaybe<ModelImageRelateToManyForCreateInput>;
   createdModels?: InputMaybe<ModelRelateToManyForCreateInput>;
   email?: InputMaybe<Scalars['String']>;
   isAdmin?: InputMaybe<Scalars['Boolean']>;
@@ -951,8 +1112,9 @@ export type UserUpdateArgs = {
 };
 
 export type UserUpdateInput = {
-  createdFiles?: InputMaybe<FileRelateToManyForUpdateInput>;
-  createdImages?: InputMaybe<ImageRelateToManyForUpdateInput>;
+  comments?: InputMaybe<CommentRelateToManyForUpdateInput>;
+  createdFiles?: InputMaybe<ModelFileRelateToManyForUpdateInput>;
+  createdImages?: InputMaybe<ModelImageRelateToManyForUpdateInput>;
   createdModels?: InputMaybe<ModelRelateToManyForUpdateInput>;
   email?: InputMaybe<Scalars['String']>;
   isAdmin?: InputMaybe<Scalars['Boolean']>;
@@ -965,8 +1127,9 @@ export type UserWhereInput = {
   AND?: InputMaybe<Array<UserWhereInput>>;
   NOT?: InputMaybe<Array<UserWhereInput>>;
   OR?: InputMaybe<Array<UserWhereInput>>;
-  createdFiles?: InputMaybe<FileManyRelationFilter>;
-  createdImages?: InputMaybe<ImageManyRelationFilter>;
+  comments?: InputMaybe<CommentManyRelationFilter>;
+  createdFiles?: InputMaybe<ModelFileManyRelationFilter>;
+  createdImages?: InputMaybe<ModelImageManyRelationFilter>;
   createdModels?: InputMaybe<ModelManyRelationFilter>;
   email?: InputMaybe<StringFilter>;
   id?: InputMaybe<IdFilter>;
@@ -981,31 +1144,17 @@ export type UserWhereUniqueInput = {
   username?: InputMaybe<Scalars['String']>;
 };
 
-export type CreateImagesMutationVariables = Exact<{
-  data: Array<ImageCreateInput> | ImageCreateInput;
-}>;
-
-
-export type CreateImagesMutation = { __typename?: 'Mutation', createImages?: Array<{ __typename?: 'Image', id: string } | null> | null };
-
-export type CreateFilesMutationVariables = Exact<{
-  data: Array<FileCreateInput> | FileCreateInput;
-}>;
-
-
-export type CreateFilesMutation = { __typename?: 'Mutation', createFiles?: Array<{ __typename?: 'File', id: string } | null> | null };
-
 export type ModelsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ModelsQuery = { __typename?: 'Query', models?: Array<{ __typename?: 'Model', id: string, name?: string | null, description?: string | null, slug?: string | null, doUserLikesIt?: boolean | null, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', url: string } | null }> | null, createdBy?: { __typename?: 'User', username?: string | null } | null, likedBy?: Array<{ __typename?: 'User', username?: string | null }> | null }> | null };
+export type ModelsQuery = { __typename?: 'Query', models?: Array<{ __typename?: 'Model', id: string, name?: string | null, description?: string | null, slug?: string | null, doUserLikesIt?: boolean | null, images?: Array<{ __typename?: 'ModelImage', image?: { __typename?: 'ImageFieldOutput', url: string } | null }> | null, createdBy?: { __typename?: 'User', username?: string | null } | null, likedBy?: Array<{ __typename?: 'User', username?: string | null }> | null }> | null };
 
 export type ModelQueryVariables = Exact<{
   slug?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type ModelQuery = { __typename?: 'Query', model?: { __typename?: 'Model', id: string, name?: string | null, description?: string | null, createdAt?: any | null, likedByCount?: number | null, doUserLikesIt?: boolean | null, recommendedInfill?: any | null, recommendedMaterial?: string | null, supports?: string | null, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', url: string } | null }> | null, files?: Array<{ __typename?: 'File', file?: { __typename?: 'FileFieldOutput', url: string } | null }> | null, createdBy?: { __typename?: 'User', username?: string | null } | null } | null };
+export type ModelQuery = { __typename?: 'Query', model?: { __typename?: 'Model', id: string, name?: string | null, description?: string | null, createdAt?: any | null, likedByCount?: number | null, doUserLikesIt?: boolean | null, recommendedInfill?: number | null, recommendedMaterial?: string | null, supports?: string | null, images?: Array<{ __typename?: 'ModelImage', image?: { __typename?: 'ImageFieldOutput', url: string } | null }> | null, files?: Array<{ __typename?: 'ModelFile', file?: { __typename?: 'FileFieldOutput', url: string } | null }> | null, createdBy?: { __typename?: 'User', username?: string | null } | null } | null };
 
 export type CreateModelMutationVariables = Exact<{
   data: ModelCreateInput;
@@ -1029,7 +1178,7 @@ export type DeleteModelMutationVariables = Exact<{
 
 export type DeleteModelMutation = { __typename?: 'Mutation', deleteModel?: { __typename?: 'Model', slug?: string | null } | null };
 
-export type ModelFragment = { __typename?: 'Model', id: string, name?: string | null, description?: string | null, slug?: string | null, doUserLikesIt?: boolean | null, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', url: string } | null }> | null, createdBy?: { __typename?: 'User', username?: string | null } | null, likedBy?: Array<{ __typename?: 'User', username?: string | null }> | null } & { ' $fragmentName'?: 'ModelFragment' };
+export type ModelFragment = { __typename?: 'Model', id: string, name?: string | null, description?: string | null, slug?: string | null, doUserLikesIt?: boolean | null, images?: Array<{ __typename?: 'ModelImage', image?: { __typename?: 'ImageFieldOutput', url: string } | null }> | null, createdBy?: { __typename?: 'User', username?: string | null } | null, likedBy?: Array<{ __typename?: 'User', username?: string | null }> | null } & { ' $fragmentName'?: 'ModelFragment' };
 
 export type AuthenticateMutationVariables = Exact<{
   username: Scalars['String'];
@@ -1102,15 +1251,13 @@ export type LikedModelsQueryVariables = Exact<{
 export type LikedModelsQuery = { __typename?: 'Query', models?: Array<{ __typename?: 'Model', id: string, name?: string | null }> | null };
 
 export const ModelFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Model"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Model"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"images"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"likedBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"doUserLikesIt"}}]}}]} as unknown as DocumentNode<ModelFragment, unknown>;
-export const CreateImagesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateImages"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ImageCreateInput"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createImages"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateImagesMutation, CreateImagesMutationVariables>;
-export const CreateFilesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateFiles"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"FileCreateInput"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createFiles"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateFilesMutation, CreateFilesMutationVariables>;
 export const ModelsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Models"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"models"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"images"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"likedBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"doUserLikesIt"}}]}}]}}]} as unknown as DocumentNode<ModelsQuery, ModelsQueryVariables>;
 export const ModelDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Model"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slug"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"model"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"slug"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slug"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"images"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"files"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"file"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"likedByCount"}},{"kind":"Field","name":{"kind":"Name","value":"doUserLikesIt"}},{"kind":"Field","name":{"kind":"Name","value":"recommendedInfill"}},{"kind":"Field","name":{"kind":"Name","value":"recommendedMaterial"}},{"kind":"Field","name":{"kind":"Name","value":"supports"}}]}}]}}]} as unknown as DocumentNode<ModelQuery, ModelQueryVariables>;
 export const CreateModelDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateModel"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ModelCreateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createModel"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}}]} as unknown as DocumentNode<CreateModelMutation, CreateModelMutationVariables>;
 export const UpdateModelDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateModel"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slug"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ModelUpdateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateModel"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"slug"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slug"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}}]} as unknown as DocumentNode<UpdateModelMutation, UpdateModelMutationVariables>;
 export const DeleteModelDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteModel"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slug"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteModel"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"slug"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slug"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}}]} as unknown as DocumentNode<DeleteModelMutation, DeleteModelMutationVariables>;
-export const AuthenticateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Authenticate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"username"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authenticateUserWithPassword"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"username"},"value":{"kind":"Variable","name":{"kind":"Name","value":"username"}}},{"kind":"Argument","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"UserAuthenticationWithPasswordSuccess"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"sessionToken"}},{"kind":"Field","name":{"kind":"Name","value":"item"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"isAdmin"}},{"kind":"Field","name":{"kind":"Name","value":"createdModels"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Model"}}]}},{"kind":"Field","name":{"kind":"Name","value":"likedModels"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Model"}}]}}]}}]}}]}}]}},...ModelFragmentDoc.definitions]} as unknown as DocumentNode<AuthenticateMutation, AuthenticateMutationVariables>;
-export const CheckTokenDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CheckToken"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authenticatedItem"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"isAdmin"}},{"kind":"Field","name":{"kind":"Name","value":"createdModels"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Model"}}]}},{"kind":"Field","name":{"kind":"Name","value":"likedModels"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Model"}}]}}]}}]}}]}},...ModelFragmentDoc.definitions]} as unknown as DocumentNode<CheckTokenQuery, CheckTokenQueryVariables>;
+export const AuthenticateDocument = {"kind":"Document", "definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Authenticate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"username"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authenticateUserWithPassword"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"username"},"value":{"kind":"Variable","name":{"kind":"Name","value":"username"}}},{"kind":"Argument","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"UserAuthenticationWithPasswordSuccess"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"sessionToken"}},{"kind":"Field","name":{"kind":"Name","value":"item"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"isAdmin"}},{"kind":"Field","name":{"kind":"Name","value":"createdModels"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Model"}}]}},{"kind":"Field","name":{"kind":"Name","value":"likedModels"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Model"}}]}}]}}]}}]}}]}},...ModelFragmentDoc.definitions]} as unknown as DocumentNode<AuthenticateMutation, AuthenticateMutationVariables>;
+export const CheckTokenDocument = {"kind":"Document", "definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CheckToken"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authenticatedItem"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"isAdmin"}},{"kind":"Field","name":{"kind":"Name","value":"createdModels"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Model"}}]}},{"kind":"Field","name":{"kind":"Name","value":"likedModels"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Model"}}]}}]}}]}}]}},...ModelFragmentDoc.definitions]} as unknown as DocumentNode<CheckTokenQuery, CheckTokenQueryVariables>;
 export const EndSessionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"EndSession"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"endSession"}}]}}]} as unknown as DocumentNode<EndSessionMutation, EndSessionMutationVariables>;
 export const CreateUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"username"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"username"},"value":{"kind":"Variable","name":{"kind":"Name","value":"username"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateUserMutation, CreateUserMutationVariables>;
 export const ChangePasswordDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ChangePassword"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"username"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"newPassword"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"username"},"value":{"kind":"Variable","name":{"kind":"Name","value":"username"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"newPassword"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<ChangePasswordMutation, ChangePasswordMutationVariables>;
