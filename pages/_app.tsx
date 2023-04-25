@@ -7,7 +7,6 @@ import Head from "next/head";
 import { UserContainer } from "../containers/UserContainer";
 import { ModelContainer } from "../containers/ModelContainer";
 import { ModalContainer } from "../containers/ModalContainer";
-import '../components/ImageCarousel/ImageCarousel.css';
 
 export default function MyApp({ Component, pageProps }) {
     return (<>
