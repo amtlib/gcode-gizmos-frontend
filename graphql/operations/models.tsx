@@ -39,6 +39,11 @@ export const ModelQuery = gql(`
                     url
                 }
             }
+            comments {
+                content {
+                    document
+                }
+            }
             createdAt
             createdBy {
                 username
