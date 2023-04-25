@@ -2,18 +2,18 @@ import { useMutation, useQuery } from "@apollo/client";
 import { useContext } from "react";
 import { ModelContext } from "../contexts/ModelContext";
 import { UserContext } from "../contexts/UserContext";
-import { CreateModel, DeleteModel, ModelsQuery, UpdateModel } from "../graphql/operations/models";
+import { CreateComment, CreateModel, DeleteModel, ModelsQuery, UpdateModel } from "../graphql/operations/models";
 
 
 export function ModelContainer({ children }) {
     const [createModelMutation, { loading: createModelLoading }] = useMutation(CreateModel, { refetchQueries: ["Models"] });
     const [updateModelMutation, { loading: updateModelLoading }] = useMutation(UpdateModel, { refetchQueries: ["Model"] });
     const [deleteModelMutation, { loading: deleteModelLoading }] = useMutation(DeleteModel, { refetchQueries: ["Models"] });
+    const [createCommentMutation, { loading: createCommentLoading }] = useMutation(CreateComment, { refetchQueries: ["Model"] });
     const { data: dataModels, loading: modelsLoading } = useQuery(ModelsQuery);
     const { username } = useContext(UserContext);
 
     const createModel = async (name: string, description: string, files: File[], images: File[], recommendedInfill: number, recommendedMaterial: 'pla' | 'abs' | 'pet' | 'tpe', supports: 'yes' | 'no' | 'n/a') => {
-        
         const result = await createModelMutation({
             variables: {
                 data: {
@@ -71,14 +71,41 @@ export function ModelContainer({ children }) {
         return false;
     }
 
+    const createComment = async (slug: string, content: any) => {
+        const result = await createCommentMutation({
+            variables: {
+                data: {
+                    author: {
+                        connect: {
+                            username
+                        }
+                    },
+                    model: {
+                        connect: {
+                            slug
+                        }
+                    },
+                    content
+                }
+            }
+        });
+
+        if (result?.data?.createComment?.id) {
+            return result.data.createComment.id;
+        }
+        return null;
+    }
+
     return <ModelContext.Provider value={{
         models: dataModels?.models || [],
         modelsLoading,
         createModel,
         updateModel,
         deleteModel,
+        createComment,
         createModelLoading,
         deleteModelLoading,
-        updateModelLoading
+        updateModelLoading,
+        createCommentLoading
     }}>{children}</ModelContext.Provider>
 }

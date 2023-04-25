@@ -8,8 +8,8 @@ export type ModelType = {
     slug?: string;
     doUserLikesIt?: boolean;
     images?: {
-        image: {
-            url: string;
+        image?: {
+            url?: string;
         }
     }[];
 }
@@ -20,9 +20,11 @@ export type ModelContextType = {
     createModel: (name: string, description: string, files: File[], images: File[], recommendedInfill: number, recommendedMaterial: 'pla' | 'abs' | 'pet' | 'tpe', supports: 'yes' | 'no' | 'n/a') => Promise<string | null>;
     updateModel: (slug: string, name: string, description: string, recommendedInfill: number, recommendedMaterial: 'pla' | 'abs' | 'pet' | 'tpe', supports: 'yes' | 'no' | 'n/a') => Promise<string | null>;
     deleteModel: (slug: string) => Promise<boolean>;
+    createComment: (slug: string, content: any) => Promise<string | null>;
     createModelLoading: boolean;
     updateModelLoading: boolean;
     deleteModelLoading: boolean;
+    createCommentLoading: boolean;
 };
 
 export const ModelContext = createContext<ModelContextType>({
@@ -31,7 +33,9 @@ export const ModelContext = createContext<ModelContextType>({
     createModel: () => Promise.resolve(null),
     updateModel: () => Promise.resolve(null),
     deleteModel: () => Promise.resolve(false),
+    createComment: () => Promise.resolve(null),
     createModelLoading: false,
     updateModelLoading: false,
     deleteModelLoading: false,
+    createCommentLoading: false,
 });

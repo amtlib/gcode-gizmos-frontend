@@ -46,6 +46,7 @@ export const ModelQuery = gql(`
                 content {
                     document
                 }
+                createdAt
             }
             createdAt
             createdBy {
@@ -86,3 +87,11 @@ export const DeleteModel = gql(`
         }
     }
 `);
+
+export const CreateComment = gql(`
+    mutation CreateComment($data: CommentCreateInput!) {
+        createComment(data: $data) {
+            id
+        }
+    }
+`)
