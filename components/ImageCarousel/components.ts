@@ -23,6 +23,8 @@ export const ArrowContainer = styled.div`
     top: 50%;
     transform: translateY(-50%);
     width: 100%;
+    display: flex;
+    justify-content: space-between;
     pointer-events: none;
     user-select: none;
     cursor: pointer;
@@ -64,6 +66,9 @@ export const Arrow = styled.div<{ direction: "left" | "right"}>`
 
     ${({ direction }) => direction === "right" && css`
         right: 10px;
+        &:only-child {
+            right: calc(-100% + 31px);
+        }
     `}
 `;
 

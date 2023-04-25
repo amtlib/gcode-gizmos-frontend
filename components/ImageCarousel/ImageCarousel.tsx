@@ -48,14 +48,17 @@ const ImageCarousel = ({ images }) => {
         <Image w="full" h="full" src={images[currentIndex]} alt="carousel image" />
       </ImageWrapper>
       <ArrowContainer>
-        {!(images.length - 1 === currentIndex) && (
+        {!(currentIndex === 0) && (
           <Arrow direction="left" onClick={handlePrev}>
             &#10094;
           </Arrow>
         )}
-        <Arrow direction="right" onClick={handleNext}>
-          &#10095;
-        </Arrow>
+        {!(currentIndex === images.length - 1) && (
+          <Arrow direction="right" onClick={handleNext}>
+            &#10095;
+          </Arrow>
+
+        )}
       </ArrowContainer>
     </Wrapper>
   );
