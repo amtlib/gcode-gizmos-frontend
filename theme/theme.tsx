@@ -209,13 +209,5 @@ export const theme = extendTheme({
                 focusBorderColor: "purple"
             },
         },
-        Textarea: {
-            defaultProps: {
-                size: "md",
-                variant: "outline",
-                colorScheme: "purple",
-                
-            },
-        }
     }
 })
