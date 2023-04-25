@@ -6,7 +6,7 @@ import { OrbitControls } from '@react-three/drei'
 import { Canvas, useLoader, useThree } from '@react-three/fiber';
 
 function Loader() {
-    return <p>Loading</p>
+    return <Box w="full" h="full" display="flex" alignItems="center" justifyContent="center"><Spinner /></Box>
 }
 
 const ModelMesh = ({ url }) => {
@@ -36,7 +36,7 @@ const ModelMesh = ({ url }) => {
 
 export const StlPreview = ({ url }: { url: string }) => {
     return (
-        <Box style={{ backgroundColor: '#eee', height: 400 }}>
+        <Box _dark={{ borderColor: "gray.600", backgroundColor: "gray.700" }} borderColor="gray.200" backgroundColor="gray.100" borderWidth={1} style={{ height: 400 }}>
             <Suspense fallback={<Loader />}>
                 <Canvas>
                     <ambientLight />
