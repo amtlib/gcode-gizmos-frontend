@@ -6,7 +6,6 @@ import {
     ListItem,
     OrderedList,
     UnorderedList,
-    Heading
 } from "@chakra-ui/react";
 import React, { ReactElement } from "react";
 import {
@@ -17,20 +16,17 @@ import {
     MdFormatListNumbered,
     MdFormatQuote,
     MdFormatUnderlined,
-    MdLooksOne,
-    MdLooksTwo
 } from "react-icons/md";
 import {
     useSlate,
     ReactEditor,
-    RenderLeafProps,
     RenderElementProps
 } from "slate-react";
-import { Editor, Transforms, Element as SlateElement, isBlock } from "slate";
+import { Editor, Transforms, Element as SlateElement } from "slate";
 import { HistoryEditor } from "slate-history";
 
 type EditorProps = Editor | ReactEditor | HistoryEditor;
-const LIST_TYPES = ["numbered-list", "bulleted-list"];
+const LIST_TYPES = ["ordered-list", "unordered-list"];
 
 const isBlockActive = (editor: EditorProps, format: string) => {
     const nodeGen = Editor.nodes(editor, {
@@ -143,11 +139,9 @@ export const Toolbar = () => {
             <MarkButton format="italic" icon={<MdFormatItalic />} />
             <MarkButton format="underline" icon={<MdFormatUnderlined />} />
             <MarkButton format="code" icon={<MdCode />} />
-            <BlockButton format="heading-one" icon={<MdLooksOne />} />
-            <BlockButton format="heading-two" icon={<MdLooksTwo />} />
-            <BlockButton format="block-quote" icon={<MdFormatQuote />} />
-            <BlockButton format="numbered-list" icon={<MdFormatListNumbered />} />
-            <BlockButton format="bulleted-list" icon={<MdFormatListBulleted />} />
+            <BlockButton format="blockquote" icon={<MdFormatQuote />} />
+            <BlockButton format="ordered-list" icon={<MdFormatListNumbered />} />
+            <BlockButton format="unordered-list" icon={<MdFormatListBulleted />} />
         </HStack>
     );
 };
@@ -163,7 +157,7 @@ export const Element = ({
     element
 }: RenderElementProps) => {
     switch (element.type) {
-        case "block-quote":
+        case "blockquote":
             return (
                 <chakra.blockquote
                     style={BlockquoteStyle}
@@ -176,22 +170,10 @@ export const Element = ({
             );
         case "list-item":
             return <ListItem {...attributes}>{children}</ListItem>;
-        case "numbered-list":
+        case "ordered-list":
             return <OrderedList {...attributes}>{children}</OrderedList>;
-        case "bulleted-list":
+        case "unordered-list":
             return <UnorderedList {...attributes}>{children}</UnorderedList>;
-        case "heading-one":
-            return (
-                <Heading as="h1" size="3xl" {...attributes}>
-                    {children}
-                </Heading>
-            );
-        case "heading-two":
-            return (
-                <Heading as="h2" size="2xl" {...attributes}>
-                    {children}
-                </Heading>
-            );
         default:
             return <p {...attributes}>{children}</p>;
     }
