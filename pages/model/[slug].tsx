@@ -167,7 +167,7 @@ export default function Model() {
                     <Download model={data?.model} />
                 </Stack>
             </SimpleGrid>
-            <Comments comments={data.model.comments} />
+            <Comments modelSlug={slug.toString()} comments={data.model.comments} />
         </BaseLayout>
     )
 };
