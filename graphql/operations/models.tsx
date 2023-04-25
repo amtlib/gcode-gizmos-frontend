@@ -40,6 +40,9 @@ export const ModelQuery = gql(`
                 }
             }
             comments {
+                author {
+                    username
+                }
                 content {
                     document
                 }
