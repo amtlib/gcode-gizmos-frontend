@@ -1,13 +1,6 @@
 import { extendTheme } from "@chakra-ui/react"
 
 export const theme = extendTheme({
-    colors: {
-        brand: {
-            100: "#f7fafc",
-            // ...
-            900: "#1a202c",
-        },
-    },
     breakpoints: {
         xsm: "768px",
         xlg: "960px",
@@ -214,6 +207,14 @@ export const theme = extendTheme({
                 size: "md",
                 variant: "outline",
                 focusBorderColor: "purple"
+            },
+        },
+        Textarea: {
+            defaultProps: {
+                size: "md",
+                variant: "outline",
+                colorScheme: "purple",
+                
             },
         }
     }
