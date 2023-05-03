@@ -5,7 +5,13 @@ import { API_URL } from "./config";
 
 const client = new ApolloClient({
     link: createUploadLink({ fetch, uri: API_URL, fetchOptions: { credentials: "include"} }),
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+        typePolicies: {
+            Model: {
+                keyFields: ['id', 'slug']
+            }
+        }
+    }),
 });
 
 export default client;

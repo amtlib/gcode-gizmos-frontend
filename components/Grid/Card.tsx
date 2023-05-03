@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
     Box,
     Heading,
@@ -15,7 +15,7 @@ import { BsArrowUpRight, BsHeartFill, BsHeart, BsBox } from 'react-icons/bs';
 import Link from 'next/link';
 import { UserContext } from '../../contexts/UserContext';
 
-export const Card = ({ name, imageUrl, slug, doUserLikesIt }: { name: string; imageUrl?: string; slug: string; doUserLikesIt: boolean }) => {
+export const Card = React.memo(function CardComponent({ name, imageUrl, slug, doUserLikesIt }: { name: string; imageUrl?: string; slug: string; doUserLikesIt: boolean }) {
     const [liked, setLiked] = useState<boolean>(doUserLikesIt);
     const [shadowWhite, shadowBlack] = useToken('colors', ['black', 'purple.200']);
     const { loggedIn, username } = useContext(UserContext);
@@ -111,4 +111,4 @@ export const Card = ({ name, imageUrl, slug, doUserLikesIt }: { name: string; im
             </Box>
         </GridItem>
     );
-}
+})
