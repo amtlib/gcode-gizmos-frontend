@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { ModelContext } from "../contexts/ModelContext";
 import { UserContext } from "../contexts/UserContext";
 import { CreateComment, CreateModel, DeleteModel, ModelsQuery, UpdateModel } from "../graphql/operations/models";
+import { debounce } from "debounce";
 
 
 export function ModelContainer({ children }) {
@@ -10,8 +11,12 @@ export function ModelContainer({ children }) {
     const [updateModelMutation, { loading: updateModelLoading }] = useMutation(UpdateModel, { refetchQueries: ["Model"] });
     const [deleteModelMutation, { loading: deleteModelLoading }] = useMutation(DeleteModel, { refetchQueries: ["Models"] });
     const [createCommentMutation, { loading: createCommentLoading }] = useMutation(CreateComment, { refetchQueries: ["Model"] });
-    const { data: dataModels, loading: modelsLoading } = useQuery(ModelsQuery);
+    const { data: dataModels, loading: modelsLoading, refetch: refetchModels } = useQuery(ModelsQuery);
     const { username } = useContext(UserContext);
+
+    const setSearchQuery = debounce((newQuery: string) => {
+        refetchModels({ query: newQuery })
+    }, 500)
 
     const createModel = async (name: string, description: any, files: File[], images: File[], recommendedInfill: number, recommendedMaterial: 'pla' | 'abs' | 'pet' | 'tpe', supports: 'yes' | 'no' | 'n/a') => {
         const result = await createModelMutation({
@@ -106,6 +111,7 @@ export function ModelContainer({ children }) {
         createModelLoading,
         deleteModelLoading,
         updateModelLoading,
-        createCommentLoading
+        createCommentLoading,
+        setSearchQuery,
     }}>{children}</ModelContext.Provider>
 }

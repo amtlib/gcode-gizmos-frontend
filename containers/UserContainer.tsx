@@ -93,7 +93,6 @@ export function UserContainer({ children }) {
     }, [authenticateData, authenticateLoading]);
 
     useEffect(() => {
-        console.log("check token", checkTokenData?.authenticatedItem)
         if (checkTokenData?.authenticatedItem && !checkTokenLoading) {
             const { id, username, email, isAdmin, likedModels: likedModelsAPI, createdModels: createdModelsAPI } = checkTokenData?.authenticatedItem;
             console.log(checkTokenData?.authenticatedItem && !checkTokenLoading)

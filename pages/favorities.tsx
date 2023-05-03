@@ -5,7 +5,7 @@ import { Grid } from "../components/Grid/Grid";
 import { ModelContext } from "../contexts/ModelContext";
 import { BaseLayout } from "../layouts/BaseLayout";
 
-export default function Home() {
+export default function Favorities() {
     const { models, modelsLoading } = useContext(ModelContext);
     if (modelsLoading) {
         return (

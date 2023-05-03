@@ -25,6 +25,7 @@ export type ModelContextType = {
     updateModelLoading: boolean;
     deleteModelLoading: boolean;
     createCommentLoading: boolean;
+    setSearchQuery: (query: string | null) => void;
 };
 
 export const ModelContext = createContext<ModelContextType>({
@@ -38,4 +39,5 @@ export const ModelContext = createContext<ModelContextType>({
     updateModelLoading: false,
     deleteModelLoading: false,
     createCommentLoading: false,
+    setSearchQuery: () => {},
 });

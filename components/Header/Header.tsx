@@ -25,6 +25,7 @@ import { UserContext } from '../../contexts/UserContext';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ModalContext } from '../../contexts/ModalContext';
+import { ModelContext } from '../../contexts/ModelContext';
 
 
 const Links = [
@@ -33,11 +34,11 @@ const Links = [
         href: "/",
         hasToBeLoggedIn: false,
     },
-    // {
-    //     name: "Favorities",
-    //     href: "/favorities",
-    //     hasToBeLoggedIn: true,
-    // }
+    {
+        name: "Favorities",
+        href: "/favorities",
+        hasToBeLoggedIn: true,
+    }
 ] as const;
 
 const NavLink = ({ children, ...rest }: { children: ReactNode; } & ComponentPropsWithoutRef<typeof ChakraLink>) => (
@@ -53,13 +54,14 @@ const NavLink = ({ children, ...rest }: { children: ReactNode; } & ComponentProp
     </ChakraLink>
 );
 
-export function Header() {
+export function Header({ withSearch }: { withSearch?: boolean }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { colorMode, toggleColorMode } = useColorMode();
     const {launchModelModal} = useContext(ModalContext);
     const router = useRouter();
     const { loggedIn, unauthenticate, username } = useContext(UserContext);
     const [maxW, setMaxW] = useState("960px");
+    const { setSearchQuery } = useContext(ModelContext);
 
     return (
         <Box zIndex={1000} px={4} position="sticky" top={0} bgColor="Background" borderBottomWidth={1} borderBottomColor={useColorModeValue('black', 'transparent')}>
@@ -83,9 +85,11 @@ export function Header() {
                             ))}
                         </HStack>
                     </HStack>
-                    {/* <HStack spacing={8} justify="center" mx="8" flexGrow={1} display={{ base: "none", md: "block" }}>
-                        <Input rounded={0} type="search" placeholder="find gizmo..." onBlur={() => setMaxW("960px")} onFocus={() => setMaxW("full")} />
-                    </HStack> */}
+                    {withSearch && (
+                        <HStack spacing={8} justify="center" mx="8" flexGrow={1} display={{ base: "none", md: "block" }}>
+                            <Input rounded={0} type="search" placeholder="find gizmo..." onBlur={() => setMaxW("960px")} onFocus={() => setMaxW("full")} onChange={(e) => setSearchQuery(e.target.value)} />
+                        </HStack>
+                    )}
                     <Flex alignItems={'center'}>
                         {loggedIn && (
                             <Button
