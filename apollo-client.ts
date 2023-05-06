@@ -8,7 +8,7 @@ const client = new ApolloClient({
     cache: new InMemoryCache({
         typePolicies: {
             Model: {
-                keyFields: ['id', 'slug']
+                keyFields: ['id']
             }
         }
     }),
