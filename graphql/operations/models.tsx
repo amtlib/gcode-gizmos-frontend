@@ -2,7 +2,7 @@ import { gql } from '../apolloSchema/gql';
 
 export const ModelsQuery = gql(`
     query Models($query: String) {
-        models(where: {name: {contains: $query}}) {
+        models(where: {name: {contains: $query, mode: insensitive}}) {
             id
             name
             description {
