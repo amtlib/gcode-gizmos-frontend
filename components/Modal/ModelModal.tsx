@@ -1,6 +1,6 @@
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, Box, FormControl, FormErrorMessage, FormLabel, Input, Textarea, Select, Checkbox, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ModalContext } from "../../contexts/ModalContext";
 import { ModelContext } from "../../contexts/ModelContext";
@@ -11,7 +11,7 @@ type FormType = {
     slug?: string;
     id?: string;
     name?: string;
-    description?: string;
+    description?: { document: Descendant[];};
     recommendedInfill?: number,
     recommendedMaterial?: "pla" | "abs" | "pet" | "tpe",
     supports?: 'yes' | 'no' | 'n/a',
@@ -19,15 +19,8 @@ type FormType = {
     images?: any,
 }
 
-const initialDescriptionValue = [
-    {
-        type: "paragraph",
-        children: [{ text: "" }]
-    }
-];
-
 export const ModelModal = ({ action, data }: { action: "create" | "update"; data?: FormType }) => {
-    const [description, setDescription] = useState<Descendant[]>(initialDescriptionValue);
+    const [description, setDescription] = useState<Descendant[] | null>(null);
     const { createModel, createModelLoading, updateModel, updateModelLoading } = useContext(ModelContext);
     const { isModelModalOpen: isOpen, onModelModalClose: onClose } = useContext(ModalContext);
     const router = useRouter();
@@ -36,13 +29,18 @@ export const ModelModal = ({ action, data }: { action: "create" | "update"; data
         defaultValues: {
             id: data?.id || "",
             name: data?.name || "",
-            recommendedInfill: data?.recommendedInfill ?? 0,
+            recommendedInfill: data?.recommendedInfill || 0,
             recommendedMaterial: data?.recommendedMaterial || "pla",
             supports: data?.supports || 'no',
             files: data?.files || null,
             images: data?.images || null,
         }
-    })
+    });
+
+    useEffect(() => {
+        console.log(data.description.document);
+        setDescription(data.description.document);
+    }, [data.description]);
 
     const onSubmit = async (values: Record<string, any>) => {
         if (action === "create") {
@@ -65,7 +63,7 @@ export const ModelModal = ({ action, data }: { action: "create" | "update"; data
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent as="form" onSubmit={handleSubmit(onSubmit)}>
+            <ModalContent as="form" onSubmit={handleSubmit(onSubmit)} rounded={0}>
                 <ModalHeader>{action === "create" ? "Add gizmo" : "Update gizmo"}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
@@ -77,13 +75,15 @@ export const ModelModal = ({ action, data }: { action: "create" | "update"; data
                                 <FormErrorMessage>{errors.name.message}</FormErrorMessage>
                             }
                         </FormControl>
-                        <FormControl>
-                            <FormLabel>Description</FormLabel>
-                            <RichTextBlock value={description} setValue={setDescription}/>
-                        </FormControl>
+                        {description && (
+                            <FormControl>
+                                <FormLabel>Description</FormLabel>
+                                <RichTextBlock value={description} setValue={setDescription}/>
+                            </FormControl>
+                        )}
                         <FormControl isInvalid={!!errors.recommendedInfill}>
                             <FormLabel>Recommended infill %</FormLabel>
-                            <Input type="number" min={0} max={100} {...register("recommendedInfill", { min: 0, max: 100 })} />
+                            <Input type="number" min={0} max={100} {...register("recommendedInfill", { min: 0, max: 100, valueAsNumber: true })} />
                             {!!errors.recommendedInfill &&
                                 <FormErrorMessage>{errors.recommendedInfill.message}</FormErrorMessage>
                             }
