@@ -1,4 +1,4 @@
-import { Box, Heading, Stack } from "@chakra-ui/react";
+import { Box, Heading, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 import { Comment } from "./Comment";
 import { AddComment } from "./AddComment/AddComment";
@@ -34,7 +34,9 @@ export const Comments = ({ modelSlug, comments }: { modelSlug: string; comments:
                 </Heading>
             </Box>
             <AddComment modelSlug={modelSlug} />
-
+            {comments.length === 0 && (
+                <Text>No comments yet...</Text>
+            )}
             {[...comments].sort((a, b) => -compare(a, b, "createdAt")).map((comment, key) => (
                 <Comment key={key} createdAt={comment.createdAt} username={comment.author.username} document={comment.content.document} />
             ))}
