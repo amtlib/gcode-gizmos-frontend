@@ -17,8 +17,8 @@ export function UserContainer({ children }) {
 
     const [authenticateUserWithPassword, { data: authenticateData, loading: authenticateLoading }] = useMutation(Authenticate);
     const [createUser, { data: createUserData, loading: createAccountLoading }] = useMutation(CreateUser);
-    const [likeModelMutation, { data: likeModelData, loading: likeModelLoading }] = useMutation(LikeModel);
-    const [dislikeModelMutation, { data: dislikeModelData, loading: dislikeModelLoading }] = useMutation(DislikeModel);
+    const [likeModelMutation, { data: likeModelData, loading: likeModelLoading }] = useMutation(LikeModel, { refetchQueries: ["Models"] });
+    const [dislikeModelMutation, { data: dislikeModelData, loading: dislikeModelLoading }] = useMutation(DislikeModel, { refetchQueries: ["Models"] });
     const [changePasswordMutation, { loading: changePasswordLoading}] = useMutation(ChangePassword);
 
     const { data: checkTokenData, loading: checkTokenLoading } = useQuery(CheckToken);

@@ -1,4 +1,4 @@
-import { Flex, Spinner } from "@chakra-ui/react";
+import { Box, Flex, Spinner, Text } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { Card } from "../components/Grid/Card";
 import { Grid } from "../components/Grid/Grid";
@@ -18,8 +18,13 @@ export default function Favorities() {
     }
     return (
         <BaseLayout withSearch>
+            {models?.filter(model => model.doUserLikesIt).length === 0 && (
+                <Box my={10}>
+                    <Text textAlign="center" fontSize="4xl">Hmmm... No liked models yet</Text>
+                </Box>
+            )}
             <Grid>
-                {models?.map(model => <Card key={model.id} name={model.name} imageUrl={model.images[0]?.image.url} doUserLikesIt={model.doUserLikesIt} slug={model.slug} />)}
+                {models?.filter(model => model.doUserLikesIt).map(model => <Card key={model.id} name={model.name} imageUrl={model.images[0]?.image.url} doUserLikesIt={model.doUserLikesIt} slug={model.slug} />)}
             </Grid>
         </BaseLayout>
     )
