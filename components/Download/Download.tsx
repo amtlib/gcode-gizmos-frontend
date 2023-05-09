@@ -8,7 +8,7 @@ const Download = ({ model }: { model: { name?: string; images?: { image?: { url:
     const toast = useToast();
 
     const getFileExtension = (url: string) => {
-        const regex = /\.([a-zA-Z0-9]+)\?.*$/;
+        const regex = /\.([a-zA-Z0-9]+)$/;
         const match = regex.exec(url);
         if (match) {
             const extension = match[1];
@@ -17,7 +17,7 @@ const Download = ({ model }: { model: { name?: string; images?: { image?: { url:
     }
 
     const zipFile = async (folder, prefix, url, index) => {
-        const response = await fetch(url);
+        const response = await fetch(url, {cache: "no-cache"});
         const blob = await response.blob();
         folder.file(`${prefix}-${index}.${getFileExtension(url)}`, blob);
     }
