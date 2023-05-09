@@ -105,7 +105,15 @@ export default function Model() {
                                 _dark={{ borderColor: 'gray.600' }}
                             />
                         }>
-                        <Box>
+                        <Box sx={{
+                            'ul': {
+                                ml: 4,
+                                my: 2
+                            },
+                            'p:empty': {
+                                my: 4
+                            }
+                        }}>
                             <DocumentRenderer document={data?.model.description.document} />
                         </Box>
                         <Box>
