@@ -16,7 +16,6 @@ import {
     useColorModeValue,
     Stack,
     useColorMode,
-    Input,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, AddIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { Logo } from './Logo';
@@ -25,7 +24,6 @@ import { UserContext } from '../../contexts/UserContext';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ModalContext } from '../../contexts/ModalContext';
-import { ModelContext } from '../../contexts/ModelContext';
 
 
 const Links = [
@@ -61,7 +59,6 @@ export function Header({ withSearch }: { withSearch?: boolean }) {
     const router = useRouter();
     const { loggedIn, unauthenticate, username } = useContext(UserContext);
     const [maxW, setMaxW] = useState("960px");
-    const { setSearchQuery } = useContext(ModelContext);
 
     return (
         <Box zIndex={1000} px={4} position="sticky" top={0} bgColor="Background" borderBottomWidth={1} borderBottomColor={useColorModeValue('black', 'transparent')}>
@@ -86,9 +83,7 @@ export function Header({ withSearch }: { withSearch?: boolean }) {
                         </HStack>
                     </HStack>
                     {withSearch && (
-                        <HStack spacing={8} justify="center" mx="8" flexGrow={1} display={{ base: "none", md: "block" }}>
-                            <Input rounded={0} type="search" placeholder="find gizmo..." onBlur={() => setMaxW("960px")} onFocus={() => setMaxW("full")} onChange={(e) => setSearchQuery(e.target.value)} />
-                        </HStack>
+                        <Search setMaxW={setMaxW} />
                     )}
                     <Flex alignItems={'center'}>
                         {loggedIn && (
@@ -146,7 +141,7 @@ export function Header({ withSearch }: { withSearch?: boolean }) {
                             {Links.map((link) => ((link.hasToBeLoggedIn && loggedIn) || !link.hasToBeLoggedIn) && (
                                 <NavLink href={link.href} key={link.name}>{link.name}</NavLink>
                             ))}
-                            <Box><Search /></Box>
+                            <Box><Search mobile /></Box>
                         </Stack>
                     </Box>
                 ) : null}
