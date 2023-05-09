@@ -77,7 +77,7 @@ export const RichTextBlock = ({ value, setValue }: { value: Descendant[]; setVal
                         onKeyDown={onKeyDown}
                         renderElement={renderElement}
                         renderLeaf={renderLeaf}
-                        placeholder="Write your comment here..."
+                        placeholder="Write your text here..."
                         spellCheck
                         style={{ minHeight: "150px", resize: "vertical", overflow: "auto" }}
                     />
