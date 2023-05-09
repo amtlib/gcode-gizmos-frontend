@@ -43,7 +43,7 @@ export const Card = React.memo(function CardComponent({ name, imageUrl, slug, do
                 border={'1px'}
                 borderColor="black"
                 boxShadow={useColorModeValue(`6px 6px 0 ${shadowWhite}`, `6px 6px 0 ${shadowBlack}`)}>
-                <Box h={'300px'} borderBottom={'1px'} borderColor="black">
+                <Box borderBottom={'1px'} borderColor="black">
                     <Image
                         src={
                             imageUrl
