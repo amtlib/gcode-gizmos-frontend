@@ -87,6 +87,7 @@ export const UpdateModel = gql(`
 export const DeleteModel = gql(`
     mutation DeleteModel($slug: String!) {
         deleteModel(where: {slug: $slug}) {
+            id
             slug
         }
     }
