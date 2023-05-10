@@ -41,7 +41,7 @@ export default function Model() {
         });
     }
     useEffect(() => {
-        if (data?.model) {
+        if (data?.model && data.model.files.length) {
             setSelectedModelUrl(data.model.files[0].file.url)
         }
     }, [data]);
