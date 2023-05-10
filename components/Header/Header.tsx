@@ -118,9 +118,9 @@ export function Header({ withSearch }: { withSearch?: boolean }) {
                                     <MenuItem onClick={() => router.push("/account")}>
                                         Account
                                     </MenuItem>
-                                    {/* <MenuItem>
+                                    <MenuItem onClick={() => router.push("/my-gizmos")}>
                                         My gizmos
-                                    </MenuItem> */}
+                                    </MenuItem>
                                     <MenuItem onClick={toggleColorMode}>
                                         {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
                                         <Box ml={2}>Toggle color scheme</Box>
