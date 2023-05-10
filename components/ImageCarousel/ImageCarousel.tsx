@@ -29,12 +29,16 @@ const ImageCarousel = ({ images }) => {
 
   const handleTouchEnd = () => {
     if (xDiff.current > 0) {
-        handleNext();
-      } else {
-        handlePrev();
-      }
-      setStartX(0);
+      handleNext();
+    } else {
+      handlePrev();
+    }
+    setStartX(0);
 
+  }
+
+  if (images.length === 0) {
+    return null;
   }
 
 
