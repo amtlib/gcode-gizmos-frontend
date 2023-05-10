@@ -9,7 +9,14 @@ export const ModelsQuery = gql(`
                 document
             }
             images {
+                id
                 image {
+                    url
+                }
+            }
+            files {
+                id
+                file {
                     url
                 }
             }
@@ -34,11 +41,13 @@ export const ModelQuery = gql(`
                 document
             }
             images {
+                id
                 image {
                     url
                 }
             }
             files {
+                id
                 file {
                     url
                 }
