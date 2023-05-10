@@ -18,7 +18,7 @@ export type ModelContextType = {
     models: ModelType[];
     modelsLoading: boolean;
     createModel: (name: string, description: any, files: File[], images: File[], recommendedInfill: number, recommendedMaterial: 'pla' | 'abs' | 'pet' | 'tpe', supports: 'yes' | 'no' | 'n/a') => Promise<string | null>;
-    updateModel: (slug: string, name: string, description: any, recommendedInfill: number, recommendedMaterial: 'pla' | 'abs' | 'pet' | 'tpe', supports: 'yes' | 'no' | 'n/a') => Promise<string | null>;
+    updateModel: (slug: string, name: string, description: any, recommendedInfill: number, recommendedMaterial: 'pla' | 'abs' | 'pet' | 'tpe', supports: 'yes' | 'no' | 'n/a', images: File[], files: File[]) => Promise<string | null>;
     deleteModel: (slug: string) => Promise<boolean>;
     createComment: (slug: string, content: any) => Promise<string | null>;
     createModelLoading: boolean;

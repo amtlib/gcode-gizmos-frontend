@@ -40,13 +40,23 @@ export function ModelContainer({ children }) {
         return null;
     }
 
-    const updateModel = async (slug: string, name: string, description: any, recommendedInfill: number, recommendedMaterial: 'pla' | 'abs' | 'pet' | 'tpe', supports: 'yes' | 'no' | 'n/a') => {
+    const updateModel = async (slug: string, name: string, description: any, recommendedInfill: number, recommendedMaterial: 'pla' | 'abs' | 'pet' | 'tpe', supports: 'yes' | 'no' | 'n/a', images: File[], files: File[]) => {
+        let imagesToUnlink = [], filesToUnlink = [];
+        if (images.length > 0) {
+            imagesToUnlink = dataModels.models.find(model => model.slug === slug).images.map(image => image.id);
+        }
+        if (files.length > 0) {
+            filesToUnlink = dataModels.models.find(model => model.slug === slug).files.map(file => file.id);
+        }
+
         const result = await updateModelMutation({
             variables: {
                 slug,
                 data: {
                     name,
                     description,
+                    images: images.length ? { disconnect: [...imagesToUnlink.map(id => ({ id }))], create: [...Array.from(images).map(image => ({ image: { upload: image}, createdBy: {connect: {username}}}))]} : undefined,
+                    files: files.length ? { disconnect: [...filesToUnlink.map(id => ({ id }))], create: [...Array.from(files).map(file => ({ file: { upload: file}, createdBy: {connect: {username}}}))]} : undefined,
                     recommendedInfill,
                     recommendedMaterial,
                     supports
