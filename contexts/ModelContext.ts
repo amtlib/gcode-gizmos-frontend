@@ -7,6 +7,9 @@ export type ModelType = {
     description?: any;
     slug?: string;
     doUserLikesIt?: boolean;
+    createdBy?: {
+        username?: string
+    };
     images?: {
         image?: {
             url?: string;
