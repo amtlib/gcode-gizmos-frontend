@@ -6,12 +6,13 @@ import { ModalContext } from "../../contexts/ModalContext";
 import { ModelContext } from "../../contexts/ModelContext";
 import { RichTextBlock } from "../Comments/AddComment/RichTextBlocks";
 import { Descendant } from "slate";
+import { FileUploader } from "../FileUploader/FileUploader";
 
 type FormType = {
     slug?: string;
     id?: string;
     name?: string;
-    description?: { document: Descendant[];};
+    description?: { document: Descendant[]; };
     recommendedInfill?: number,
     recommendedMaterial?: "pla" | "abs" | "pet" | "tpe",
     supports?: 'yes' | 'no' | 'n/a',
@@ -21,6 +22,8 @@ type FormType = {
 
 export const ModelModal = ({ action, data }: { action: "create" | "update"; data?: FormType }) => {
     const [description, setDescription] = useState<Descendant[] | null>(null);
+    const [uploadedImages, setUploadedImages] = useState<File[]>([]);
+    const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
     const { createModel, createModelLoading, updateModel, updateModelLoading } = useContext(ModelContext);
     const { isModelModalOpen: isOpen, onModelModalClose: onClose } = useContext(ModalContext);
     const router = useRouter();
@@ -32,26 +35,23 @@ export const ModelModal = ({ action, data }: { action: "create" | "update"; data
             recommendedInfill: data?.recommendedInfill || 0,
             recommendedMaterial: data?.recommendedMaterial || "pla",
             supports: data?.supports || 'no',
-            files: data?.files || null,
-            images: data?.images || null,
         }
     });
 
     useEffect(() => {
-        console.log(data.description.document);
         setDescription(data.description.document);
     }, [data.description]);
 
     const onSubmit = async (values: Record<string, any>) => {
         if (action === "create") {
-            const slug = await createModel(values.name, description, values.files, values.images, values.recommendedInfill, values.recommendedMaterial, values.supports);
+            const slug = await createModel(values.name, description, uploadedFiles, uploadedImages, values.recommendedInfill, values.recommendedMaterial, values.supports);
             console.log(slug)
             if (slug) {
                 onClose();
                 router.push(`/model/${slug}`);
             }
         } else if (action === "update") {
-            const slug = await updateModel(data.slug, values.name, description, values.recommendedInfill, values.recommendedMaterial, values.supports);
+            const slug = await updateModel(data.slug, values.name, description, values.recommendedInfill, values.recommendedMaterial, values.supports, uploadedImages, uploadedFiles);
             console.log(slug)
             if (slug) {
                 onClose();
@@ -78,7 +78,7 @@ export const ModelModal = ({ action, data }: { action: "create" | "update"; data
                         {description && (
                             <FormControl>
                                 <FormLabel>Description</FormLabel>
-                                <RichTextBlock value={description} setValue={setDescription}/>
+                                <RichTextBlock value={description} setValue={setDescription} />
                             </FormControl>
                         )}
                         <FormControl isInvalid={!!errors.recommendedInfill}>
@@ -111,24 +111,14 @@ export const ModelModal = ({ action, data }: { action: "create" | "update"; data
                                 <FormErrorMessage>{errors.supports.message}</FormErrorMessage>
                             }
                         </FormControl>
-                        {action === "create" && (
-                            <>
-                                <FormControl isInvalid={!!errors.images}>
-                                    <FormLabel>Image</FormLabel>
-                                    <Input type="file" multiple accept="image/jpg,image/png,image/jpeg" {...register("images")} py={1} pl={1} />
-                                    {!!errors.images &&
-                                        <FormErrorMessage>{errors.images.message.toString()}</FormErrorMessage>
-                                    }
-                                </FormControl>
-                                <FormControl isInvalid={!!errors.files}>
-                                    <FormLabel>Model</FormLabel>
-                                    <Input type="file" multiple accept=".stl" {...register("files")} py={1} pl={1} />
-                                    {!!errors.files &&
-                                        <FormErrorMessage>{errors.files.message.toString()}</FormErrorMessage>
-                                    }
-                                </FormControl>
-                            </>
-                        )}
+                        <FormControl>
+                            <FormLabel>Images</FormLabel>
+                            <FileUploader uploadedFiles={uploadedImages} setUploadedFiles={setUploadedImages} acceptedFileExtensions={["jpg", "png", "jpeg"]} />
+                        </FormControl>
+                        <FormControl>
+                            <FormLabel>Models</FormLabel>
+                            <FileUploader acceptedFileExtensions={["stl"]} uploadedFiles={uploadedFiles} setUploadedFiles={setUploadedFiles} />
+                        </FormControl>
                     </VStack>
                 </ModalBody>
 
