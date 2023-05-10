@@ -1,4 +1,4 @@
-import { Flex, Spinner } from "@chakra-ui/react";
+import { Flex, Spinner, Text } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { Card } from "../components/Grid/Card";
 import { Grid } from "../components/Grid/Grid";
@@ -18,6 +18,7 @@ export default function Home() {
     }
     return (
         <BaseLayout withSearch>
+            <Text fontSize="4xl">Browse models</Text>
             <Grid>
                 {models?.map(model => <Card key={model.id} name={model.name} imageUrl={model.images[0]?.image.url} doUserLikesIt={model.doUserLikesIt} slug={model.slug} />)}
             </Grid>

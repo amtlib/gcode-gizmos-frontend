@@ -18,6 +18,7 @@ export default function Favorities() {
     }
     return (
         <BaseLayout withSearch>
+            <Text fontSize="4xl">Favorities</Text>
             {models?.filter(model => model.doUserLikesIt).length === 0 && (
                 <Box my={10}>
                     <Text textAlign="center" fontSize="4xl">Hmmm... No liked models yet</Text>
