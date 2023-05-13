@@ -28,6 +28,9 @@ export const ModelsQuery = gql(`
             }
             slug
             doUserLikesIt
+            recommendedInfill
+            recommendedMaterial
+            supports
         }
     }
 `);

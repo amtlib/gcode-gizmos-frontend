@@ -16,14 +16,19 @@ import { DocumentRenderer } from "@keystone-6/document-renderer";
 export default function Model() {
     const router = useRouter();
     const { slug } = router.query;
-    const { username, isAdmin } = useContext(UserContext);
-    const { deleteModel, deleteModelLoading } = useContext(ModelContext);
+    const { username, isAdmin, loggedIn } = useContext(UserContext);
+    const { deleteModel, deleteModelLoading, createRemix } = useContext(ModelContext);
     const { launchModelModal } = useContext(ModalContext);
     const [selectedModelUrl, setSelectedModelUrl] = useState<string | undefined>();
 
-
     const { data, loading } = useQuery(ModelQuery, { variables: { slug: slug?.toString() } });
 
+    const handleRemix = async (slug: string) => {
+        const newModelSlug = await createRemix(slug);
+        console.log(newModelSlug);
+
+        router.push(`/model/${newModelSlug}`);
+    }
 
     const handleDelete = async () => {
         if (slug) {
@@ -173,6 +178,9 @@ export default function Model() {
                     </Stack>
                     <Download model={data?.model} />
                 </Stack>
+                {loggedIn && (
+                    <Button onClick={() => handleRemix(slug.toString())}>Create Remix</Button>
+                )}
             </SimpleGrid>
             <Comments modelSlug={slug.toString()} comments={data.model.comments} />
         </BaseLayout>

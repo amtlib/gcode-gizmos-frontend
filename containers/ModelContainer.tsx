@@ -5,6 +5,24 @@ import { UserContext } from "../contexts/UserContext";
 import { CreateComment, CreateModel, DeleteModel, ModelsQuery, UpdateModel } from "../graphql/operations/models";
 import { debounce } from "debounce";
 
+async function createFileArray(urls: string[]): Promise<File[]> {
+    const fileArray: File[] = [];
+
+    for (const url of urls) {
+        const response = await fetch(url, {cache: "no-cache"});
+        const blob = await response.blob();
+        const fileName = getFileNameFromUrl(url);
+        const file = new File([blob], fileName);
+        fileArray.push(file);
+    }
+
+    return fileArray;
+}
+
+function getFileNameFromUrl(url: string): string {
+    const pathSegments = url.split('/');
+    return pathSegments[pathSegments.length - 1];
+}
 
 export function ModelContainer({ children }) {
     const [createModelMutation, { loading: createModelLoading }] = useMutation(CreateModel, { refetchQueries: ["Models"] });
@@ -18,14 +36,14 @@ export function ModelContainer({ children }) {
         refetchModels({ query: newQuery })
     }, 500)
 
-    const createModel = async (name: string, description: any, files: File[], images: File[], recommendedInfill: number, recommendedMaterial: 'pla' | 'abs' | 'pet' | 'tpe', supports: 'yes' | 'no' | 'n/a') => {
+    const createModel = async (name: string, description: any, files: File[], images: File[], recommendedInfill: number, recommendedMaterial: string, supports: string) => {
         const result = await createModelMutation({
             variables: {
                 data: {
                     name,
                     description,
-                    images: { create: [...Array.from(images).map(image => ({ image: { upload: image}, createdBy: {connect: {username}}}))]},
-                    files: { create: [...Array.from(files).map(file => ({ file: { upload: file}, createdBy: {connect: {username}}}))]},
+                    images: { create: [...Array.from(images).map(image => ({ image: { upload: image }, createdBy: { connect: { username } } }))] },
+                    files: { create: [...Array.from(files).map(file => ({ file: { upload: file }, createdBy: { connect: { username } } }))] },
                     createdBy: { connect: { username } },
                     recommendedInfill,
                     recommendedMaterial,
@@ -55,8 +73,8 @@ export function ModelContainer({ children }) {
                 data: {
                     name,
                     description,
-                    images: images.length ? { disconnect: [...imagesToUnlink.map(id => ({ id }))], create: [...Array.from(images).map(image => ({ image: { upload: image}, createdBy: {connect: {username}}}))]} : undefined,
-                    files: files.length ? { disconnect: [...filesToUnlink.map(id => ({ id }))], create: [...Array.from(files).map(file => ({ file: { upload: file}, createdBy: {connect: {username}}}))]} : undefined,
+                    images: images.length ? { disconnect: [...imagesToUnlink.map(id => ({ id }))], create: [...Array.from(images).map(image => ({ image: { upload: image }, createdBy: { connect: { username } } }))] } : undefined,
+                    files: files.length ? { disconnect: [...filesToUnlink.map(id => ({ id }))], create: [...Array.from(files).map(file => ({ file: { upload: file }, createdBy: { connect: { username } } }))] } : undefined,
                     recommendedInfill,
                     recommendedMaterial,
                     supports
@@ -84,6 +102,14 @@ export function ModelContainer({ children }) {
             return true;
         }
         return false;
+    }
+
+    const createRemix = async (slug: string) => {
+        const { name, description, files, images, recommendedInfill, recommendedMaterial, supports } = dataModels.models.find(model => model.slug === slug);
+        const filesList = await createFileArray(files.map(file => file.file.url));
+        const imagesList = await createFileArray(images.map(image => image.image.url));
+        const newModelSlug = await createModel(name, description.document, filesList, imagesList, recommendedInfill, recommendedMaterial, supports);
+        return newModelSlug;
     }
 
     const createComment = async (slug: string, content: any) => {
@@ -123,5 +149,6 @@ export function ModelContainer({ children }) {
         updateModelLoading,
         createCommentLoading,
         setSearchQuery,
+        createRemix
     }}>{children}</ModelContext.Provider>
 }

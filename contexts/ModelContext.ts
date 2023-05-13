@@ -7,6 +7,7 @@ export type ModelType = {
     description?: any;
     slug?: string;
     doUserLikesIt?: boolean;
+    recommendedInfill?: number;
     createdBy?: {
         username?: string
     };
@@ -29,6 +30,7 @@ export type ModelContextType = {
     deleteModelLoading: boolean;
     createCommentLoading: boolean;
     setSearchQuery: (query: string | null) => void;
+    createRemix: (slug: string) => Promise<String>;
 };
 
 export const ModelContext = createContext<ModelContextType>({
@@ -43,4 +45,5 @@ export const ModelContext = createContext<ModelContextType>({
     deleteModelLoading: false,
     createCommentLoading: false,
     setSearchQuery: () => {},
+    createRemix: () => Promise.resolve("")
 });
