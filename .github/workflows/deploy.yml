@@ -26,15 +26,12 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build and Publish to Github Packages Registry
         uses: elgohr/Publish-Docker-Github-Action@master
-        env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.APP_NEXT_PUBLIC_API_URL }}
         with:
           name: amtlib/gcode-gizmos-frontend/gcode-gizmos-frontend
           registry: ghcr.io
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.GITHUB_TOKEN }}
           dockerfile: Dockerfile
-          buildargs: NEXT_PUBLIC_API_URL
           tags: latest
       - name: Deploy package to VPS
         uses: appleboy/ssh-action@master
@@ -48,10 +45,10 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           envs: GITHUB_USERNAME, GITHUB_TOKEN
           script: |
+            docker container ls | grep gcode-gizmos-frontend | awk '{print $1}' | xargs docker container kill
+            docker system prune -a -f
             docker login ghcr.io -u $GITHUB_USERNAME -p $GITHUB_TOKEN
             docker pull ghcr.io/amtlib/gcode-gizmos-frontend/gcode-gizmos-frontend:latest
             cd gcode-gizmos-frontend
             git pull
-            docker container ls | grep gcode-gizmos-frontend | awk '{print $1}' | xargs docker container kill
-            docker system prune -f
             docker-compose up -d
