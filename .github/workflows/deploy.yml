@@ -36,3 +36,21 @@ jobs:
           dockerfile: Dockerfile
           buildargs: NEXT_PUBLIC_API_URL
           tags: latest
+      - name: Deploy package to VPS
+        uses: appleboy/ssh-action@master
+        env:
+          GITHUB_USERNAME: ${{ secrets.USERNAME }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          port: ${{ secrets.DEPLOY_PORT }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          envs: GITHUB_USERNAME, GITHUB_TOKEN
+          script: |
+            docker login ghcr.io -u $GITHUB_USERNAME -p $GITHUB_TOKEN
+            docker pull ghcr.io/amtlib/gcode-gizmos-frontend/gcode-gizmos-frontend:latest
+            git pull
+            docker container ls | grep gcode-gizmos-frontend | awk '{print $1}' | xargs docker container kill
+            docker system prune -f
+            docker-compose up -d

@@ -2,8 +2,7 @@ version: "3.9"
 
 services:
   gcode-gizmos-frontend:
-    container_name: gcode-gizmos-frontend
-    build: .
+    image: ghcr.io/gcode-gizmos-frontend/gcode-gizmos-frontend:latest
     env_file:
       - .env
     restart: always
