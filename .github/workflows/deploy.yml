@@ -50,6 +50,7 @@ jobs:
           script: |
             docker login ghcr.io -u $GITHUB_USERNAME -p $GITHUB_TOKEN
             docker pull ghcr.io/amtlib/gcode-gizmos-frontend/gcode-gizmos-frontend:latest
+            cd gcode-gizmos-frontend
             git pull
             docker container ls | grep gcode-gizmos-frontend | awk '{print $1}' | xargs docker container kill
             docker system prune -f
