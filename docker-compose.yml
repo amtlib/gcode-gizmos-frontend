@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   gcode-gizmos-frontend:
-    image: ghcr.io/gcode-gizmos-frontend/gcode-gizmos-frontend:latest
+    image: gcode-gizmos-frontend/gcode-gizmos-frontend:latest
     env_file:
       - .env
     restart: always
