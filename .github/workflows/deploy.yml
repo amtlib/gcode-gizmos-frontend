@@ -28,13 +28,14 @@ jobs:
         uses: elgohr/Publish-Docker-Github-Action@master
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          PORT: ${{ secrets.PORT }}
         with:
           name: amtlib/gcode-gizmos-frontend/gcode-gizmos-frontend
           registry: ghcr.io
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.GITHUB_TOKEN }}
           dockerfile: Dockerfile
-          buildargs: NEXT_PUBLIC_API_URL
+          buildargs: NEXT_PUBLIC_API_URL,PORT
           tags: latest
       - name: Deploy package to VPS
         uses: appleboy/ssh-action@master
