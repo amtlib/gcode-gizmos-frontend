@@ -3,8 +3,6 @@ version: "3.9"
 services:
   gcode-gizmos-frontend:
     image: ghcr.io/amtlib/gcode-gizmos-frontend/gcode-gizmos-frontend:latest
-    env_file:
-      - .env
     restart: always
     labels:
       - "traefik.enable=true"
