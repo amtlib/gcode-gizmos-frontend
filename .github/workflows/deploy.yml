@@ -12,6 +12,7 @@ on:
         required: true
         default: 'warning'
 env:
+  NEXT_PUBLIC_API_URL: "https://admin.gcode-gizmos.grzegorzpach.pl/api/graphql"
   GITHUB_USERNAME: ${{ secrets.USERNAME }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -34,6 +35,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.GITHUB_TOKEN }}
           dockerfile: Dockerfile
+          buildargs: NEXT_PUBLIC_API_URL
           tags: latest
       - name: Deploy package to VPS
         uses: appleboy/ssh-action@master
