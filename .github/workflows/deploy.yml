@@ -27,7 +27,7 @@ jobs:
       - name: Build and Publish to Github Packages Registry
         uses: elgohr/Publish-Docker-Github-Action@master
         env:
-          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+          NEXT_PUBLIC_API_URL: ${{ env.NEXT_PUBLIC_API_URL }}
         with:
           name: amtlib/gcode-gizmos-frontend/gcode-gizmos-frontend
           registry: ghcr.io
@@ -37,9 +37,9 @@ jobs:
           buildargs: NEXT_PUBLIC_API_URL
           tags: latest
       - name: Show API url
-        run: echo "API url: $NEXT_PUBLIC_API_URL"
+        run: echo "$NEXT_PUBLIC_API_URL"
         env:
-          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+          NEXT_PUBLIC_API_URL: ${{ env.NEXT_PUBLIC_API_URL }}
       - name: Deploy package to VPS
         uses: appleboy/ssh-action@master
         env:
