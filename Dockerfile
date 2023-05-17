@@ -1,6 +1,10 @@
 # Use an official Node.js runtime as a parent image
 FROM node:16-alpine
 
+ARG NEXT_PUBLIC_API_URL
+
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
 # Install Yarn
 RUN apk add --no-cache yarn
 
