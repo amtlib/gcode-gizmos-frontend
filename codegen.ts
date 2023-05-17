@@ -1,8 +1,7 @@
 import { CodegenConfig } from '@graphql-codegen/cli';
-import { API_URL } from './config';
 
 const config: CodegenConfig = {
-  schema: API_URL,
+  schema: process.env.NEXT_PUBLIC_API_URL,
   documents: ['./**/*.tsx'],
   generates: {
     './graphql/apolloSchema/': {
