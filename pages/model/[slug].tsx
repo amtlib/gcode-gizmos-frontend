@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { SimpleGrid, Flex, Stack, Heading, StackDivider, List, ListItem, Button, Box, Text, Spinner, Select } from "@chakra-ui/react";
+import { SimpleGrid, Flex, Stack, Heading, StackDivider, List, ListItem, Button, Box, Text, Spinner, Select, AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, useDisclosure } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 import Download from "../../components/Download/Download";
@@ -19,6 +19,8 @@ export default function Model() {
     const { username, isAdmin, loggedIn } = useContext(UserContext);
     const { deleteModel, deleteModelLoading, createRemix } = useContext(ModelContext);
     const { launchModelModal } = useContext(ModalContext);
+    const { isOpen: isDeleteModelDialogOpen, onOpen: onDeleteModelDialogOpen, onClose: onDeleteModelDialogClose } = useDisclosure()
+    const deleteModelDialogCancelRef = React.useRef()
     const [selectedModelUrl, setSelectedModelUrl] = useState<string | undefined>();
 
     const { data, loading } = useQuery(ModelQuery, { variables: { slug: slug?.toString() } });
@@ -170,7 +172,7 @@ export default function Model() {
                                         <Button onClick={handleEdit}>Edit model</Button>
                                     </ListItem>
                                     <ListItem>
-                                        <Button onClick={handleDelete} isLoading={deleteModelLoading}>Delete model</Button>
+                                        <Button onClick={onDeleteModelDialogOpen} isLoading={deleteModelLoading}>Delete model</Button>
                                     </ListItem>
                                 </List>
                             </Box>
@@ -183,6 +185,32 @@ export default function Model() {
                 )}
             </SimpleGrid>
             <Comments modelSlug={slug.toString()} comments={data.model.comments} />
+            <AlertDialog
+                isOpen={isDeleteModelDialogOpen}
+                leastDestructiveRef={deleteModelDialogCancelRef}
+                onClose={onDeleteModelDialogClose}
+            >
+                <AlertDialogOverlay>
+                    <AlertDialogContent>
+                        <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                            Delete Model
+                        </AlertDialogHeader>
+
+                        <AlertDialogBody>
+                            Are you sure? You can't undo this action afterwards.
+                        </AlertDialogBody>
+
+                        <AlertDialogFooter>
+                            <Button ref={deleteModelDialogCancelRef} onClick={onDeleteModelDialogClose}>
+                                Cancel
+                            </Button>
+                            <Button colorScheme='red' onClick={handleDelete} ml={3}>
+                                Delete
+                            </Button>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialogOverlay>
+            </AlertDialog>
         </BaseLayout>
     )
 };
