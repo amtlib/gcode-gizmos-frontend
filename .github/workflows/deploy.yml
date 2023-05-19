@@ -53,3 +53,13 @@ jobs:
             cd gcode-gizmos-frontend
             git pull
             docker-compose up -d
+      - name: Run project
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          port: ${{ secrets.DEPLOY_PORT }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          envs: GITHUB_USERNAME, GITHUB_TOKEN
+          script: |
+            docker-compose up -d
