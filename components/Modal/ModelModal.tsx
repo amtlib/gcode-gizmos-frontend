@@ -20,8 +20,15 @@ type FormType = {
     images?: any,
 }
 
+const initialDescriptionValue = [
+    {
+        type: 'paragraph',
+        children: [{ text: '' }],
+    },
+]
+
 export const ModelModal = ({ action, data }: { action: "create" | "update"; data?: FormType }) => {
-    const [description, setDescription] = useState<Descendant[] | null>(null);
+    const [description, setDescription] = useState<Descendant[]>(initialDescriptionValue);
     const [uploadedImages, setUploadedImages] = useState<File[]>([]);
     const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
     const { createModel, createModelLoading, updateModel, updateModelLoading } = useContext(ModelContext);
@@ -77,12 +84,10 @@ export const ModelModal = ({ action, data }: { action: "create" | "update"; data
                                 <FormErrorMessage>{errors.name.message}</FormErrorMessage>
                             }
                         </FormControl>
-                        {description && (
-                            <FormControl>
-                                <FormLabel>Description</FormLabel>
-                                <RichTextBlock value={description} setValue={setDescription} />
-                            </FormControl>
-                        )}
+                        <FormControl>
+                            <FormLabel>Description</FormLabel>
+                            <RichTextBlock value={description} setValue={setDescription} />
+                        </FormControl>
                         <FormControl isInvalid={!!errors.recommendedInfill}>
                             <FormLabel>Recommended infill %</FormLabel>
                             <Input type="number" min={0} max={100} {...register("recommendedInfill", { min: 0, max: 100, valueAsNumber: true })} />
