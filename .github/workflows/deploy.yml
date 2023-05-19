@@ -62,4 +62,5 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           envs: GITHUB_USERNAME, GITHUB_TOKEN
           script: |
+            cd gcode-gizmos-frontend
             docker-compose up -d
