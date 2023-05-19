@@ -191,7 +191,7 @@ export default function Model() {
                 onClose={onDeleteModelDialogClose}
             >
                 <AlertDialogOverlay>
-                    <AlertDialogContent>
+                    <AlertDialogContent rounded={0}>
                         <AlertDialogHeader fontSize='lg' fontWeight='bold'>
                             Delete Model
                         </AlertDialogHeader>
