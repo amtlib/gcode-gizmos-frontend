@@ -39,8 +39,10 @@ export const ModelModal = ({ action, data }: { action: "create" | "update"; data
     });
 
     useEffect(() => {
-        setDescription(data.description.document);
-    }, [data.description]);
+        if (data && data.description) {
+            setDescription(data.description.document);
+        }
+    }, [data]);
 
     const onSubmit = async (values: Record<string, any>) => {
         if (action === "create") {
