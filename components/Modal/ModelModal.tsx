@@ -30,7 +30,9 @@ const initialDescriptionValue = [
 export const ModelModal = ({ action, data }: { action: "create" | "update"; data?: FormType }) => {
     const [description, setDescription] = useState<Descendant[]>(initialDescriptionValue);
     const [uploadedImages, setUploadedImages] = useState<File[]>([]);
+    const [uploadedImagesError, setUploadedImagesError] = useState<string | null>(null);
     const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+    const [uploadedFilesError, setUploadedFilesError] = useState<string | null>(null);
     const { createModel, createModelLoading, updateModel, updateModelLoading } = useContext(ModelContext);
     const { isModelModalOpen: isOpen, onModelModalClose: onClose } = useContext(ModalContext);
     const router = useRouter();
@@ -53,8 +55,21 @@ export const ModelModal = ({ action, data }: { action: "create" | "update"; data
 
     const onSubmit = async (values: Record<string, any>) => {
         if (action === "create") {
+            if (uploadedImages.length === 0) {
+                setUploadedImagesError("Please provide at least 1 image");
+                return;
+            } else {
+                setUploadedImagesError(null);
+            }
+
+            if (uploadedFiles.length === 0) {
+                setUploadedFilesError("Please provide at least 1 model");
+                return;
+            } else {
+                setUploadedFilesError(null);
+            }
+
             const slug = await createModel(values.name, description, uploadedFiles, uploadedImages, values.recommendedInfill, values.recommendedMaterial, values.supports);
-            console.log(slug)
             if (slug) {
                 onClose();
                 router.push(`/model/${slug}`);
@@ -118,13 +133,19 @@ export const ModelModal = ({ action, data }: { action: "create" | "update"; data
                                 <FormErrorMessage>{errors.supports.message}</FormErrorMessage>
                             }
                         </FormControl>
-                        <FormControl>
+                        <FormControl isInvalid={!!uploadedImagesError}>
                             <FormLabel>Images</FormLabel>
                             <FileUploader uploadedFiles={uploadedImages} setUploadedFiles={setUploadedImages} acceptedFileExtensions={["jpg", "png", "jpeg"]} />
+                            {!!uploadedImagesError &&
+                                <FormErrorMessage>{uploadedImagesError}</FormErrorMessage>
+                            }
                         </FormControl>
-                        <FormControl>
+                        <FormControl isInvalid={!!uploadedFilesError}>
                             <FormLabel>Models</FormLabel>
                             <FileUploader acceptedFileExtensions={["stl"]} uploadedFiles={uploadedFiles} setUploadedFiles={setUploadedFiles} />
+                            {!!uploadedFilesError &&
+                                <FormErrorMessage>{uploadedFilesError}</FormErrorMessage>
+                            }
                         </FormControl>
                     </VStack>
                 </ModalBody>
