@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { SimpleGrid, Flex, Stack, Heading, StackDivider, List, ListItem, Button, Box, Text, Spinner, Select, AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, useDisclosure } from "@chakra-ui/react";
+import { SimpleGrid, Flex, Stack, Heading, StackDivider, List, ListItem, Button, Box, Text, Spinner, Select, AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, useDisclosure, Tooltip } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 import Download from "../../components/Download/Download";
@@ -12,11 +12,13 @@ import { BaseLayout } from "../../layouts/BaseLayout";
 import ImageCarousel from "../../components/ImageCarousel/ImageCarousel";
 import { Comments } from "../../components/Comments/Comments";
 import { DocumentRenderer } from "@keystone-6/document-renderer";
+import { format } from "date-fns";
+import { BsHeartFill, BsHeart } from "react-icons/bs";
 
 export default function Model() {
     const router = useRouter();
     const { slug } = router.query;
-    const { username, isAdmin, loggedIn } = useContext(UserContext);
+    const { username, isAdmin, loggedIn, likeModel, dislikeModel } = useContext(UserContext);
     const { deleteModel, deleteModelLoading, createRemix } = useContext(ModelContext);
     const { launchModelModal } = useContext(ModalContext);
     const { isOpen: isDeleteModelDialogOpen, onOpen: onDeleteModelDialogOpen, onClose: onDeleteModelDialogClose } = useDisclosure()
@@ -30,6 +32,16 @@ export default function Model() {
         console.log(newModelSlug);
 
         router.push(`/model/${newModelSlug}`);
+    }
+
+    const handleLike = async () => {
+        if (username && slug) {
+            if (data?.model.doUserLikesIt) {
+                dislikeModel(slug.toString(), username);
+            } else {
+                likeModel(slug.toString(), username);
+            }
+        }
     }
 
     const handleDelete = async () => {
@@ -93,16 +105,79 @@ export default function Model() {
                             </>
                         )}
                     </Box>
+                    <Box>
+                        <Text
+                            fontSize={{ base: '16px', lg: '18px' }}
+                            color='yellow.500'
+                            _dark={{ color: 'yellow.300' }}
+                            fontWeight={'500'}
+                            textTransform={'uppercase'}
+                            mb={'4'}>
+                            Details
+                        </Text>
+
+                        <List spacing={2}>
+                            <ListItem>
+                                <Text as={'span'} fontWeight={'bold'}>
+                                    Created by:
+                                </Text>{' '}
+                                {data?.model.createdBy.username}
+                            </ListItem>
+                            <ListItem>
+                                <Text as={'span'} fontWeight={'bold'}>
+                                    Created at:
+                                </Text>{' '}
+                                {format(Date.parse(data?.model.createdAt), 'dd/LL/yyyy HH:mm:ss')}
+                            </ListItem>
+                        </List>
+                    </Box>
+                    {haveAccessToAdmin && (
+                        <Box>
+                            <Text
+                                fontSize={{ base: '16px', lg: '18px' }}
+                                color='yellow.500'
+                                _dark={{ color: 'yellow.300' }}
+                                fontWeight={'500'}
+                                textTransform={'uppercase'}
+                                mb={'4'}>
+                                Administration
+                            </Text>
+
+                            <List spacing={2}>
+                                <ListItem>
+                                    <Button onClick={handleEdit}>Edit model</Button>
+                                </ListItem>
+                                <ListItem>
+                                    <Button onClick={onDeleteModelDialogOpen} isLoading={deleteModelLoading}>Delete model</Button>
+                                </ListItem>
+                            </List>
+                        </Box>
+                    )}
                 </Flex>
                 <Stack spacing={{ base: 6, md: 10 }}>
-                    <Box as={'header'}>
+                    <Flex as={'header'}>
                         <Heading
                             lineHeight={1.1}
                             fontWeight={600}
                             fontSize={{ base: '2xl', sm: '4xl', lg: '5xl' }}>
                             {data?.model.name}
                         </Heading>
-                    </Box>
+                        <Tooltip label={loggedIn ? data?.model.doUserLikesIt ? 'Click to dislike!' : 'Click to like!' : 'Log in to like models!'}>
+                            <Flex
+                                p={4}
+                                alignItems="center"
+                                justifyContent={'space-between'}
+                                roundedBottom={'sm'}
+                                cursor="pointer"
+                                onClick={() => loggedIn ? handleLike() : null}>
+                                {data?.model.doUserLikesIt ? (
+                                    <BsHeartFill fill="red" fontSize={'24px'} />
+                                ) : (
+                                    <BsHeart fontSize={'24px'} />
+                                )}
+                            </Flex>
+                        </Tooltip>
+                    </Flex>
                     <Stack
                         spacing={{ base: 4, sm: 6 }}
                         direction={'column'}
@@ -112,6 +187,9 @@ export default function Model() {
                                 _dark={{ borderColor: 'gray.600' }}
                             />
                         }>
+                        {loggedIn && (
+                            <Button onClick={() => handleRemix(slug.toString())}>Create Remix</Button>
+                        )}
                         <Box sx={{
                             'ul': {
                                 ml: 4,
@@ -155,34 +233,9 @@ export default function Model() {
                                 </ListItem>
                             </List>
                         </Box>
-                        {haveAccessToAdmin && (
-                            <Box>
-                                <Text
-                                    fontSize={{ base: '16px', lg: '18px' }}
-                                    color='yellow.500'
-                                    _dark={{ color: 'yellow.300' }}
-                                    fontWeight={'500'}
-                                    textTransform={'uppercase'}
-                                    mb={'4'}>
-                                    Administration
-                                </Text>
-
-                                <List spacing={2}>
-                                    <ListItem>
-                                        <Button onClick={handleEdit}>Edit model</Button>
-                                    </ListItem>
-                                    <ListItem>
-                                        <Button onClick={onDeleteModelDialogOpen} isLoading={deleteModelLoading}>Delete model</Button>
-                                    </ListItem>
-                                </List>
-                            </Box>
-                        )}
                     </Stack>
                     <Download model={data?.model} />
                 </Stack>
-                {loggedIn && (
-                    <Button onClick={() => handleRemix(slug.toString())}>Create Remix</Button>
-                )}
             </SimpleGrid>
             <Comments modelSlug={slug.toString()} comments={data.model.comments} />
             <AlertDialog
