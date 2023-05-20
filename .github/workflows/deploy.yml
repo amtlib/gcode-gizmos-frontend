@@ -52,4 +52,4 @@ jobs:
             docker pull ghcr.io/amtlib/gcode-gizmos-frontend/gcode-gizmos-frontend:latest
             cd gcode-gizmos-frontend
             git pull
-            docker-compose up -d --wait
+            docker compose up -d --wait
