@@ -33,7 +33,7 @@ export const RichTextBlock = ({ value, setValue }: { value: Descendant[]; setVal
                 savedSelection.current ?? Editor.end(editor, [])
             );
         }
-    }, [editor]);
+    }, [editor, value]);
 
     const onBlur = React.useCallback(() => {
         setFocused(false);
