@@ -29,6 +29,7 @@ const initialDescriptionValue = [
 
 export const ModelModal = ({ action, data }: { action: "create" | "update"; data?: FormType }) => {
     const [description, setDescription] = useState<Descendant[]>(initialDescriptionValue);
+    const [isDescriptionUpdated, setIsDescriptionUpdated] = useState<boolean>(false);
     const [uploadedImages, setUploadedImages] = useState<File[]>([]);
     const [uploadedImagesError, setUploadedImagesError] = useState<string | null>(null);
     const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
@@ -48,8 +49,9 @@ export const ModelModal = ({ action, data }: { action: "create" | "update"; data
     });
 
     useEffect(() => {
-        if (data && data.description) {
+        if (data && data.description.document) {
             setDescription(data.description.document);
+            setIsDescriptionUpdated(true);
         }
     }, [data]);
 
@@ -99,10 +101,12 @@ export const ModelModal = ({ action, data }: { action: "create" | "update"; data
                                 <FormErrorMessage>{errors.name.message}</FormErrorMessage>
                             }
                         </FormControl>
-                        <FormControl>
-                            <FormLabel>Description</FormLabel>
-                            <RichTextBlock value={description} setValue={setDescription} />
-                        </FormControl>
+                        {((action === "update" && isDescriptionUpdated) || (action === "create")) && (
+                            <FormControl>
+                                <FormLabel>Description</FormLabel>
+                                <RichTextBlock value={description} setValue={setDescription} />
+                            </FormControl>
+                        )}
                         <FormControl isInvalid={!!errors.recommendedInfill}>
                             <FormLabel>Recommended infill %</FormLabel>
                             <Input type="number" min={0} max={100} {...register("recommendedInfill", { min: 0, max: 100, valueAsNumber: true })} />
