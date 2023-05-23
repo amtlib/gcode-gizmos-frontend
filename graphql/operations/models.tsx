@@ -26,6 +26,8 @@ export const ModelsQuery = gql(`
             likedBy {
                 username
             }
+            ratingsAvg
+            userRating
             slug
             doUserLikesIt
             recommendedInfill
@@ -68,6 +70,8 @@ export const ModelQuery = gql(`
             createdBy {
                 username
             }
+            ratingsAvg
+            userRating
             likedByCount
             doUserLikesIt
             recommendedInfill

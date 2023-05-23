@@ -8,6 +8,8 @@ export type ModelType = {
     slug?: string;
     doUserLikesIt?: boolean;
     recommendedInfill?: number;
+    ratingsAvg?: number;
+    userRating?: number;
     createdBy?: {
         username?: string
     };

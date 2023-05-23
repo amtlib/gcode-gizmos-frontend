@@ -302,10 +302,14 @@ export type Model = {
   likedBy?: Maybe<Array<User>>;
   likedByCount?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
+  ratings?: Maybe<Array<Rating>>;
+  ratingsAvg?: Maybe<Scalars['Float']>;
+  ratingsCount?: Maybe<Scalars['Int']>;
   recommendedInfill?: Maybe<Scalars['Int']>;
   recommendedMaterial?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
   supports?: Maybe<Scalars['String']>;
+  userRating?: Maybe<Scalars['Float']>;
 };
 
 
@@ -360,6 +364,19 @@ export type ModelLikedByCountArgs = {
   where?: UserWhereInput;
 };
 
+
+export type ModelRatingsArgs = {
+  orderBy?: Array<RatingOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: RatingWhereInput;
+};
+
+
+export type ModelRatingsCountArgs = {
+  where?: RatingWhereInput;
+};
+
 export type ModelCreateInput = {
   comments?: InputMaybe<CommentRelateToManyForCreateInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
@@ -369,6 +386,7 @@ export type ModelCreateInput = {
   images?: InputMaybe<ModelImageRelateToManyForCreateInput>;
   likedBy?: InputMaybe<UserRelateToManyForCreateInput>;
   name?: InputMaybe<Scalars['String']>;
+  ratings?: InputMaybe<RatingRelateToManyForCreateInput>;
   recommendedInfill?: InputMaybe<Scalars['Int']>;
   recommendedMaterial?: InputMaybe<Scalars['String']>;
   slug?: InputMaybe<Scalars['String']>;
@@ -548,6 +566,7 @@ export type ModelUpdateInput = {
   images?: InputMaybe<ModelImageRelateToManyForUpdateInput>;
   likedBy?: InputMaybe<UserRelateToManyForUpdateInput>;
   name?: InputMaybe<Scalars['String']>;
+  ratings?: InputMaybe<RatingRelateToManyForUpdateInput>;
   recommendedInfill?: InputMaybe<Scalars['Int']>;
   recommendedMaterial?: InputMaybe<Scalars['String']>;
   slug?: InputMaybe<Scalars['String']>;
@@ -566,6 +585,7 @@ export type ModelWhereInput = {
   images?: InputMaybe<ModelImageManyRelationFilter>;
   likedBy?: InputMaybe<UserManyRelationFilter>;
   name?: InputMaybe<StringFilter>;
+  ratings?: InputMaybe<RatingManyRelationFilter>;
   recommendedInfill?: InputMaybe<IntNullableFilter>;
   recommendedMaterial?: InputMaybe<StringNullableFilter>;
   slug?: InputMaybe<StringFilter>;
@@ -599,6 +619,8 @@ export type Mutation = {
   createModelImage?: Maybe<ModelImage>;
   createModelImages?: Maybe<Array<Maybe<ModelImage>>>;
   createModels?: Maybe<Array<Maybe<Model>>>;
+  createRating?: Maybe<Rating>;
+  createRatings?: Maybe<Array<Maybe<Rating>>>;
   createUser?: Maybe<User>;
   createUsers?: Maybe<Array<Maybe<User>>>;
   deleteComment?: Maybe<Comment>;
@@ -609,6 +631,8 @@ export type Mutation = {
   deleteModelImage?: Maybe<ModelImage>;
   deleteModelImages?: Maybe<Array<Maybe<ModelImage>>>;
   deleteModels?: Maybe<Array<Maybe<Model>>>;
+  deleteRating?: Maybe<Rating>;
+  deleteRatings?: Maybe<Array<Maybe<Rating>>>;
   deleteUser?: Maybe<User>;
   deleteUsers?: Maybe<Array<Maybe<User>>>;
   endSession: Scalars['Boolean'];
@@ -620,6 +644,8 @@ export type Mutation = {
   updateModelImage?: Maybe<ModelImage>;
   updateModelImages?: Maybe<Array<Maybe<ModelImage>>>;
   updateModels?: Maybe<Array<Maybe<Model>>>;
+  updateRating?: Maybe<Rating>;
+  updateRatings?: Maybe<Array<Maybe<Rating>>>;
   updateUser?: Maybe<User>;
   updateUsers?: Maybe<Array<Maybe<User>>>;
 };
@@ -676,6 +702,16 @@ export type MutationCreateModelsArgs = {
 };
 
 
+export type MutationCreateRatingArgs = {
+  data: RatingCreateInput;
+};
+
+
+export type MutationCreateRatingsArgs = {
+  data: Array<RatingCreateInput>;
+};
+
+
 export type MutationCreateUserArgs = {
   data: UserCreateInput;
 };
@@ -723,6 +759,16 @@ export type MutationDeleteModelImagesArgs = {
 
 export type MutationDeleteModelsArgs = {
   where: Array<ModelWhereUniqueInput>;
+};
+
+
+export type MutationDeleteRatingArgs = {
+  where: RatingWhereUniqueInput;
+};
+
+
+export type MutationDeleteRatingsArgs = {
+  where: Array<RatingWhereUniqueInput>;
 };
 
 
@@ -777,6 +823,17 @@ export type MutationUpdateModelImagesArgs = {
 
 export type MutationUpdateModelsArgs = {
   data: Array<ModelUpdateArgs>;
+};
+
+
+export type MutationUpdateRatingArgs = {
+  data: RatingUpdateInput;
+  where: RatingWhereUniqueInput;
+};
+
+
+export type MutationUpdateRatingsArgs = {
+  data: Array<RatingUpdateArgs>;
 };
 
 
@@ -844,6 +901,9 @@ export type Query = {
   modelImagesCount?: Maybe<Scalars['Int']>;
   models?: Maybe<Array<Model>>;
   modelsCount?: Maybe<Scalars['Int']>;
+  rating?: Maybe<Rating>;
+  ratings?: Maybe<Array<Rating>>;
+  ratingsCount?: Maybe<Scalars['Int']>;
   user?: Maybe<User>;
   users?: Maybe<Array<User>>;
   usersCount?: Maybe<Scalars['Int']>;
@@ -922,6 +982,24 @@ export type QueryModelsCountArgs = {
 };
 
 
+export type QueryRatingArgs = {
+  where: RatingWhereUniqueInput;
+};
+
+
+export type QueryRatingsArgs = {
+  orderBy?: Array<RatingOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: RatingWhereInput;
+};
+
+
+export type QueryRatingsCountArgs = {
+  where?: RatingWhereInput;
+};
+
+
 export type QueryUserArgs = {
   where: UserWhereUniqueInput;
 };
@@ -943,6 +1021,68 @@ export enum QueryMode {
   Default = 'default',
   Insensitive = 'insensitive'
 }
+
+export type Rating = {
+  __typename?: 'Rating';
+  id: Scalars['ID'];
+  model?: Maybe<Model>;
+  score?: Maybe<Scalars['Int']>;
+  user?: Maybe<User>;
+};
+
+export type RatingCreateInput = {
+  model?: InputMaybe<ModelRelateToOneForCreateInput>;
+  score?: InputMaybe<Scalars['Int']>;
+  user?: InputMaybe<UserRelateToOneForCreateInput>;
+};
+
+export type RatingManyRelationFilter = {
+  every?: InputMaybe<RatingWhereInput>;
+  none?: InputMaybe<RatingWhereInput>;
+  some?: InputMaybe<RatingWhereInput>;
+};
+
+export type RatingOrderByInput = {
+  id?: InputMaybe<OrderDirection>;
+  score?: InputMaybe<OrderDirection>;
+};
+
+export type RatingRelateToManyForCreateInput = {
+  connect?: InputMaybe<Array<RatingWhereUniqueInput>>;
+  create?: InputMaybe<Array<RatingCreateInput>>;
+};
+
+export type RatingRelateToManyForUpdateInput = {
+  connect?: InputMaybe<Array<RatingWhereUniqueInput>>;
+  create?: InputMaybe<Array<RatingCreateInput>>;
+  disconnect?: InputMaybe<Array<RatingWhereUniqueInput>>;
+  set?: InputMaybe<Array<RatingWhereUniqueInput>>;
+};
+
+export type RatingUpdateArgs = {
+  data: RatingUpdateInput;
+  where: RatingWhereUniqueInput;
+};
+
+export type RatingUpdateInput = {
+  model?: InputMaybe<ModelRelateToOneForUpdateInput>;
+  score?: InputMaybe<Scalars['Int']>;
+  user?: InputMaybe<UserRelateToOneForUpdateInput>;
+};
+
+export type RatingWhereInput = {
+  AND?: InputMaybe<Array<RatingWhereInput>>;
+  NOT?: InputMaybe<Array<RatingWhereInput>>;
+  OR?: InputMaybe<Array<RatingWhereInput>>;
+  id?: InputMaybe<IdFilter>;
+  model?: InputMaybe<ModelWhereInput>;
+  score?: InputMaybe<IntNullableFilter>;
+  user?: InputMaybe<UserWhereInput>;
+};
+
+export type RatingWhereUniqueInput = {
+  id?: InputMaybe<Scalars['ID']>;
+};
 
 export type StringFilter = {
   contains?: InputMaybe<Scalars['String']>;
@@ -990,6 +1130,8 @@ export type User = {
   likedModels?: Maybe<Array<Model>>;
   likedModelsCount?: Maybe<Scalars['Int']>;
   password?: Maybe<PasswordState>;
+  ratings?: Maybe<Array<Rating>>;
+  ratingsCount?: Maybe<Scalars['Int']>;
   username?: Maybe<Scalars['String']>;
 };
 
@@ -1058,6 +1200,19 @@ export type UserLikedModelsCountArgs = {
   where?: ModelWhereInput;
 };
 
+
+export type UserRatingsArgs = {
+  orderBy?: Array<RatingOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: RatingWhereInput;
+};
+
+
+export type UserRatingsCountArgs = {
+  where?: RatingWhereInput;
+};
+
 export type UserAuthenticationWithPasswordFailure = {
   __typename?: 'UserAuthenticationWithPasswordFailure';
   message: Scalars['String'];
@@ -1080,6 +1235,7 @@ export type UserCreateInput = {
   isAdmin?: InputMaybe<Scalars['Boolean']>;
   likedModels?: InputMaybe<ModelRelateToManyForCreateInput>;
   password?: InputMaybe<Scalars['String']>;
+  ratings?: InputMaybe<RatingRelateToManyForCreateInput>;
   username?: InputMaybe<Scalars['String']>;
 };
 
@@ -1133,6 +1289,7 @@ export type UserUpdateInput = {
   isAdmin?: InputMaybe<Scalars['Boolean']>;
   likedModels?: InputMaybe<ModelRelateToManyForUpdateInput>;
   password?: InputMaybe<Scalars['String']>;
+  ratings?: InputMaybe<RatingRelateToManyForUpdateInput>;
   username?: InputMaybe<Scalars['String']>;
 };
 
@@ -1148,6 +1305,7 @@ export type UserWhereInput = {
   id?: InputMaybe<IdFilter>;
   isAdmin?: InputMaybe<BooleanFilter>;
   likedModels?: InputMaybe<ModelManyRelationFilter>;
+  ratings?: InputMaybe<RatingManyRelationFilter>;
   username?: InputMaybe<StringFilter>;
 };
 
@@ -1162,14 +1320,14 @@ export type ModelsQueryVariables = Exact<{
 }>;
 
 
-export type ModelsQuery = { __typename?: 'Query', models?: Array<{ __typename?: 'Model', id: string, name?: string | null, slug?: string | null, doUserLikesIt?: boolean | null, recommendedInfill?: number | null, recommendedMaterial?: string | null, supports?: string | null, description?: { __typename?: 'Model_description_Document', document: any } | null, images?: Array<{ __typename?: 'ModelImage', id: string, image?: { __typename?: 'ImageFieldOutput', url: string } | null }> | null, files?: Array<{ __typename?: 'ModelFile', id: string, file?: { __typename?: 'FileFieldOutput', url: string } | null }> | null, createdBy?: { __typename?: 'User', username?: string | null } | null, likedBy?: Array<{ __typename?: 'User', username?: string | null }> | null }> | null };
+export type ModelsQuery = { __typename?: 'Query', models?: Array<{ __typename?: 'Model', id: string, name?: string | null, ratingsAvg?: number | null, userRating?: number | null, slug?: string | null, doUserLikesIt?: boolean | null, recommendedInfill?: number | null, recommendedMaterial?: string | null, supports?: string | null, description?: { __typename?: 'Model_description_Document', document: any } | null, images?: Array<{ __typename?: 'ModelImage', id: string, image?: { __typename?: 'ImageFieldOutput', url: string } | null }> | null, files?: Array<{ __typename?: 'ModelFile', id: string, file?: { __typename?: 'FileFieldOutput', url: string } | null }> | null, createdBy?: { __typename?: 'User', username?: string | null } | null, likedBy?: Array<{ __typename?: 'User', username?: string | null }> | null }> | null };
 
 export type ModelQueryVariables = Exact<{
   slug?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type ModelQuery = { __typename?: 'Query', model?: { __typename?: 'Model', id: string, name?: string | null, createdAt?: any | null, likedByCount?: number | null, doUserLikesIt?: boolean | null, recommendedInfill?: number | null, recommendedMaterial?: string | null, supports?: string | null, description?: { __typename?: 'Model_description_Document', document: any } | null, images?: Array<{ __typename?: 'ModelImage', id: string, image?: { __typename?: 'ImageFieldOutput', url: string } | null }> | null, files?: Array<{ __typename?: 'ModelFile', id: string, file?: { __typename?: 'FileFieldOutput', url: string } | null }> | null, comments?: Array<{ __typename?: 'Comment', createdAt?: any | null, author?: { __typename?: 'User', username?: string | null } | null, content?: { __typename?: 'Comment_content_Document', document: any } | null }> | null, createdBy?: { __typename?: 'User', username?: string | null } | null } | null };
+export type ModelQuery = { __typename?: 'Query', model?: { __typename?: 'Model', id: string, name?: string | null, createdAt?: any | null, ratingsAvg?: number | null, userRating?: number | null, likedByCount?: number | null, doUserLikesIt?: boolean | null, recommendedInfill?: number | null, recommendedMaterial?: string | null, supports?: string | null, description?: { __typename?: 'Model_description_Document', document: any } | null, images?: Array<{ __typename?: 'ModelImage', id: string, image?: { __typename?: 'ImageFieldOutput', url: string } | null }> | null, files?: Array<{ __typename?: 'ModelFile', id: string, file?: { __typename?: 'FileFieldOutput', url: string } | null }> | null, comments?: Array<{ __typename?: 'Comment', createdAt?: any | null, author?: { __typename?: 'User', username?: string | null } | null, content?: { __typename?: 'Comment_content_Document', document: any } | null }> | null, createdBy?: { __typename?: 'User', username?: string | null } | null } | null };
 
 export type CreateModelMutationVariables = Exact<{
   data: ModelCreateInput;
@@ -1273,8 +1431,8 @@ export type LikedModelsQueryVariables = Exact<{
 export type LikedModelsQuery = { __typename?: 'Query', models?: Array<{ __typename?: 'Model', id: string, name?: string | null }> | null };
 
 export const ModelFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Model"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Model"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"document"}}]}},{"kind":"Field","name":{"kind":"Name","value":"images"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"likedBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"doUserLikesIt"}}]}}]} as unknown as DocumentNode<ModelFragment, unknown>;
-export const ModelsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Models"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"query"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"models"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"name"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"contains"},"value":{"kind":"Variable","name":{"kind":"Name","value":"query"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"mode"},"value":{"kind":"EnumValue","value":"insensitive"}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"document"}}]}},{"kind":"Field","name":{"kind":"Name","value":"images"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"files"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"file"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"likedBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"doUserLikesIt"}},{"kind":"Field","name":{"kind":"Name","value":"recommendedInfill"}},{"kind":"Field","name":{"kind":"Name","value":"recommendedMaterial"}},{"kind":"Field","name":{"kind":"Name","value":"supports"}}]}}]}}]} as unknown as DocumentNode<ModelsQuery, ModelsQueryVariables>;
-export const ModelDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Model"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slug"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"model"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"slug"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slug"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"document"}}]}},{"kind":"Field","name":{"kind":"Name","value":"images"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"files"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"file"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"comments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"content"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"document"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"likedByCount"}},{"kind":"Field","name":{"kind":"Name","value":"doUserLikesIt"}},{"kind":"Field","name":{"kind":"Name","value":"recommendedInfill"}},{"kind":"Field","name":{"kind":"Name","value":"recommendedMaterial"}},{"kind":"Field","name":{"kind":"Name","value":"supports"}}]}}]}}]} as unknown as DocumentNode<ModelQuery, ModelQueryVariables>;
+export const ModelsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Models"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"query"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"models"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"name"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"contains"},"value":{"kind":"Variable","name":{"kind":"Name","value":"query"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"mode"},"value":{"kind":"EnumValue","value":"insensitive"}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"document"}}]}},{"kind":"Field","name":{"kind":"Name","value":"images"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"files"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"file"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"likedBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"ratingsAvg"}},{"kind":"Field","name":{"kind":"Name","value":"userRating"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"doUserLikesIt"}},{"kind":"Field","name":{"kind":"Name","value":"recommendedInfill"}},{"kind":"Field","name":{"kind":"Name","value":"recommendedMaterial"}},{"kind":"Field","name":{"kind":"Name","value":"supports"}}]}}]}}]} as unknown as DocumentNode<ModelsQuery, ModelsQueryVariables>;
+export const ModelDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Model"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slug"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"model"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"slug"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slug"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"document"}}]}},{"kind":"Field","name":{"kind":"Name","value":"images"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"files"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"file"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"comments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"content"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"document"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"ratingsAvg"}},{"kind":"Field","name":{"kind":"Name","value":"userRating"}},{"kind":"Field","name":{"kind":"Name","value":"likedByCount"}},{"kind":"Field","name":{"kind":"Name","value":"doUserLikesIt"}},{"kind":"Field","name":{"kind":"Name","value":"recommendedInfill"}},{"kind":"Field","name":{"kind":"Name","value":"recommendedMaterial"}},{"kind":"Field","name":{"kind":"Name","value":"supports"}}]}}]}}]} as unknown as DocumentNode<ModelQuery, ModelQueryVariables>;
 export const CreateModelDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateModel"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ModelCreateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createModel"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}}]} as unknown as DocumentNode<CreateModelMutation, CreateModelMutationVariables>;
 export const UpdateModelDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateModel"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slug"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ModelUpdateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateModel"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"slug"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slug"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}}]} as unknown as DocumentNode<UpdateModelMutation, UpdateModelMutationVariables>;
 export const DeleteModelDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteModel"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slug"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteModel"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"slug"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slug"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}}]} as unknown as DocumentNode<DeleteModelMutation, DeleteModelMutationVariables>;
