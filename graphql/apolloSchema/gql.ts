@@ -19,6 +19,7 @@ const documents = {
     "\n    mutation UpdateModel($slug: String, $data: ModelUpdateInput!) {\n        updateModel(where: {slug: $slug}, data: $data) {\n            id\n            slug\n        }\n    }\n": types.UpdateModelDocument,
     "\n    mutation DeleteModel($slug: String!) {\n        deleteModel(where: {slug: $slug}) {\n            id\n            slug\n        }\n    }\n": types.DeleteModelDocument,
     "\n    mutation CreateComment($data: CommentCreateInput!) {\n        createComment(data: $data) {\n            id\n        }\n    }\n": types.CreateCommentDocument,
+    "\n    mutation RateModel($slug: String!, $score: Int!) {\n        rateModel(score: $score, modelSlug: $slug)\n    }\n": types.RateModelDocument,
     "\n    fragment Model on Model {\n        id\n        name\n        description {\n            document\n        }\n        images {\n            image {\n                url\n            }\n        }\n        createdBy {\n            username\n        }\n        likedBy {\n            username\n        }\n        slug\n        doUserLikesIt\n    }\n": types.ModelFragmentDoc,
     "\n    mutation Authenticate($username: String!, $password: String!) {\n        authenticateUserWithPassword(username: $username, password: $password) {\n            ... on UserAuthenticationWithPasswordSuccess {\n                sessionToken\n                item {\n                    id\n                    username\n                    email\n                    isAdmin\n                    createdModels {\n                        ...Model\n                    }\n                    likedModels {\n                        ...Model\n                    }\n                }\n            }\n        }\n    }\n": types.AuthenticateDocument,
     "\n    query CheckToken {\n        authenticatedItem {\n            ... on User {\n                id\n                username\n                email\n                isAdmin\n                createdModels {\n                    ...Model\n                }\n                likedModels {\n                    ...Model\n                }\n            }\n        }\n    }\n": types.CheckTokenDocument,
@@ -68,6 +69,10 @@ export function gql(source: "\n    mutation DeleteModel($slug: String!) {\n     
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n    mutation CreateComment($data: CommentCreateInput!) {\n        createComment(data: $data) {\n            id\n        }\n    }\n"): (typeof documents)["\n    mutation CreateComment($data: CommentCreateInput!) {\n        createComment(data: $data) {\n            id\n        }\n    }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    mutation RateModel($slug: String!, $score: Int!) {\n        rateModel(score: $score, modelSlug: $slug)\n    }\n"): (typeof documents)["\n    mutation RateModel($slug: String!, $score: Int!) {\n        rateModel(score: $score, modelSlug: $slug)\n    }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

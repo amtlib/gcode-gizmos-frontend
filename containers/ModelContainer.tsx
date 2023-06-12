@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { useContext } from "react";
 import { ModelContext } from "../contexts/ModelContext";
 import { UserContext } from "../contexts/UserContext";
-import { CreateComment, CreateModel, DeleteModel, ModelsQuery, UpdateModel } from "../graphql/operations/models";
+import { CreateComment, CreateModel, DeleteModel, ModelsQuery, RateModel, UpdateModel } from "../graphql/operations/models";
 import { debounce } from "debounce";
 
 async function createFileArray(urls: string[]): Promise<File[]> {
@@ -27,6 +27,7 @@ function getFileNameFromUrl(url: string): string {
 export function ModelContainer({ children }) {
     const [createModelMutation, { loading: createModelLoading }] = useMutation(CreateModel, { refetchQueries: ["Models"] });
     const [updateModelMutation, { loading: updateModelLoading }] = useMutation(UpdateModel, { refetchQueries: ["Model"] });
+    const [rateModelMutation, { loading: rateModelLoading }] = useMutation(RateModel, { refetchQueries: ["Model"] });
     const [deleteModelMutation, { loading: deleteModelLoading }] = useMutation(DeleteModel, { refetchQueries: ["Models"] });
     const [createCommentMutation, { loading: createCommentLoading }] = useMutation(CreateComment, { refetchQueries: ["Model"] });
     const { data: dataModels, loading: modelsLoading, refetch: refetchModels } = useQuery(ModelsQuery);
@@ -137,6 +138,16 @@ export function ModelContainer({ children }) {
         return null;
     }
 
+    const rateModel = async (slug: string, score: number) => {
+        const result = await rateModelMutation({
+            variables: {
+                score,
+                slug
+            }
+        });
+        return result.data.rateModel;
+    }
+
     return <ModelContext.Provider value={{
         models: dataModels?.models || [],
         modelsLoading,
@@ -149,6 +160,7 @@ export function ModelContainer({ children }) {
         updateModelLoading,
         createCommentLoading,
         setSearchQuery,
-        createRemix
+        createRemix,
+        rateModel
     }}>{children}</ModelContext.Provider>
 }

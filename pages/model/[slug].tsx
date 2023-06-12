@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { SimpleGrid, Flex, Stack, Heading, StackDivider, List, ListItem, Button, Box, Text, Spinner, Select, AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, useDisclosure, Tooltip } from "@chakra-ui/react";
+import { SimpleGrid, Flex, Stack, Heading, StackDivider, List, ListItem, Button, Box, Text, Spinner, Select, AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, useDisclosure, Tooltip, HStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 import Download from "../../components/Download/Download";
@@ -13,17 +13,20 @@ import ImageCarousel from "../../components/ImageCarousel/ImageCarousel";
 import { Comments } from "../../components/Comments/Comments";
 import { DocumentRenderer } from "@keystone-6/document-renderer";
 import { format } from "date-fns";
-import { BsHeartFill, BsHeart } from "react-icons/bs";
+import { BsHeartFill, BsHeart, BsBox2 } from "react-icons/bs";
+import { Rating } from "@smastrom/react-rating";
+import '@smastrom/react-rating/style.css'
 
 export default function Model() {
     const router = useRouter();
     const { slug } = router.query;
     const { username, isAdmin, loggedIn, likeModel, dislikeModel } = useContext(UserContext);
-    const { deleteModel, deleteModelLoading, createRemix } = useContext(ModelContext);
+    const { deleteModel, deleteModelLoading, createRemix, rateModel } = useContext(ModelContext);
     const { launchModelModal } = useContext(ModalContext);
     const { isOpen: isDeleteModelDialogOpen, onOpen: onDeleteModelDialogOpen, onClose: onDeleteModelDialogClose } = useDisclosure()
     const deleteModelDialogCancelRef = React.useRef()
     const [selectedModelUrl, setSelectedModelUrl] = useState<string | undefined>();
+    const [rating, setRating] = useState<number | undefined>(0);
 
     const { data, loading } = useQuery(ModelQuery, { variables: { slug: slug?.toString() } });
 
@@ -53,6 +56,11 @@ export default function Model() {
         }
     };
 
+    const handleRate = async (newRate: number) => {
+        await rateModel(slug.toString(), newRate);
+        setRating(newRate);
+    }
+
     const handleEdit = async () => {
         launchModelModal("update", {
             slug,
@@ -62,6 +70,9 @@ export default function Model() {
     useEffect(() => {
         if (data?.model && data.model.files.length) {
             setSelectedModelUrl(data.model.files[0].file.url)
+        }
+        if(data?.model && data.model.userRating) {
+            setRating(data.model.userRating)
         }
     }, [data]);
 
@@ -178,6 +189,23 @@ export default function Model() {
                             </Flex>
                         </Tooltip>
                     </Flex>
+                    <Box my={2}>
+                        <Box>
+                            <Rating
+                                style={{ maxWidth: 180 }}
+                                value={rating}
+                                onChange={handleRate}
+                                readOnly={!loggedIn}
+                            />
+                        </Box>
+                        {loggedIn && rating > 0 && (
+                            <Text>Your score: {rating}</Text>
+                        )}
+                        {loggedIn && rating === 0 && (
+                            <Text>You haven't rated this model yet.</Text>
+                        )}
+                        <Text>Average score: {data.model.ratingsAvg}</Text>
+                    </Box>
                     <Stack
                         spacing={{ base: 4, sm: 6 }}
                         direction={'column'}

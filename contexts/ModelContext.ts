@@ -33,6 +33,7 @@ export type ModelContextType = {
     createCommentLoading: boolean;
     setSearchQuery: (query: string | null) => void;
     createRemix: (slug: string) => Promise<String>;
+    rateModel: (slug: string, score: number) => Promise<Boolean>
 };
 
 export const ModelContext = createContext<ModelContextType>({
@@ -47,5 +48,6 @@ export const ModelContext = createContext<ModelContextType>({
     deleteModelLoading: false,
     createCommentLoading: false,
     setSearchQuery: () => {},
-    createRemix: () => Promise.resolve("")
+    createRemix: () => Promise.resolve(""),
+    rateModel: () => Promise.resolve(false)
 });

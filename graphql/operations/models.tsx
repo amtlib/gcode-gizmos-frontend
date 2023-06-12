@@ -115,4 +115,10 @@ export const CreateComment = gql(`
             id
         }
     }
-`)
+`);
+
+export const RateModel = gql(`
+    mutation RateModel($slug: String!, $score: Int!) {
+        rateModel(score: $score, modelSlug: $slug)
+    }
+`);
