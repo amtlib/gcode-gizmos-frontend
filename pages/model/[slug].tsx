@@ -202,7 +202,7 @@ export default function Model() {
                             <Text>Your score: {rating}</Text>
                         )}
                         {loggedIn && rating === 0 && (
-                            <Text>You haven't rated this model yet.</Text>
+                            <Text>You haven&apos;t rated this model yet.</Text>
                         )}
                         <Text>Average score: {data.model.ratingsAvg}</Text>
                     </Box>
