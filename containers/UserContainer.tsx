@@ -22,7 +22,7 @@ export function UserContainer({ children }) {
     const [changePasswordMutation, { loading: changePasswordLoading}] = useMutation(ChangePassword);
 
     const { data: checkTokenData, loading: checkTokenLoading } = useQuery(CheckToken);
-    const [endSession] = useMutation(EndSession);
+    const [endSession] = useMutation(EndSession, { refetchQueries: ["Models"]});
 
 
     const authenticate = async (username: string, password: string) => {
