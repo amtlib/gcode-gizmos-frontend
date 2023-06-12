@@ -183,7 +183,7 @@ export const Leaf = ({ attributes, children, leaf }) => {
     const { colorMode } = useColorMode();
 
     if (leaf.bold) {
-        children = <strong>{children}</strong>;
+        children = <strong {...attributes}>{children}</strong>;
     }
 
     if (leaf.code) {
@@ -192,6 +192,7 @@ export const Leaf = ({ attributes, children, leaf }) => {
                 padding={"3px"}
                 backgroundColor={colorMode === "dark" ? "gray.700" : "gray.200"}
                 fontSize={"90%"}
+                {...attributes}
             >
                 {children}
             </chakra.code>
@@ -199,11 +200,11 @@ export const Leaf = ({ attributes, children, leaf }) => {
     }
 
     if (leaf.italic) {
-        children = <em>{children}</em>;
+        children = <em {...attributes}>{children}</em>;
     }
 
     if (leaf.underline) {
-        children = <u>{children}</u>;
+        children = <u {...attributes}>{children}</u>;
     }
 
     return <span {...attributes}>{children}</span>;
