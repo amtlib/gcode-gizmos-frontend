@@ -22,7 +22,7 @@ export function UserContainer({ children }) {
     const [changePasswordMutation, { loading: changePasswordLoading}] = useMutation(ChangePassword);
 
     const { data: checkTokenData, loading: checkTokenLoading } = useQuery(CheckToken);
-    const [endSession] = useMutation(EndSession, { refetchQueries: ["Models"]});
+    const [endSession] = useMutation(EndSession, { refetchQueries: ["Models", "Model"]});
 
 
     const authenticate = async (username: string, password: string) => {
@@ -95,7 +95,6 @@ export function UserContainer({ children }) {
     useEffect(() => {
         if (checkTokenData?.authenticatedItem && !checkTokenLoading) {
             const { id, username, email, isAdmin, likedModels: likedModelsAPI, createdModels: createdModelsAPI } = checkTokenData?.authenticatedItem;
-            console.log(checkTokenData?.authenticatedItem && !checkTokenLoading)
             setId(id);
             setUsername(username);
             setEmail(email);
