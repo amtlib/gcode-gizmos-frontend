@@ -27,6 +27,7 @@ export default function Model() {
     const deleteModelDialogCancelRef = React.useRef()
     const [selectedModelUrl, setSelectedModelUrl] = useState<string | undefined>();
     const [rating, setRating] = useState<number | undefined>(0);
+    const [avgRating, setAvgRating] = useState<number | undefined>(0);
 
     const { data, loading } = useQuery(ModelQuery, { variables: { slug: slug?.toString() } });
 
@@ -73,6 +74,11 @@ export default function Model() {
         }
         if(data?.model && data.model.userRating) {
             setRating(data.model.userRating)
+        } else {
+            setRating(0);
+        }
+        if (rating === 0 && data?.model && data.model.ratingsAvg) {
+            setAvgRating(data.model.ratingsAvg);
         }
     }, [data]);
 
@@ -193,7 +199,7 @@ export default function Model() {
                         <Box>
                             <Rating
                                 style={{ maxWidth: 180 }}
-                                value={rating}
+                                value={rating || avgRating}
                                 onChange={handleRate}
                                 readOnly={!loggedIn}
                             />
@@ -204,7 +210,7 @@ export default function Model() {
                         {loggedIn && rating === 0 && (
                             <Text>You haven&apos;t rated this model yet.</Text>
                         )}
-                        <Text>Average score: {data.model.ratingsAvg}</Text>
+                        {data.model.ratingsAvg > 0 ? (<Text>Average score: {data.model.ratingsAvg}</Text>) : <Text>Be first to score this model</Text>}
                     </Box>
                     <Stack
                         spacing={{ base: 4, sm: 6 }}
