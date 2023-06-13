@@ -78,7 +78,6 @@ export const ModelModal = ({ action, data }: { action: "create" | "update"; data
             }
         } else if (action === "update") {
             const slug = await updateModel(data.slug, values.name, description, values.recommendedInfill, values.recommendedMaterial, values.supports, uploadedImages, uploadedFiles);
-            console.log(slug)
             if (slug) {
                 onClose();
                 router.push(`/model/${slug}`);
