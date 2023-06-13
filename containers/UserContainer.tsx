@@ -72,6 +72,7 @@ export function UserContainer({ children }) {
         setLoggedIn(false);
         setLikedModels([]);
         setCreatedModels([]);
+        window.location.reload();
     };
 
     useEffect(() => {
